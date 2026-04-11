@@ -1,0 +1,149 @@
+import Link from 'next/link';
+import Image from 'next/image';
+import { MapPin, Heart, Users, Bed, Bath } from 'lucide-react';
+import PageHeader from '@/components/PageHeader';
+import SearchWidget from '@/components/SearchWidget';
+import FilterSidebar from '@/components/FilterSidebar';
+import { villas } from '@/lib/data';
+
+export default function VillasPage() {
+  return (
+    <>
+      <PageHeader
+        eyebrow="Villas privadas"
+        title="Tu <span class='italic-script'>refugio</span> en el mundo"
+        subtitle="Villas exclusivas en los rincones mas hermosos de Europa, Asia y el Caribe."
+        crumbs={[{ href: '/', label: 'Inicio' }, { label: 'Villas' }]}
+      />
+
+      <div className="container-site -mt-10 relative z-10 mb-12">
+        <SearchWidget initialTab="villas" />
+      </div>
+
+      <section className="pb-24">
+        <div className="container-site grid lg:grid-cols-[300px_1fr] gap-8">
+          <FilterSidebar
+            priceMin={100}
+            priceMax={2000}
+            groups={[
+              {
+                title: 'Capacidad',
+                options: [
+                  { label: '2-4 huespedes' },
+                  { label: '5-6 huespedes' },
+                  { label: '7-8 huespedes' },
+                  { label: '9+ huespedes' },
+                ],
+              },
+              {
+                title: 'Habitaciones',
+                options: [
+                  { label: '1-2 habitaciones' },
+                  { label: '3-4 habitaciones' },
+                  { label: '5+ habitaciones' },
+                ],
+              },
+              {
+                title: 'Amenidades',
+                options: [
+                  { label: 'Piscina privada' },
+                  { label: 'Vista al mar' },
+                  { label: 'Cocina completa' },
+                  { label: 'Chef privado' },
+                  { label: 'Jardin' },
+                  { label: 'Staff incluido' },
+                  { label: 'Pet friendly' },
+                  { label: 'WiFi' },
+                ],
+              },
+              {
+                title: 'Region',
+                options: [
+                  { label: 'Mediterraneo' },
+                  { label: 'Caribe' },
+                  { label: 'Sudeste Asiatico' },
+                  { label: 'Europa' },
+                ],
+              },
+            ]}
+          />
+
+          <div>
+            <div className="flex justify-between items-center mb-6 flex-wrap gap-4 bg-white rounded-2xl px-6 py-4 shadow-soft">
+              <span className="text-charcoal-500 text-sm">
+                <strong className="text-plum-700 font-display text-lg">{villas.length}</strong>{' '}
+                villas exclusivas
+              </span>
+              <select className="px-4 py-2 border border-ivory-300 rounded-full bg-ivory-50 text-sm cursor-pointer">
+                <option>Mas recomendadas</option>
+                <option>Precio: menor a mayor</option>
+                <option>Capacidad: mayor</option>
+              </select>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              {villas.map((villa) => (
+                <article
+                  key={villa.id}
+                  className="card-soft overflow-hidden hover:-translate-y-1 hover:shadow-soft-lg"
+                >
+                  <div className="relative aspect-[16/10] overflow-hidden">
+                    <Image
+                      src={villa.image}
+                      alt={villa.name}
+                      fill
+                      className="object-cover transition-transform duration-1000 hover:scale-105"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                    <button className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 text-plum-700 flex items-center justify-center hover:bg-plum-700 hover:text-white transition-colors">
+                      <Heart size={18} />
+                    </button>
+                    <div className="absolute top-4 left-4 bg-white px-3 py-1.5 rounded-full flex items-center gap-1.5 text-xs font-semibold">
+                      <span className="text-gold-600">★</span>
+                      {villa.rating} · {villa.reviewCount}
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <div className="flex items-center gap-1 text-[11px] uppercase tracking-widest text-charcoal-500 mb-2">
+                      <MapPin size={12} />
+                      {villa.location}, {villa.country}
+                    </div>
+                    <h3 className="font-display text-xl mb-2">{villa.name}</h3>
+                    <p className="text-sm text-charcoal-500 line-clamp-2 mb-4">
+                      {villa.description}
+                    </p>
+                    <div className="flex gap-4 text-xs text-charcoal-500 mb-4">
+                      <span className="flex items-center gap-1">
+                        <Users size={14} /> {villa.guests}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Bed size={14} /> {villa.bedrooms}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Bath size={14} /> {villa.bathrooms}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-end pt-4 border-t border-ivory-200">
+                      <div>
+                        <div className="text-xs text-charcoal-500">Desde</div>
+                        <div className="font-display text-2xl text-plum-700 leading-none">
+                          ${villa.price}
+                          <small className="text-xs text-charcoal-500 font-sans ml-1">
+                            / noche
+                          </small>
+                        </div>
+                      </div>
+                      <Link href={`/hotel/${villa.id}`} className="btn btn-primary btn-sm">
+                        Ver detalle
+                      </Link>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
