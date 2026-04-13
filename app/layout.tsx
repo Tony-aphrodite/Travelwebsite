@@ -29,6 +29,10 @@ export const metadata: Metadata = {
   title: 'Aurelia Viajes — El arte de viajar, redescubierto',
   description:
     'Aurelia crea experiencias de viaje que combinan el lujo discreto con el alma de cada destino. Vuelos, hoteles boutique, villas privadas y momentos inolvidables.',
+  icons: {
+    icon: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
