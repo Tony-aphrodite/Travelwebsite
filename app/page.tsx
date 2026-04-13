@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Star, Award } from 'lucide-react';
 import SearchWidget from '@/components/SearchWidget';
 import { destinations, packages, activities, testimonials, blogPosts } from '@/lib/data';
@@ -8,7 +7,7 @@ export default function HomePage() {
   return (
     <>
       {/* HERO */}
-      <section className="relative pt-32 pb-16 overflow-hidden bg-gradient-to-br from-ivory-100 to-rose-100 min-h-screen">
+      <section className="relative pt-32 pb-32 overflow-hidden bg-gradient-to-br from-ivory-100 to-rose-100 min-h-screen">
         <div className="absolute w-[400px] h-[400px] -top-24 -right-24 rounded-full bg-gold-600/20 blur-3xl pointer-events-none" />
         <div className="absolute w-[300px] h-[300px] -bottom-12 left-[10%] rounded-full bg-rose-500/20 blur-3xl pointer-events-none" />
 
@@ -51,24 +50,19 @@ export default function HomePage() {
 
           <div className="relative h-[500px] lg:h-[600px]">
             <div className="absolute w-[280px] lg:w-[340px] h-[360px] lg:h-[440px] top-5 right-16 overflow-hidden shadow-soft-xl animate-float rounded-t-[200px]">
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=800&q=80"
                 alt="Destino de lujo"
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 280px, 340px"
-                priority
-                unoptimized
+                className="absolute inset-0 w-full h-full object-cover"
               />
             </div>
             <div className="absolute w-[180px] lg:w-[220px] h-[240px] lg:h-[280px] bottom-10 left-0 overflow-hidden shadow-soft-xl animate-float-delayed rounded-b-[200px]">
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src="https://images.unsplash.com/photo-1544644181-1484b3fdfc62?w=600&q=80"
                 alt="Experiencia de viaje"
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 180px, 220px"
-                unoptimized
+                className="absolute inset-0 w-full h-full object-cover"
               />
             </div>
             <div className="absolute bottom-16 right-5 bg-white p-4 rounded-2xl shadow-soft-lg flex items-center gap-3 animate-float">
@@ -118,13 +112,11 @@ export default function HomePage() {
                     : 'col-span-6 md:col-span-3 aspect-[3/4]'
                 }`}
               >
-                <Image
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
                   src={dest.image}
                   alt={dest.name}
-                  fill
-                  className="object-cover transition-transform duration-[1200ms] group-hover:scale-110"
-                  sizes="(max-width: 768px) 50vw, 25vw"
-                  unoptimized
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/85 via-charcoal-900/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
@@ -171,13 +163,12 @@ export default function HomePage() {
                 className="card-soft overflow-hidden group hover:-translate-y-2 hover:shadow-soft-lg"
               >
                 <div className="relative aspect-[16/10] overflow-hidden bg-ivory-200">
-                  <Image
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
                     src={pkg.image}
                     alt={pkg.title}
-                    fill
-                    className="object-cover transition-transform duration-1000 group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    unoptimized
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                    loading="lazy"
                   />
                   <span className="absolute top-4 left-4 bg-plum-700 text-white px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider">
                     {pkg.badge}
@@ -304,13 +295,11 @@ export default function HomePage() {
                 href="/actividades"
                 className="relative rounded-3xl overflow-hidden aspect-[3/4] group cursor-pointer bg-ivory-200"
               >
-                <Image
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
                   src={exp.image}
                   alt={exp.title}
-                  fill
-                  className="object-cover transition-transform duration-1000 group-hover:scale-105"
-                  sizes="(max-width: 768px) 50vw, 25vw"
-                  unoptimized
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/80 via-charcoal-900/10 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
@@ -351,13 +340,13 @@ export default function HomePage() {
                   {t.text}
                 </p>
                 <div className="flex items-center gap-3 pt-5 border-t border-ivory-200">
-                  <Image
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
                     src={t.avatar}
                     alt={t.name}
                     width={48}
                     height={48}
-                    className="rounded-full object-cover"
-                    unoptimized
+                    className="rounded-full object-cover w-12 h-12"
                   />
                   <div>
                     <strong className="block text-[15px] text-charcoal-900">{t.name}</strong>
@@ -385,34 +374,33 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr] gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
             {blogPosts.slice(0, 3).map((post, i) => (
               <Link
                 key={post.slug}
                 href="/blog"
-                className={`card-soft overflow-hidden flex flex-col group hover:-translate-y-1 hover:shadow-soft-lg ${
+                className={`card-soft overflow-hidden group hover:-translate-y-1 hover:shadow-soft-lg ${
                   i === 0 ? 'md:col-span-2 lg:col-span-1' : ''
                 }`}
               >
-                <div className={`relative overflow-hidden bg-ivory-200 ${i === 0 ? 'aspect-[4/3]' : 'aspect-[16/10]'}`}>
-                  <Image
+                <div className="relative overflow-hidden bg-ivory-200 aspect-[16/10]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
                     src={post.image}
                     alt={post.title}
-                    fill
-                    className="object-cover transition-transform duration-1000 group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    unoptimized
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                    loading="lazy"
                   />
                 </div>
-                <div className="p-7">
+                <div className="p-6">
                   <div className="flex gap-4 text-xs uppercase tracking-widest text-charcoal-500 mb-3">
                     <span className="text-gold-700 font-semibold">{post.category}</span>
                     <span>{post.readTime}</span>
                   </div>
-                  <h3 className={`font-display leading-tight mb-2 ${i === 0 ? 'text-2xl' : 'text-lg'}`}>
+                  <h3 className="font-display text-lg leading-tight mb-2">
                     {post.title}
                   </h3>
-                  <p className={`text-sm text-charcoal-500 ${i === 0 ? '' : 'line-clamp-2'}`}>{post.excerpt}</p>
+                  <p className="text-sm text-charcoal-500 line-clamp-2">{post.excerpt}</p>
                 </div>
               </Link>
             ))}
