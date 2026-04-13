@@ -41,7 +41,7 @@ export default function HomePage() {
                   <strong className="font-display text-4xl text-plum-700 block leading-none">
                     {stat.value}
                   </strong>
-                  <span className="text-xs text-charcoal-500 uppercase tracking-widest">
+                  <span className="text-xs text-charcoal-500 uppercase tracking-wider">
                     {stat.label}
                   </span>
                 </div>
@@ -58,6 +58,7 @@ export default function HomePage() {
                 className="object-cover"
                 sizes="(max-width: 1024px) 280px, 340px"
                 priority
+                unoptimized
               />
             </div>
             <div className="absolute w-[180px] lg:w-[220px] h-[240px] lg:h-[280px] bottom-10 left-0 overflow-hidden shadow-soft-xl animate-float-delayed rounded-b-[200px]">
@@ -67,6 +68,7 @@ export default function HomePage() {
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 180px, 220px"
+                unoptimized
               />
             </div>
             <div className="absolute bottom-16 right-5 bg-white p-4 rounded-2xl shadow-soft-lg flex items-center gap-3 animate-float">
@@ -110,7 +112,7 @@ export default function HomePage() {
               <Link
                 key={dest.id}
                 href={`/hotel/${dest.id}`}
-                className={`relative rounded-3xl overflow-hidden shadow-soft-md cursor-pointer group transition-all duration-500 hover:-translate-y-2 hover:shadow-soft-xl ${
+                className={`relative rounded-3xl overflow-hidden shadow-soft-md cursor-pointer group transition-all duration-500 hover:-translate-y-2 hover:shadow-soft-xl bg-ivory-200 ${
                   i === 0
                     ? 'col-span-12 md:col-span-6 row-span-2 aspect-[4/5] md:aspect-auto'
                     : 'col-span-6 md:col-span-3 aspect-[3/4]'
@@ -122,6 +124,7 @@ export default function HomePage() {
                   fill
                   className="object-cover transition-transform duration-[1200ms] group-hover:scale-110"
                   sizes="(max-width: 768px) 50vw, 25vw"
+                  unoptimized
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/85 via-charcoal-900/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
@@ -167,13 +170,14 @@ export default function HomePage() {
                 key={pkg.id}
                 className="card-soft overflow-hidden group hover:-translate-y-2 hover:shadow-soft-lg"
               >
-                <div className="relative aspect-[16/10] overflow-hidden">
+                <div className="relative aspect-[16/10] overflow-hidden bg-ivory-200">
                   <Image
                     src={pkg.image}
                     alt={pkg.title}
                     fill
                     className="object-cover transition-transform duration-1000 group-hover:scale-105"
                     sizes="(max-width: 768px) 100vw, 33vw"
+                    unoptimized
                   />
                   <span className="absolute top-4 left-4 bg-plum-700 text-white px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider">
                     {pkg.badge}
@@ -298,7 +302,7 @@ export default function HomePage() {
               <Link
                 key={exp.id}
                 href="/actividades"
-                className="relative rounded-3xl overflow-hidden aspect-[3/4] group cursor-pointer"
+                className="relative rounded-3xl overflow-hidden aspect-[3/4] group cursor-pointer bg-ivory-200"
               >
                 <Image
                   src={exp.image}
@@ -306,6 +310,7 @@ export default function HomePage() {
                   fill
                   className="object-cover transition-transform duration-1000 group-hover:scale-105"
                   sizes="(max-width: 768px) 50vw, 25vw"
+                  unoptimized
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/80 via-charcoal-900/10 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
@@ -352,6 +357,7 @@ export default function HomePage() {
                     width={48}
                     height={48}
                     className="rounded-full object-cover"
+                    unoptimized
                   />
                   <div>
                     <strong className="block text-[15px] text-charcoal-900">{t.name}</strong>
@@ -388,16 +394,17 @@ export default function HomePage() {
                   i === 0 ? 'md:col-span-2 lg:col-span-1' : ''
                 }`}
               >
-                <div className={`relative overflow-hidden ${i === 0 ? 'aspect-[4/3]' : 'aspect-[16/10]'}`}>
+                <div className={`relative overflow-hidden bg-ivory-200 ${i === 0 ? 'aspect-[4/3]' : 'aspect-[16/10]'}`}>
                   <Image
                     src={post.image}
                     alt={post.title}
                     fill
                     className="object-cover transition-transform duration-1000 group-hover:scale-105"
                     sizes="(max-width: 768px) 100vw, 33vw"
+                    unoptimized
                   />
                 </div>
-                <div className="p-7 flex-1">
+                <div className="p-7">
                   <div className="flex gap-4 text-xs uppercase tracking-widest text-charcoal-500 mb-3">
                     <span className="text-gold-700 font-semibold">{post.category}</span>
                     <span>{post.readTime}</span>
@@ -405,9 +412,7 @@ export default function HomePage() {
                   <h3 className={`font-display leading-tight mb-2 ${i === 0 ? 'text-2xl' : 'text-lg'}`}>
                     {post.title}
                   </h3>
-                  {i === 0 && (
-                    <p className="text-sm text-charcoal-500">{post.excerpt}</p>
-                  )}
+                  <p className={`text-sm text-charcoal-500 ${i === 0 ? '' : 'line-clamp-2'}`}>{post.excerpt}</p>
                 </div>
               </Link>
             ))}
