@@ -138,7 +138,7 @@ export default function Header() {
             </>
           ) : (
             <>
-              <Link href="/auth/login" className="hidden sm:inline-flex btn btn-ghost btn-sm">
+              <Link href="/auth/login" className="btn btn-outline btn-sm">
                 <User size={16} />
                 Iniciar sesion
               </Link>
