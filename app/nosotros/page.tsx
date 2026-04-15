@@ -1,8 +1,7 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { Heart, Compass, Shield, Sparkles, Award, Users, Globe } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
-import { testimonials } from '@/lib/data';
+import { getTestimonials } from '@/lib/db/queries';
 
 const VALUES = [
   {
@@ -57,7 +56,9 @@ const STATS = [
   { icon: Sparkles, value: '12', label: 'Anos de experiencia' },
 ];
 
-export default function NosotrosPage() {
+export default async function NosotrosPage() {
+  const testimonials = await getTestimonials();
+
   return (
     <>
       <PageHeader
@@ -71,12 +72,11 @@ export default function NosotrosPage() {
       <section className="container-site py-20">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-soft-lg">
-            <Image
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1200&q=80"
               alt="Aurelia team"
-              fill
-              className="object-cover"
-              sizes="50vw"
+              className="absolute inset-0 w-full h-full object-cover"
             />
           </div>
           <div>
@@ -153,12 +153,11 @@ export default function NosotrosPage() {
           {TEAM.map((m) => (
             <article key={m.name} className="card-soft overflow-hidden group">
               <div className="relative aspect-[4/5]">
-                <Image
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
                   src={m.image}
                   alt={m.name}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-1000"
-                  sizes="(max-width: 768px) 50vw, 25vw"
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
                 />
               </div>
               <div className="p-5 text-center">

@@ -1,12 +1,27 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Users, Fuel, Settings, Snowflake } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import SearchWidget from '@/components/SearchWidget';
 import FilterSidebar from '@/components/FilterSidebar';
-import { cars } from '@/lib/data';
+import { getCars } from '@/lib/db/queries';
 
-export default function AutosPage() {
+export default async function AutosPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string>>;
+}) {
+  const params = await searchParams;
+
+  const filters = {
+    category: params.category || undefined,
+    priceMin: params.priceMin ? Number(params.priceMin) : undefined,
+    priceMax: params.priceMax ? Number(params.priceMax) : undefined,
+    transmission: params.transmission || undefined,
+    sort: params.sort || undefined,
+  };
+
+  const cars = await getCars(filters);
+
   return (
     <>
       <PageHeader
@@ -83,12 +98,11 @@ export default function AutosPage() {
                   className="card-soft overflow-hidden hover:-translate-y-1 hover:shadow-soft-lg"
                 >
                   <div className="relative aspect-[16/10] bg-ivory-200 overflow-hidden">
-                    <Image
+                    <img
                       src={car.image}
                       alt={car.model}
-                      fill
-                      className="object-cover transition-transform duration-1000 hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, 50vw"
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 hover:scale-105"
+                      loading="lazy"
                     />
                     <div className="absolute top-4 left-4 bg-white/95 px-3 py-1 rounded-full text-xs font-semibold text-plum-700">
                       {car.category}
@@ -124,7 +138,7 @@ export default function AutosPage() {
                     </div>
 
                     <div className="flex flex-wrap gap-1.5 mb-5">
-                      {car.features.map((f) => (
+                      {(car.features ?? []).map((f) => (
                         <span key={f} className="amenity-chip">
                           {f}
                         </span>

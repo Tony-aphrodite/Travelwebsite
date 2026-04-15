@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { useState } from 'react';
 import {
   Mail,
   Phone,
@@ -9,6 +12,9 @@ import {
   Instagram,
   Facebook,
   Twitter,
+  Loader2,
+  CheckCircle,
+  AlertCircle,
   type LucideIcon,
 } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
@@ -44,6 +50,53 @@ const REASONS = [
 ];
 
 export default function ContactoPage() {
+  const [form, setForm] = useState({
+    name: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    reason: REASONS[0],
+    message: '',
+    privacy: false,
+  });
+  const [submitting, setSubmitting] = useState(false);
+  const [result, setResult] = useState<'success' | 'error' | null>(null);
+
+  const updateField = (field: string, value: string | boolean) =>
+    setForm((prev) => ({ ...prev, [field]: value }));
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.name || !form.email || !form.message) return;
+
+    setSubmitting(true);
+    setResult(null);
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.name,
+          lastName: form.lastName,
+          email: form.email,
+          phone: form.phone,
+          reason: form.reason,
+          message: form.message,
+        }),
+      });
+      if (res.ok) {
+        setResult('success');
+        setForm({ name: '', lastName: '', email: '', phone: '', reason: REASONS[0], message: '', privacy: false });
+      } else {
+        setResult('error');
+      }
+    } catch {
+      setResult('error');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <>
       <PageHeader
@@ -96,30 +149,74 @@ export default function ContactoPage() {
             <p className="text-charcoal-500 mb-8">
               Completa el formulario y una experta te contactara pronto.
             </p>
-            <form className="space-y-5">
+
+            {result === 'success' && (
+              <div className="mb-6 p-4 rounded-xl bg-sage-100 text-sage-500 flex items-center gap-3">
+                <CheckCircle size={20} />
+                <span>Mensaje enviado con exito. Te contactaremos pronto.</span>
+              </div>
+            )}
+            {result === 'error' && (
+              <div className="mb-6 p-4 rounded-xl bg-rose-100 text-rose-400 flex items-center gap-3">
+                <AlertCircle size={20} />
+                <span>Error al enviar el mensaje. Intentalo de nuevo.</span>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-5">
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
                   <label className="field-label">Nombre</label>
-                  <input type="text" placeholder="Sofia" className="field-input" />
+                  <input
+                    type="text"
+                    placeholder="Sofia"
+                    className="field-input"
+                    value={form.name}
+                    onChange={(e) => updateField('name', e.target.value)}
+                    required
+                  />
                 </div>
                 <div>
                   <label className="field-label">Apellidos</label>
-                  <input type="text" placeholder="Martinez" className="field-input" />
+                  <input
+                    type="text"
+                    placeholder="Martinez"
+                    className="field-input"
+                    value={form.lastName}
+                    onChange={(e) => updateField('lastName', e.target.value)}
+                  />
                 </div>
               </div>
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
                   <label className="field-label">Email</label>
-                  <input type="email" placeholder="sofia@email.com" className="field-input" />
+                  <input
+                    type="email"
+                    placeholder="sofia@email.com"
+                    className="field-input"
+                    value={form.email}
+                    onChange={(e) => updateField('email', e.target.value)}
+                    required
+                  />
                 </div>
                 <div>
                   <label className="field-label">Telefono</label>
-                  <input type="tel" placeholder="+52 55 1234 5678" className="field-input" />
+                  <input
+                    type="tel"
+                    placeholder="+52 55 1234 5678"
+                    className="field-input"
+                    value={form.phone}
+                    onChange={(e) => updateField('phone', e.target.value)}
+                  />
                 </div>
               </div>
               <div>
                 <label className="field-label">Motivo de contacto</label>
-                <select className="field-input">
+                <select
+                  className="field-input"
+                  value={form.reason}
+                  onChange={(e) => updateField('reason', e.target.value)}
+                >
                   {REASONS.map((r) => (
                     <option key={r}>{r}</option>
                   ))}
@@ -131,10 +228,18 @@ export default function ContactoPage() {
                   rows={6}
                   placeholder="Cuentanos sobre el viaje que suenas..."
                   className="field-input resize-none"
+                  value={form.message}
+                  onChange={(e) => updateField('message', e.target.value)}
+                  required
                 />
               </div>
               <div className="flex items-start gap-2 text-xs text-charcoal-500">
-                <input type="checkbox" className="mt-1" />
+                <input
+                  type="checkbox"
+                  className="mt-1"
+                  checked={form.privacy}
+                  onChange={(e) => updateField('privacy', e.target.checked)}
+                />
                 <span>
                   Acepto la{' '}
                   <Link href="#" className="text-plum-700 underline">
@@ -143,9 +248,22 @@ export default function ContactoPage() {
                   y recibir comunicaciones de Aurelia Viajes.
                 </span>
               </div>
-              <button type="submit" className="btn btn-primary btn-lg w-full sm:w-auto">
-                <Send size={16} />
-                Enviar mensaje
+              <button
+                type="submit"
+                disabled={submitting}
+                className="btn btn-primary btn-lg w-full sm:w-auto"
+              >
+                {submitting ? (
+                  <span className="flex items-center gap-2">
+                    <Loader2 size={16} className="animate-spin" />
+                    Enviando...
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-2">
+                    <Send size={16} />
+                    Enviar mensaje
+                  </span>
+                )}
               </button>
             </form>
           </div>
@@ -193,7 +311,7 @@ export default function ContactoPage() {
                 urgente, llamanos directamente.
               </p>
               <div className="text-xs text-gold-400 uppercase tracking-widest">
-                ⏱ Tiempo medio: 42 min
+                Tiempo medio: 42 min
               </div>
             </div>
           </aside>

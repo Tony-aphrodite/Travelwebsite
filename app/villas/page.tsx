@@ -1,12 +1,28 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { MapPin, Heart, Users, Bed, Bath } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import SearchWidget from '@/components/SearchWidget';
 import FilterSidebar from '@/components/FilterSidebar';
-import { villas } from '@/lib/data';
+import { getVillas } from '@/lib/db/queries';
 
-export default function VillasPage() {
+export default async function VillasPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string>>;
+}) {
+  const params = await searchParams;
+
+  const filters = {
+    country: params.country || undefined,
+    priceMin: params.priceMin ? Number(params.priceMin) : undefined,
+    priceMax: params.priceMax ? Number(params.priceMax) : undefined,
+    guests: params.guests ? Number(params.guests) : undefined,
+    sort: params.sort || undefined,
+    q: params.q || undefined,
+  };
+
+  const villas = await getVillas(filters);
+
   return (
     <>
       <PageHeader
@@ -88,12 +104,11 @@ export default function VillasPage() {
                   className="card-soft overflow-hidden hover:-translate-y-1 hover:shadow-soft-lg"
                 >
                   <div className="relative aspect-[16/10] overflow-hidden">
-                    <Image
+                    <img
                       src={villa.image}
                       alt={villa.name}
-                      fill
-                      className="object-cover transition-transform duration-1000 hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, 50vw"
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 hover:scale-105"
+                      loading="lazy"
                     />
                     <button className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 text-plum-700 flex items-center justify-center hover:bg-plum-700 hover:text-white transition-colors">
                       <Heart size={18} />

@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSession, signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import {
   User,
   Plane,
@@ -18,9 +19,9 @@ import {
   Gift,
   TrendingUp,
   LogOut,
+  Loader2,
   type LucideIcon,
 } from 'lucide-react';
-import { hotels, packages, destinations } from '@/lib/data';
 
 type Tab = 'resumen' | 'viajes' | 'favoritos' | 'recompensas' | 'datos' | 'notificaciones';
 
@@ -33,8 +34,70 @@ const TABS: { key: Tab; label: string; icon: LucideIcon }[] = [
   { key: 'notificaciones', label: 'Notificaciones', icon: Bell },
 ];
 
+type Booking = {
+  id: string;
+  type: string;
+  itemId: string;
+  itemName: string;
+  status: string;
+  checkIn: string | null;
+  checkOut: string | null;
+  guests: number;
+  quantity: number;
+  unitPrice: number;
+  total: number;
+  pointsEarned: number;
+  createdAt: string;
+};
+
+type Favorite = {
+  id: number;
+  type: string;
+  itemId: string;
+  createdAt: string;
+};
+
 export default function CuentaPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [tab, setTab] = useState<Tab>('resumen');
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [favorites, setFavorites] = useState<Favorite[]>([]);
+  const [loadingData, setLoadingData] = useState(true);
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/auth/login');
+    }
+  }, [status, router]);
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      Promise.all([
+        fetch('/api/bookings').then((r) => r.json()),
+        fetch('/api/favorites').then((r) => r.json()),
+      ])
+        .then(([b, f]) => {
+          if (Array.isArray(b)) setBookings(b);
+          if (Array.isArray(f)) setFavorites(f);
+        })
+        .finally(() => setLoadingData(false));
+    }
+  }, [status]);
+
+  if (status === 'loading' || status === 'unauthenticated') {
+    return (
+      <div className="pt-28 pb-20 bg-ivory-100 min-h-screen flex items-center justify-center">
+        <Loader2 size={40} className="text-plum-700 animate-spin" />
+      </div>
+    );
+  }
+
+  const user = session?.user;
+  const userName = user?.name || 'Viajera';
+  const userEmail = user?.email || '';
+  const userInitial = userName.charAt(0).toUpperCase();
+  const userRole = (user as any)?.role || 'user';
 
   return (
     <div className="pt-28 pb-20 bg-ivory-100 min-h-screen">
@@ -51,13 +114,21 @@ export default function CuentaPage() {
           {/* Sidebar */}
           <aside className="space-y-4 h-fit lg:sticky lg:top-28">
             <div className="card-soft p-6 text-center">
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-plum-700 to-rose-400 text-white flex items-center justify-center mx-auto mb-3 font-display text-3xl">
-                S
-              </div>
-              <h3 className="font-display text-xl">Sofia Martinez</h3>
-              <p className="text-xs text-charcoal-500 mb-3">sofia@aurelia.com</p>
+              {user?.image ? (
+                <img
+                  src={user.image}
+                  alt={userName}
+                  className="w-20 h-20 rounded-full mx-auto mb-3 object-cover"
+                />
+              ) : (
+                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-plum-700 to-rose-400 text-white flex items-center justify-center mx-auto mb-3 font-display text-3xl">
+                  {userInitial}
+                </div>
+              )}
+              <h3 className="font-display text-xl">{userName}</h3>
+              <p className="text-xs text-charcoal-500 mb-3">{userEmail}</p>
               <span className="status-pill bg-gradient-to-r from-gold-500 to-gold-600 text-charcoal-900">
-                <Sparkles size={12} /> Rose Gold Member
+                <Sparkles size={12} /> Miembro
               </span>
             </div>
 
@@ -84,7 +155,10 @@ export default function CuentaPage() {
                 );
               })}
               <hr className="my-2 border-ivory-200" />
-              <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-charcoal-500 hover:bg-ivory-100 text-left">
+              <button
+                onClick={() => signOut({ callbackUrl: '/' })}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-charcoal-500 hover:bg-ivory-100 text-left"
+              >
                 <LogOut size={16} />
                 Cerrar sesion
               </button>
@@ -93,12 +167,26 @@ export default function CuentaPage() {
 
           {/* Content */}
           <div>
-            {tab === 'resumen' && <ResumenTab />}
-            {tab === 'viajes' && <ViajesTab />}
-            {tab === 'favoritos' && <FavoritosTab />}
-            {tab === 'recompensas' && <RecompensasTab />}
-            {tab === 'datos' && <DatosTab />}
-            {tab === 'notificaciones' && <NotificacionesTab />}
+            {loadingData ? (
+              <div className="flex items-center justify-center py-20">
+                <Loader2 size={32} className="text-plum-700 animate-spin" />
+              </div>
+            ) : (
+              <>
+                {tab === 'resumen' && (
+                  <ResumenTab
+                    userName={userName}
+                    bookings={bookings}
+                    favoritesCount={favorites.length}
+                  />
+                )}
+                {tab === 'viajes' && <ViajesTab bookings={bookings} />}
+                {tab === 'favoritos' && <FavoritosTab favorites={favorites} />}
+                {tab === 'recompensas' && <RecompensasTab />}
+                {tab === 'datos' && <DatosTab userName={userName} userEmail={userEmail} />}
+                {tab === 'notificaciones' && <NotificacionesTab />}
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -106,11 +194,24 @@ export default function CuentaPage() {
   );
 }
 
-function ResumenTab() {
+function ResumenTab({
+  userName,
+  bookings,
+  favoritesCount,
+}: {
+  userName: string;
+  bookings: Booking[];
+  favoritesCount: number;
+}) {
+  const totalPoints = bookings.reduce((sum, b) => sum + (b.pointsEarned || 0), 0);
+  const upcomingBooking = bookings.find(
+    (b) => b.status === 'confirmed' || b.status === 'pending'
+  );
+
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="heading-lg mb-2">Bienvenida, Sofia</h1>
+        <h1 className="heading-lg mb-2">Bienvenida, {userName.split(' ')[0]}</h1>
         <p className="text-charcoal-500">
           Tu proxima aventura te espera. Revisa tus reservas y recompensas.
         </p>
@@ -118,9 +219,24 @@ function ResumenTab() {
 
       {/* Stats */}
       <div className="grid sm:grid-cols-3 gap-4">
-        <StatCard icon={Plane} label="Viajes realizados" value="12" accent="plum" />
-        <StatCard icon={Award} label="Puntos acumulados" value="4,850" accent="gold" />
-        <StatCard icon={Heart} label="Favoritos guardados" value="23" accent="rose" />
+        <StatCard
+          icon={Plane}
+          label="Viajes realizados"
+          value={String(bookings.length)}
+          accent="plum"
+        />
+        <StatCard
+          icon={Award}
+          label="Puntos acumulados"
+          value={totalPoints.toLocaleString()}
+          accent="gold"
+        />
+        <StatCard
+          icon={Heart}
+          label="Favoritos guardados"
+          value={String(favoritesCount)}
+          accent="rose"
+        />
       </div>
 
       {/* Loyalty card */}
@@ -130,23 +246,25 @@ function ResumenTab() {
           <div className="flex justify-between items-start mb-8">
             <div>
               <div className="text-[11px] uppercase tracking-widest opacity-70">Aurelia Society</div>
-              <div className="font-display text-3xl">Rose Gold</div>
+              <div className="font-display text-3xl">Miembro</div>
             </div>
             <Sparkles size={32} className="text-gold-500" />
           </div>
           <div className="mb-6">
             <div className="flex justify-between text-xs mb-2 opacity-80">
-              <span>4,850 / 8,000 para Platinum</span>
-              <span>60%</span>
+              <span>{totalPoints.toLocaleString()} puntos acumulados</span>
             </div>
             <div className="h-2 bg-white/20 rounded-full overflow-hidden">
-              <div className="h-full bg-gradient-to-r from-gold-500 to-gold-400 w-[60%]" />
+              <div
+                className="h-full bg-gradient-to-r from-gold-500 to-gold-400"
+                style={{ width: `${Math.min(100, (totalPoints / 8000) * 100)}%` }}
+              />
             </div>
           </div>
           <div className="flex justify-between items-end">
             <div>
-              <div className="text-[11px] opacity-70">Miembro desde</div>
-              <div className="font-display text-lg">Marzo 2024</div>
+              <div className="text-[11px] opacity-70">Viajes completados</div>
+              <div className="font-display text-lg">{bookings.length}</div>
             </div>
             <button className="btn btn-gold btn-sm">Ver beneficios</button>
           </div>
@@ -154,31 +272,37 @@ function ResumenTab() {
       </div>
 
       {/* Upcoming trip */}
-      <div>
-        <h2 className="font-display text-2xl mb-4">Proximo viaje</h2>
-        <article className="card-soft overflow-hidden grid md:grid-cols-[280px_1fr]">
-          <div className="relative aspect-[4/3] md:aspect-auto">
-            <Image src={hotels[0].image} alt={hotels[0].name} fill className="object-cover" />
-          </div>
-          <div className="p-6">
-            <span className="status-pill bg-sage-100 text-sage-500">Confirmado</span>
-            <h3 className="font-display text-2xl mt-3">{hotels[0].name}</h3>
-            <div className="flex items-center gap-1 text-xs text-charcoal-500 mt-1">
-              <MapPin size={12} /> {hotels[0].location}, {hotels[0].country}
-            </div>
+      {upcomingBooking && (
+        <div>
+          <h2 className="font-display text-2xl mb-4">Proximo viaje</h2>
+          <article className="card-soft overflow-hidden p-6">
+            <span
+              className={`status-pill ${
+                upcomingBooking.status === 'confirmed'
+                  ? 'bg-sage-100 text-sage-500'
+                  : 'bg-gold-100 text-gold-700'
+              }`}
+            >
+              {upcomingBooking.status === 'confirmed' ? 'Confirmado' : 'Pendiente'}
+            </span>
+            <h3 className="font-display text-2xl mt-3">{upcomingBooking.itemName}</h3>
             <div className="flex items-center gap-4 mt-4 text-sm text-charcoal-700">
-              <span className="flex items-center gap-1">
-                <Calendar size={14} className="text-plum-700" /> 15-20 May 2026
-              </span>
-              <span>· 5 noches · 2 huespedes</span>
+              {upcomingBooking.checkIn && (
+                <span className="flex items-center gap-1">
+                  <Calendar size={14} className="text-plum-700" />
+                  {new Date(upcomingBooking.checkIn).toLocaleDateString('es-ES')}
+                  {upcomingBooking.checkOut &&
+                    ` - ${new Date(upcomingBooking.checkOut).toLocaleDateString('es-ES')}`}
+                </span>
+              )}
+              <span>· {upcomingBooking.guests} huespedes</span>
             </div>
             <div className="flex gap-2 mt-5">
               <button className="btn btn-primary btn-sm">Ver detalle</button>
-              <button className="btn btn-outline btn-sm">Descargar voucher</button>
             </div>
-          </div>
-        </article>
-      </div>
+          </article>
+        </div>
+      )}
     </div>
   );
 }
@@ -206,79 +330,137 @@ function StatCard({
   );
 }
 
-function ViajesTab() {
-  const trips = [
-    { hotel: hotels[0], status: 'Confirmado', dates: '15-20 May 2026', tone: 'sage' },
-    { hotel: hotels[1], status: 'Proximamente', dates: '10-17 Jul 2026', tone: 'gold' },
-    { hotel: hotels[2], status: 'Completado', dates: '3-8 Nov 2025', tone: 'charcoal' },
-  ];
+function ViajesTab({ bookings }: { bookings: Booking[] }) {
+  const [filter, setFilter] = useState<'all' | 'upcoming' | 'past'>('all');
+
+  const filtered = bookings.filter((b) => {
+    if (filter === 'upcoming')
+      return b.status === 'confirmed' || b.status === 'pending';
+    if (filter === 'past') return b.status === 'completed' || b.status === 'cancelled';
+    return true;
+  });
+
+  const statusLabel = (s: string) => {
+    switch (s) {
+      case 'confirmed': return 'Confirmado';
+      case 'pending': return 'Pendiente';
+      case 'completed': return 'Completado';
+      case 'cancelled': return 'Cancelado';
+      default: return s;
+    }
+  };
+
+  const statusStyle = (s: string) => {
+    switch (s) {
+      case 'confirmed': return 'bg-sage-100 text-sage-500';
+      case 'pending': return 'bg-gold-100 text-gold-700';
+      case 'cancelled': return 'bg-rose-100 text-rose-400';
+      default: return 'bg-ivory-200 text-charcoal-700';
+    }
+  };
+
   return (
     <div>
       <h1 className="heading-lg mb-2">Mis viajes</h1>
       <p className="text-charcoal-500 mb-6">Tu historial y reservas en curso</p>
       <div className="flex gap-2 mb-6">
-        <button className="btn btn-primary btn-sm">Todos</button>
-        <button className="btn btn-ghost btn-sm">Proximos</button>
-        <button className="btn btn-ghost btn-sm">Pasados</button>
+        <button
+          onClick={() => setFilter('all')}
+          className={`btn btn-sm ${filter === 'all' ? 'btn-primary' : 'btn-ghost'}`}
+        >
+          Todos
+        </button>
+        <button
+          onClick={() => setFilter('upcoming')}
+          className={`btn btn-sm ${filter === 'upcoming' ? 'btn-primary' : 'btn-ghost'}`}
+        >
+          Proximos
+        </button>
+        <button
+          onClick={() => setFilter('past')}
+          className={`btn btn-sm ${filter === 'past' ? 'btn-primary' : 'btn-ghost'}`}
+        >
+          Pasados
+        </button>
       </div>
-      <div className="space-y-4">
-        {trips.map((t, i) => (
-          <article key={i} className="card-soft overflow-hidden grid md:grid-cols-[220px_1fr_auto]">
-            <div className="relative aspect-[4/3] md:aspect-auto">
-              <Image src={t.hotel.image} alt={t.hotel.name} fill className="object-cover" />
-            </div>
-            <div className="p-5">
-              <span
-                className={`status-pill ${
-                  t.tone === 'sage'
-                    ? 'bg-sage-100 text-sage-500'
-                    : t.tone === 'gold'
-                    ? 'bg-gold-100 text-gold-700'
-                    : 'bg-ivory-200 text-charcoal-700'
-                }`}
-              >
-                {t.status}
-              </span>
-              <h3 className="font-display text-xl mt-3">{t.hotel.name}</h3>
-              <div className="flex items-center gap-1 text-xs text-charcoal-500 mt-1">
-                <MapPin size={12} /> {t.hotel.location}, {t.hotel.country}
+      {filtered.length === 0 ? (
+        <div className="card-soft p-12 text-center">
+          <Plane size={40} className="text-plum-700 mx-auto mb-3 opacity-50" />
+          <p className="text-charcoal-500">No hay viajes en esta categoria</p>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {filtered.map((b) => (
+            <article key={b.id} className="card-soft overflow-hidden p-5">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <span className={`status-pill ${statusStyle(b.status)}`}>
+                    {statusLabel(b.status)}
+                  </span>
+                  <h3 className="font-display text-xl mt-3">{b.itemName}</h3>
+                  <div className="text-xs text-charcoal-500 mt-1 uppercase tracking-wider">
+                    {b.type}
+                  </div>
+                  {b.checkIn && (
+                    <div className="text-sm text-charcoal-700 mt-3 flex items-center gap-1">
+                      <Calendar size={13} className="text-plum-700" />
+                      {new Date(b.checkIn).toLocaleDateString('es-ES')}
+                      {b.checkOut &&
+                        ` - ${new Date(b.checkOut).toLocaleDateString('es-ES')}`}
+                    </div>
+                  )}
+                </div>
+                <div className="text-right">
+                  <div className="font-display text-xl text-plum-700">
+                    ${b.total.toLocaleString()}
+                  </div>
+                  <div className="text-xs text-charcoal-500">
+                    +{b.pointsEarned} puntos
+                  </div>
+                </div>
               </div>
-              <div className="text-sm text-charcoal-700 mt-3 flex items-center gap-1">
-                <Calendar size={13} className="text-plum-700" /> {t.dates}
-              </div>
-            </div>
-            <div className="p-5 flex flex-col justify-center gap-2 border-l border-ivory-200">
-              <button className="btn btn-primary btn-sm">Ver detalle</button>
-              <button className="btn btn-ghost btn-sm">Voucher</button>
-            </div>
-          </article>
-        ))}
-      </div>
+            </article>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
-function FavoritosTab() {
+function FavoritosTab({ favorites }: { favorites: Favorite[] }) {
   return (
     <div>
       <h1 className="heading-lg mb-2">Favoritos</h1>
-      <p className="text-charcoal-500 mb-6">Los lugares que has guardado para soñar despues</p>
-      <div className="grid sm:grid-cols-2 gap-5">
-        {destinations.slice(0, 4).map((d) => (
-          <article key={d.id} className="card-soft overflow-hidden group">
-            <div className="relative aspect-[4/3]">
-              <Image src={d.image} alt={d.name} fill className="object-cover group-hover:scale-105 transition-transform duration-1000" />
-              <button className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 flex items-center justify-center text-rose-400">
-                <Heart size={16} fill="currentColor" />
-              </button>
-            </div>
-            <div className="p-5">
-              <h3 className="font-display text-lg">{d.name}</h3>
-              <div className="text-xs text-charcoal-500">{d.country}</div>
-            </div>
-          </article>
-        ))}
-      </div>
+      <p className="text-charcoal-500 mb-6">Los lugares que has guardado para sonar despues</p>
+      {favorites.length === 0 ? (
+        <div className="card-soft p-12 text-center">
+          <Heart size={40} className="text-plum-700 mx-auto mb-3 opacity-50" />
+          <p className="text-charcoal-500">Aun no has guardado favoritos</p>
+          <Link href="/" className="btn btn-primary btn-sm mt-4 inline-block">
+            Explorar destinos
+          </Link>
+        </div>
+      ) : (
+        <div className="grid sm:grid-cols-2 gap-5">
+          {favorites.map((f) => (
+            <article key={f.id} className="card-soft overflow-hidden group">
+              <div className="p-5">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="text-xs uppercase tracking-widest text-charcoal-500">
+                      {f.type}
+                    </span>
+                    <h3 className="font-display text-lg">{f.itemId}</h3>
+                  </div>
+                  <button className="w-9 h-9 rounded-full bg-rose-100 flex items-center justify-center text-rose-400">
+                    <Heart size={16} fill="currentColor" />
+                  </button>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -290,7 +472,6 @@ function RecompensasTab() {
       name: 'Rose Gold',
       points: '2,000 - 8,000',
       benefits: ['10% descuento', 'Upgrade habitacion', 'Check-in prioritario'],
-      current: true,
     },
     {
       name: 'Platinum',
@@ -306,17 +487,17 @@ function RecompensasTab() {
       <div className="grid sm:grid-cols-3 gap-4 mb-8">
         <div className="card-soft p-5 text-center">
           <TrendingUp className="text-plum-700 mx-auto mb-2" size={20} />
-          <div className="font-display text-3xl text-plum-700">4,850</div>
+          <div className="font-display text-3xl text-plum-700">--</div>
           <div className="text-xs text-charcoal-500 uppercase tracking-wider">Puntos actuales</div>
         </div>
         <div className="card-soft p-5 text-center">
           <Gift className="text-gold-600 mx-auto mb-2" size={20} />
-          <div className="font-display text-3xl text-plum-700">3,150</div>
-          <div className="text-xs text-charcoal-500 uppercase tracking-wider">Para Platinum</div>
+          <div className="font-display text-3xl text-plum-700">--</div>
+          <div className="text-xs text-charcoal-500 uppercase tracking-wider">Para siguiente nivel</div>
         </div>
         <div className="card-soft p-5 text-center">
           <Sparkles className="text-rose-400 mx-auto mb-2" size={20} />
-          <div className="font-display text-3xl text-plum-700">$245</div>
+          <div className="font-display text-3xl text-plum-700">--</div>
           <div className="text-xs text-charcoal-500 uppercase tracking-wider">Ahorros totales</div>
         </div>
       </div>
@@ -326,36 +507,23 @@ function RecompensasTab() {
         {tiers.map((tier) => (
           <div
             key={tier.name}
-            className={`rounded-2xl p-6 ${
-              tier.current
-                ? 'bg-gradient-to-br from-plum-800 to-plum-700 text-white shadow-soft-lg'
-                : 'bg-white border border-ivory-200'
-            }`}
+            className="rounded-2xl p-6 bg-white border border-ivory-200"
           >
             <div className="flex items-center gap-2 mb-2">
-              <Sparkles size={16} className={tier.current ? 'text-gold-400' : 'text-plum-700'} />
+              <Sparkles size={16} className="text-plum-700" />
               <h3 className="font-display text-xl">{tier.name}</h3>
             </div>
-            <div
-              className={`text-xs mb-4 ${
-                tier.current ? 'text-white/70' : 'text-charcoal-500'
-              }`}
-            >
+            <div className="text-xs mb-4 text-charcoal-500">
               {tier.points} puntos
             </div>
             <ul className="space-y-2 text-sm">
               {tier.benefits.map((b) => (
                 <li key={b} className="flex items-start gap-2">
-                  <span className={tier.current ? 'text-gold-400' : 'text-plum-700'}>✓</span>
+                  <span className="text-plum-700">&#10003;</span>
                   {b}
                 </li>
               ))}
             </ul>
-            {tier.current && (
-              <div className="mt-5 pt-4 border-t border-white/20 text-xs uppercase tracking-widest text-gold-400">
-                Tu nivel actual
-              </div>
-            )}
           </div>
         ))}
       </div>
@@ -363,7 +531,11 @@ function RecompensasTab() {
   );
 }
 
-function DatosTab() {
+function DatosTab({ userName, userEmail }: { userName: string; userEmail: string }) {
+  const nameParts = userName.split(' ');
+  const firstName = nameParts[0] || '';
+  const lastName = nameParts.slice(1).join(' ') || '';
+
   return (
     <div>
       <h1 className="heading-lg mb-2">Datos personales</h1>
@@ -373,27 +545,27 @@ function DatosTab() {
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
             <label className="field-label">Nombre</label>
-            <input type="text" defaultValue="Sofia" className="field-input" />
+            <input type="text" defaultValue={firstName} className="field-input" />
           </div>
           <div>
             <label className="field-label">Apellidos</label>
-            <input type="text" defaultValue="Martinez Garcia" className="field-input" />
+            <input type="text" defaultValue={lastName} className="field-input" />
           </div>
           <div>
             <label className="field-label">Email</label>
-            <input type="email" defaultValue="sofia@aurelia.com" className="field-input" />
+            <input type="email" defaultValue={userEmail} className="field-input" readOnly />
           </div>
           <div>
             <label className="field-label">Telefono</label>
-            <input type="tel" defaultValue="+52 55 1234 5678" className="field-input" />
+            <input type="tel" placeholder="+52 55 1234 5678" className="field-input" />
           </div>
           <div>
             <label className="field-label">Pais</label>
-            <input type="text" defaultValue="Mexico" className="field-input" />
+            <input type="text" placeholder="Mexico" className="field-input" />
           </div>
           <div>
             <label className="field-label">Fecha de nacimiento</label>
-            <input type="date" defaultValue="1992-06-14" className="field-input" />
+            <input type="date" className="field-input" />
           </div>
         </div>
 
@@ -403,17 +575,9 @@ function DatosTab() {
           <CreditCard size={18} className="text-plum-700" />
           Metodos de pago
         </h3>
-        <div className="flex items-center justify-between p-4 bg-ivory-100 rounded-xl">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-8 rounded bg-gradient-to-r from-plum-700 to-plum-500" />
-            <div>
-              <div className="text-sm font-semibold">Visa · · · · 4242</div>
-              <div className="text-xs text-charcoal-500">Expira 05/28</div>
-            </div>
-          </div>
-          <button className="text-xs text-plum-700 hover:underline">Editar</button>
-        </div>
-        <button className="btn btn-outline btn-sm">+ Agregar metodo de pago</button>
+        <p className="text-sm text-charcoal-500">
+          Los pagos se gestionan de forma segura a traves de Stripe.
+        </p>
 
         <hr className="border-ivory-200" />
 
@@ -428,7 +592,7 @@ function DatosTab() {
 
 function NotificacionesTab() {
   const prefs = [
-    { label: 'Ofertas exclusivas para miembros', desc: 'Promociones flash y descuentos Rose Gold', on: true },
+    { label: 'Ofertas exclusivas para miembros', desc: 'Promociones flash y descuentos', on: true },
     { label: 'Recordatorios de viaje', desc: 'Alertas 48h antes de tu check-in', on: true },
     { label: 'Newsletter Aurelia', desc: 'Destinos curados cada semana', on: true },
     { label: 'Blog de viajes', desc: 'Nuevos articulos y guias', on: false },

@@ -1,12 +1,27 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { MapPin, Clock, Star } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import SearchWidget from '@/components/SearchWidget';
 import FilterSidebar from '@/components/FilterSidebar';
-import { activities } from '@/lib/data';
+import { getActivities } from '@/lib/db/queries';
 
-export default function ActividadesPage() {
+export default async function ActividadesPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string>>;
+}) {
+  const params = await searchParams;
+
+  const filters = {
+    category: params.category || undefined,
+    location: params.location || undefined,
+    priceMin: params.priceMin ? Number(params.priceMin) : undefined,
+    priceMax: params.priceMax ? Number(params.priceMax) : undefined,
+    sort: params.sort || undefined,
+  };
+
+  const activities = await getActivities(filters);
+
   return (
     <>
       <PageHeader
@@ -83,12 +98,11 @@ export default function ActividadesPage() {
                   className="card-soft overflow-hidden hover:-translate-y-1 hover:shadow-soft-lg flex flex-col"
                 >
                   <div className="relative aspect-[4/3] overflow-hidden">
-                    <Image
+                    <img
                       src={act.image}
                       alt={act.title}
-                      fill
-                      className="object-cover transition-transform duration-1000 hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, 33vw"
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 hover:scale-105"
+                      loading="lazy"
                     />
                     <div className="absolute top-4 left-4 bg-gradient-to-r from-gold-600 to-gold-500 text-charcoal-900 px-3 py-1 rounded-full text-xs font-semibold">
                       {act.category}

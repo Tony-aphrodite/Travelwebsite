@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 import {
   ShoppingBag,
   Trash2,
@@ -10,78 +10,128 @@ import {
   Minus,
   Shield,
   Tag,
-  CreditCard,
   Lock,
   Check,
   Calendar,
   Users,
   MapPin,
+  Loader2,
 } from 'lucide-react';
-import { hotels, packages, activities } from '@/lib/data';
 
 type CartItem = {
-  id: string;
-  type: 'hotel' | 'paquete' | 'actividad';
-  name: string;
-  image: string;
-  location: string;
-  price: number;
+  id: number;
+  userId: string;
+  type: string;
+  itemId: string;
+  itemName: string;
+  itemImage: string;
+  unitPrice: number;
   quantity: number;
-  details: string;
+  checkIn: string | null;
+  checkOut: string | null;
+  guests: number | null;
+  createdAt: string;
 };
 
-const INITIAL_CART: CartItem[] = [
-  {
-    id: hotels[0].id,
-    type: 'hotel',
-    name: hotels[0].name,
-    image: hotels[0].image,
-    location: `${hotels[0].location}, ${hotels[0].country}`,
-    price: hotels[0].price,
-    quantity: 5,
-    details: '15-20 May 2026 · 2 huespedes',
-  },
-  {
-    id: packages[0].id,
-    type: 'paquete',
-    name: packages[0].title,
-    image: packages[0].image,
-    location: packages[0].destination,
-    price: packages[0].price,
-    quantity: 2,
-    details: `${packages[0].duration} · por persona`,
-  },
-  {
-    id: activities[0].id,
-    type: 'actividad',
-    name: activities[0].title,
-    image: activities[0].image,
-    location: activities[0].location,
-    price: activities[0].price,
-    quantity: 2,
-    details: `${activities[0].duration} · por persona`,
-  },
-];
-
 export default function CarritoPage() {
-  const [items, setItems] = useState<CartItem[]>(INITIAL_CART);
+  const { data: session, status } = useSession();
+  const [items, setItems] = useState<CartItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [removing, setRemoving] = useState<number | null>(null);
+  const [checkingOut, setCheckingOut] = useState(false);
   const [promoCode, setPromoCode] = useState('');
   const [promoApplied, setPromoApplied] = useState(false);
+  const [promoError, setPromoError] = useState('');
 
-  const updateQty = (id: string, delta: number) => {
+  useEffect(() => {
+    if (status === 'authenticated') {
+      fetch('/api/cart')
+        .then((r) => r.json())
+        .then((data) => {
+          if (Array.isArray(data)) setItems(data);
+        })
+        .finally(() => setLoading(false));
+    } else if (status === 'unauthenticated') {
+      setLoading(false);
+    }
+  }, [status]);
+
+  const updateQty = (id: number, delta: number) => {
     setItems((prev) =>
       prev.map((it) =>
         it.id === id ? { ...it, quantity: Math.max(1, it.quantity + delta) } : it
       )
     );
   };
-  const removeItem = (id: string) => setItems((prev) => prev.filter((it) => it.id !== id));
 
-  const subtotal = items.reduce((sum, it) => sum + it.price * it.quantity, 0);
+  const removeItem = async (id: number) => {
+    setRemoving(id);
+    try {
+      await fetch(`/api/cart?id=${id}`, { method: 'DELETE' });
+      setItems((prev) => prev.filter((it) => it.id !== id));
+    } finally {
+      setRemoving(null);
+    }
+  };
+
+  const applyPromo = () => {
+    setPromoError('');
+    if (promoCode.toUpperCase() === 'BIENVENIDA20') {
+      setPromoApplied(true);
+    } else {
+      setPromoApplied(false);
+      setPromoError('Codigo invalido');
+    }
+  };
+
+  const handleCheckout = async () => {
+    setCheckingOut(true);
+    try {
+      const res = await fetch('/api/stripe/checkout', { method: 'POST' });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } finally {
+      setCheckingOut(false);
+    }
+  };
+
+  const subtotal = items.reduce((sum, it) => sum + it.unitPrice * it.quantity, 0);
   const taxes = Math.round(subtotal * 0.12);
-  const discount = promoApplied ? Math.round(subtotal * 0.1) : 0;
+  const discount = promoApplied ? Math.round(subtotal * 0.2) : 0;
   const aureliaDiscount = Math.round(subtotal * 0.05);
   const total = subtotal + taxes - discount - aureliaDiscount;
+
+  if (status === 'loading' || loading) {
+    return (
+      <div className="pt-28 pb-20 bg-ivory-100 min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 size={40} className="text-plum-700 animate-spin mx-auto mb-4" />
+          <p className="text-charcoal-500">Cargando tu carrito...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (status === 'unauthenticated') {
+    return (
+      <div className="pt-28 pb-20 bg-ivory-100 min-h-screen">
+        <div className="container-site">
+          <div className="card-soft p-16 text-center">
+            <ShoppingBag size={48} className="text-plum-700 mx-auto mb-4 opacity-50" />
+            <h2 className="font-display text-2xl mb-2">Inicia sesion para ver tu carrito</h2>
+            <p className="text-charcoal-500 mb-6">
+              Necesitas una cuenta para agregar experiencias a tu carrito
+            </p>
+            <Link href="/auth/login" className="btn btn-primary btn-md">
+              Iniciar sesion
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="pt-28 pb-20 bg-ivory-100 min-h-screen">
@@ -125,7 +175,11 @@ export default function CarritoPage() {
                 <article key={it.id} className="card-soft overflow-hidden">
                   <div className="grid grid-cols-[140px_1fr] md:grid-cols-[200px_1fr]">
                     <div className="relative aspect-square">
-                      <Image src={it.image} alt={it.name} fill className="object-cover" sizes="200px" />
+                      <img
+                        src={it.itemImage}
+                        alt={it.itemName}
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
                       <span className="absolute top-3 left-3 bg-white/95 text-plum-700 text-[10px] uppercase tracking-widest px-2 py-1 rounded-full font-semibold">
                         {it.type}
                       </span>
@@ -135,20 +189,30 @@ export default function CarritoPage() {
                         <div>
                           <div className="flex items-center gap-1 text-[11px] uppercase tracking-widest text-charcoal-500 mb-1">
                             <MapPin size={11} />
-                            {it.location}
+                            {it.itemName}
                           </div>
-                          <h3 className="font-display text-xl leading-tight">{it.name}</h3>
-                          <div className="text-xs text-charcoal-500 mt-1 flex items-center gap-1">
-                            <Calendar size={11} />
-                            {it.details}
-                          </div>
+                          <h3 className="font-display text-xl leading-tight">{it.itemName}</h3>
+                          {(it.checkIn || it.checkOut) && (
+                            <div className="text-xs text-charcoal-500 mt-1 flex items-center gap-1">
+                              <Calendar size={11} />
+                              {it.checkIn && it.checkOut
+                                ? `${it.checkIn} - ${it.checkOut}`
+                                : it.checkIn || it.checkOut}
+                              {it.guests && ` · ${it.guests} huespedes`}
+                            </div>
+                          )}
                         </div>
                         <button
                           onClick={() => removeItem(it.id)}
+                          disabled={removing === it.id}
                           className="text-charcoal-500 hover:text-plum-700 p-1"
                           aria-label="Eliminar"
                         >
-                          <Trash2 size={16} />
+                          {removing === it.id ? (
+                            <Loader2 size={16} className="animate-spin" />
+                          ) : (
+                            <Trash2 size={16} />
+                          )}
                         </button>
                       </div>
 
@@ -172,10 +236,10 @@ export default function CarritoPage() {
                         </div>
                         <div className="text-right">
                           <div className="text-[11px] text-charcoal-500">
-                            ${it.price} x {it.quantity}
+                            ${it.unitPrice} x {it.quantity}
                           </div>
                           <div className="font-display text-2xl text-plum-700 leading-none">
-                            ${(it.price * it.quantity).toLocaleString()}
+                            ${(it.unitPrice * it.quantity).toLocaleString()}
                           </div>
                         </div>
                       </div>
@@ -184,33 +248,14 @@ export default function CarritoPage() {
                 </article>
               ))}
 
-              {/* Payment form */}
+              {/* Secure payment info */}
               <div className="card-soft p-7 mt-8">
-                <h2 className="font-display text-2xl mb-5 flex items-center gap-2">
-                  <CreditCard size={20} className="text-plum-700" />
-                  Datos de pago
-                </h2>
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div className="sm:col-span-2">
-                    <label className="field-label">Nombre en la tarjeta</label>
-                    <input type="text" placeholder="Sofia Martinez" className="field-input" />
-                  </div>
-                  <div className="sm:col-span-2">
-                    <label className="field-label">Numero de tarjeta</label>
-                    <input type="text" placeholder="4242 4242 4242 4242" className="field-input" />
-                  </div>
-                  <div>
-                    <label className="field-label">Vencimiento</label>
-                    <input type="text" placeholder="MM/AA" className="field-input" />
-                  </div>
-                  <div>
-                    <label className="field-label">CVV</label>
-                    <input type="text" placeholder="123" className="field-input" />
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 text-xs text-charcoal-500 mt-4">
-                  <Lock size={12} />
-                  Tus datos estan protegidos con encriptacion SSL de 256 bits
+                <div className="flex items-center gap-2 text-sm text-charcoal-700">
+                  <Lock size={16} className="text-plum-700" />
+                  <span>
+                    El pago se procesara de forma segura a traves de Stripe. Tus datos estan
+                    protegidos con encriptacion SSL de 256 bits.
+                  </span>
                 </div>
               </div>
             </div>
@@ -229,17 +274,23 @@ export default function CarritoPage() {
                     <input
                       type="text"
                       value={promoCode}
-                      onChange={(e) => setPromoCode(e.target.value)}
-                      placeholder="AURELIA10"
+                      onChange={(e) => {
+                        setPromoCode(e.target.value);
+                        setPromoError('');
+                      }}
+                      placeholder="BIENVENIDA20"
                       className="field-input flex-1"
                     />
                     <button
-                      onClick={() => setPromoApplied(!!promoCode)}
+                      onClick={applyPromo}
                       className="btn btn-outline btn-sm"
                     >
                       {promoApplied ? <Check size={14} /> : 'Aplicar'}
                     </button>
                   </div>
+                  {promoError && (
+                    <p className="text-xs text-rose-400 mt-1">{promoError}</p>
+                  )}
                 </div>
 
                 <div className="space-y-3 py-5 border-y border-ivory-200 text-sm">
@@ -253,7 +304,7 @@ export default function CarritoPage() {
                   </div>
                   {promoApplied && (
                     <div className="flex justify-between text-sage-500">
-                      <span>Codigo promocional</span>
+                      <span>Codigo BIENVENIDA20 (-20%)</span>
                       <span>-${discount.toLocaleString()}</span>
                     </div>
                   )}
@@ -271,8 +322,19 @@ export default function CarritoPage() {
                   </span>
                 </div>
 
-                <button className="btn btn-primary btn-lg w-full">
-                  Confirmar y pagar
+                <button
+                  onClick={handleCheckout}
+                  disabled={checkingOut}
+                  className="btn btn-primary btn-lg w-full"
+                >
+                  {checkingOut ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <Loader2 size={18} className="animate-spin" />
+                      Procesando...
+                    </span>
+                  ) : (
+                    'Confirmar y pagar'
+                  )}
                 </button>
                 <p className="text-center text-xs text-charcoal-500 mt-3">
                   Cancelacion gratis hasta 48h antes del viaje

@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import { useSession } from 'next-auth/react';
 import {
   LayoutDashboard,
   Hotel,
@@ -22,9 +22,10 @@ import {
   Edit,
   Trash2,
   Plus,
+  Loader2,
+  ShieldAlert,
   type LucideIcon,
 } from 'lucide-react';
-import { hotels, packages as pkgs } from '@/lib/data';
 
 type Panel = 'dashboard' | 'reservas' | 'hoteles' | 'paquetes' | 'usuarios' | 'reportes';
 
@@ -37,8 +38,75 @@ const NAV: { key: Panel; label: string; icon: LucideIcon }[] = [
   { key: 'reportes', label: 'Reportes', icon: TrendingUp },
 ];
 
+type HotelRow = {
+  id: string;
+  name: string;
+  location: string;
+  country: string;
+  image: string;
+  price: number;
+  rating: number;
+};
+
+type PackageRow = {
+  id: string;
+  title: string;
+  destination: string;
+  image: string;
+  duration: string;
+  price: number;
+  oldPrice: number;
+};
+
 export default function AdminPage() {
+  const { data: session, status } = useSession();
   const [panel, setPanel] = useState<Panel>('dashboard');
+  const [hotels, setHotels] = useState<HotelRow[]>([]);
+  const [packages, setPackages] = useState<PackageRow[]>([]);
+  const [loadingData, setLoadingData] = useState(true);
+
+  const isAdmin = (session?.user as any)?.role === 'admin';
+
+  useEffect(() => {
+    if (status === 'authenticated' && isAdmin) {
+      Promise.all([
+        fetch('/api/admin/hotels').then((r) => r.json()),
+        fetch('/api/admin/packages').then((r) => r.json()),
+      ])
+        .then(([h, p]) => {
+          if (Array.isArray(h)) setHotels(h);
+          if (Array.isArray(p)) setPackages(p);
+        })
+        .finally(() => setLoadingData(false));
+    } else if (status !== 'loading') {
+      setLoadingData(false);
+    }
+  }, [status, isAdmin]);
+
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen bg-ivory-100 flex items-center justify-center">
+        <Loader2 size={40} className="text-plum-700 animate-spin" />
+      </div>
+    );
+  }
+
+  if (!session || !isAdmin) {
+    return (
+      <div className="min-h-screen bg-ivory-100 flex items-center justify-center">
+        <div className="card-soft p-12 text-center max-w-md">
+          <ShieldAlert size={48} className="text-rose-400 mx-auto mb-4" />
+          <h1 className="font-display text-2xl mb-2">Acceso denegado</h1>
+          <p className="text-charcoal-500 mb-6">
+            No tienes permisos de administrador para acceder a esta seccion.
+          </p>
+          <Link href="/" className="btn btn-primary btn-md">
+            Volver al inicio
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-ivory-100 pt-20">
@@ -125,19 +193,27 @@ export default function AdminPage() {
                 <span className="absolute top-2 right-2 w-2 h-2 bg-rose-400 rounded-full" />
               </button>
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-plum-700 to-rose-400 text-white flex items-center justify-center font-display">
-                I
+                {session.user?.name?.charAt(0) || 'A'}
               </div>
             </div>
           </header>
 
           {/* Panels */}
           <main className="p-8">
-            {panel === 'dashboard' && <Dashboard />}
-            {panel === 'reservas' && <Reservas />}
-            {panel === 'hoteles' && <Hoteles />}
-            {panel === 'paquetes' && <Paquetes />}
-            {panel === 'usuarios' && <Usuarios />}
-            {panel === 'reportes' && <Reportes />}
+            {loadingData ? (
+              <div className="flex items-center justify-center py-20">
+                <Loader2 size={32} className="text-plum-700 animate-spin" />
+              </div>
+            ) : (
+              <>
+                {panel === 'dashboard' && <Dashboard />}
+                {panel === 'reservas' && <Reservas />}
+                {panel === 'hoteles' && <Hoteles hotels={hotels} />}
+                {panel === 'paquetes' && <Paquetes packages={packages} />}
+                {panel === 'usuarios' && <Usuarios />}
+                {panel === 'reportes' && <Reportes />}
+              </>
+            )}
           </main>
         </div>
       </div>
@@ -384,7 +460,7 @@ function Reservas() {
   );
 }
 
-function Hoteles() {
+function Hoteles({ hotels }: { hotels: HotelRow[] }) {
   return (
     <div className="space-y-5">
       <div className="flex justify-between items-center">
@@ -397,7 +473,11 @@ function Hoteles() {
         {hotels.map((h) => (
           <div key={h.id} className="card-soft overflow-hidden">
             <div className="relative aspect-[16/10]">
-              <Image src={h.image} alt={h.name} fill className="object-cover" sizes="33vw" />
+              <img
+                src={h.image}
+                alt={h.name}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
               <button className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/95 text-plum-700 flex items-center justify-center">
                 <MoreVertical size={14} />
               </button>
@@ -426,20 +506,24 @@ function Hoteles() {
   );
 }
 
-function Paquetes() {
+function Paquetes({ packages }: { packages: PackageRow[] }) {
   return (
     <div className="space-y-5">
       <div className="flex justify-between items-center">
-        <p className="text-sm text-charcoal-500">{pkgs.length} paquetes activos</p>
+        <p className="text-sm text-charcoal-500">{packages.length} paquetes activos</p>
         <button className="btn btn-primary btn-sm">
           <Plus size={14} /> Nuevo paquete
         </button>
       </div>
       <div className="space-y-4">
-        {pkgs.slice(0, 4).map((p) => (
+        {packages.slice(0, 4).map((p) => (
           <div key={p.id} className="card-soft p-5 grid md:grid-cols-[140px_1fr_auto] gap-5 items-center">
             <div className="relative aspect-[4/3] rounded-xl overflow-hidden">
-              <Image src={p.image} alt={p.title} fill className="object-cover" sizes="140px" />
+              <img
+                src={p.image}
+                alt={p.title}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
             </div>
             <div>
               <div className="text-xs uppercase tracking-widest text-gold-700 font-semibold mb-1">
@@ -453,9 +537,11 @@ function Paquetes() {
                 <div className="font-display text-xl text-plum-700">
                   ${p.price.toLocaleString()}
                 </div>
-                <div className="text-[10px] text-sage-500">
-                  {Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100)}% OFF
-                </div>
+                {p.oldPrice > 0 && (
+                  <div className="text-[10px] text-sage-500">
+                    {Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100)}% OFF
+                  </div>
+                )}
               </div>
               <div className="flex gap-1">
                 <button className="w-9 h-9 rounded-full bg-ivory-100 hover:bg-plum-100 text-plum-700 flex items-center justify-center">

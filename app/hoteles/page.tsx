@@ -1,12 +1,29 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { MapPin, Heart, Wifi, Waves, Utensils, Sparkles } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import SearchWidget from '@/components/SearchWidget';
 import FilterSidebar from '@/components/FilterSidebar';
-import { hotels } from '@/lib/data';
+import { getHotels } from '@/lib/db/queries';
 
-export default function HotelesPage() {
+export default async function HotelesPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string>>;
+}) {
+  const params = await searchParams;
+
+  const filters = {
+    country: params.country || undefined,
+    priceMin: params.priceMin ? Number(params.priceMin) : undefined,
+    priceMax: params.priceMax ? Number(params.priceMax) : undefined,
+    stars: params.stars ? params.stars.split(',').map(Number) : undefined,
+    amenity: params.amenity || undefined,
+    sort: params.sort || undefined,
+    q: params.q || undefined,
+  };
+
+  const hotels = await getHotels(filters);
+
   return (
     <>
       <PageHeader
@@ -85,12 +102,11 @@ export default function HotelesPage() {
                   className="card-soft overflow-hidden grid md:grid-cols-[320px_1fr_auto] hover:-translate-y-0.5 hover:shadow-soft-lg"
                 >
                   <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[280px] overflow-hidden">
-                    <Image
+                    <img
                       src={hotel.image}
                       alt={hotel.name}
-                      fill
-                      className="object-cover transition-transform duration-1000 hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, 320px"
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 hover:scale-105"
+                      loading="lazy"
                     />
                     <button className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 text-plum-700 hover:bg-plum-700 hover:text-white flex items-center justify-center transition-colors">
                       <Heart size={18} />
@@ -120,7 +136,7 @@ export default function HotelesPage() {
                     </div>
                     <p className="text-sm text-charcoal-500 mb-4 line-clamp-2">{hotel.description}</p>
                     <div className="flex flex-wrap gap-2">
-                      {hotel.amenities.slice(0, 4).map((a) => (
+                      {(hotel.amenities ?? []).slice(0, 4).map((a) => (
                         <span key={a} className="amenity-chip">
                           {a.includes('WiFi') ? (
                             <Wifi size={12} />

@@ -1,12 +1,26 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Check, Clock } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import SearchWidget from '@/components/SearchWidget';
 import FilterSidebar from '@/components/FilterSidebar';
-import { packages } from '@/lib/data';
+import { getPackages } from '@/lib/db/queries';
 
-export default function PaquetesPage() {
+export default async function PaquetesPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string>>;
+}) {
+  const params = await searchParams;
+
+  const filters = {
+    destination: params.destination || undefined,
+    priceMin: params.priceMin ? Number(params.priceMin) : undefined,
+    priceMax: params.priceMax ? Number(params.priceMax) : undefined,
+    sort: params.sort || undefined,
+  };
+
+  const packages = await getPackages(filters);
+
   return (
     <>
       <PageHeader
@@ -89,12 +103,11 @@ export default function PaquetesPage() {
                   className="card-soft overflow-hidden grid md:grid-cols-[380px_1fr] hover:-translate-y-0.5 hover:shadow-soft-lg"
                 >
                   <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[300px] overflow-hidden">
-                    <Image
+                    <img
                       src={pkg.image}
                       alt={pkg.title}
-                      fill
-                      className="object-cover transition-transform duration-1000 hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, 380px"
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 hover:scale-105"
+                      loading="lazy"
                     />
                     <span className="absolute top-4 left-4 bg-plum-700 text-white px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider">
                       {pkg.badge}
@@ -113,7 +126,7 @@ export default function PaquetesPage() {
                       {pkg.description}
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 mb-5">
-                      {pkg.includes.map((inc) => (
+                      {(pkg.includes ?? []).map((inc) => (
                         <div
                           key={inc}
                           className="flex items-center gap-2 text-xs text-charcoal-700"

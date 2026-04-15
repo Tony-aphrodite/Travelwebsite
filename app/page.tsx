@@ -1,9 +1,18 @@
 import Link from 'next/link';
 import { Star, Award } from 'lucide-react';
 import SearchWidget from '@/components/SearchWidget';
-import { destinations, packages, activities, testimonials, blogPosts } from '@/lib/data';
+import { getDestinations, getPackages, getActivities, getTestimonials, getBlogPosts } from '@/lib/db/queries';
+import NewsletterForm from '@/components/NewsletterForm';
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [destinations, packages, activities, testimonials, blogPosts] = await Promise.all([
+    getDestinations(),
+    getPackages(),
+    getActivities(),
+    getTestimonials(),
+    getBlogPosts(),
+  ]);
+
   return (
     <>
       {/* HERO */}
@@ -378,7 +387,7 @@ export default function HomePage() {
             {blogPosts.slice(0, 3).map((post, i) => (
               <Link
                 key={post.slug}
-                href="/blog"
+                href={`/blog/${post.slug}`}
                 className={`card-soft overflow-hidden group hover:-translate-y-1 hover:shadow-soft-lg ${
                   i === 0 ? 'md:col-span-2 lg:col-span-1' : ''
                 }`}
@@ -419,17 +428,7 @@ export default function HomePage() {
             Suscribete a nuestra carta mensual y recibe ofertas exclusivas, guias de viaje curadas y
             avances de nuevos destinos.
           </p>
-          <form className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto">
-            <input
-              type="email"
-              placeholder="tu@correo.com"
-              required
-              className="flex-1 px-6 py-4 rounded-full border border-ivory-300 bg-white text-[15px] outline-none focus:border-plum-700 focus:ring-4 focus:ring-plum-700/10"
-            />
-            <button type="submit" className="btn btn-primary btn-md">
-              Suscribirme
-            </button>
-          </form>
+          <NewsletterForm />
         </div>
       </section>
     </>

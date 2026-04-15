@@ -3,9 +3,26 @@ import { Plane, Clock, Briefcase } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import SearchWidget from '@/components/SearchWidget';
 import FilterSidebar from '@/components/FilterSidebar';
-import { flights } from '@/lib/data';
+import { getFlights } from '@/lib/db/queries';
 
-export default function VuelosPage() {
+export default async function VuelosPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string>>;
+}) {
+  const params = await searchParams;
+
+  const filters = {
+    fromCity: params.fromCity || undefined,
+    toCity: params.toCity || undefined,
+    priceMin: params.priceMin ? Number(params.priceMin) : undefined,
+    priceMax: params.priceMax ? Number(params.priceMax) : undefined,
+    stops: params.stops ? Number(params.stops) : undefined,
+    sort: params.sort || undefined,
+  };
+
+  const flights = await getFlights(filters);
+
   return (
     <>
       <PageHeader
@@ -109,7 +126,7 @@ export default function VuelosPage() {
                         {flight.departure}
                       </strong>
                       <span className="text-xs text-charcoal-500 uppercase tracking-wider mt-1 block">
-                        {flight.from} · {flight.fromCity}
+                        {flight.fromCode} · {flight.fromCity}
                       </span>
                     </div>
                     <div className="text-center relative min-w-[140px]">
@@ -129,7 +146,7 @@ export default function VuelosPage() {
                         {flight.arrival}
                       </strong>
                       <span className="text-xs text-charcoal-500 uppercase tracking-wider mt-1 block">
-                        {flight.to} · {flight.toCity}
+                        {flight.toCode} · {flight.toCity}
                       </span>
                     </div>
                   </div>

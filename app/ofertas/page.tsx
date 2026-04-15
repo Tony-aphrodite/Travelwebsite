@@ -1,10 +1,11 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Flame, Clock, Tag, Sparkles, Percent, type LucideIcon } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
-import { packages, hotels } from '@/lib/data';
+import { getPackages, getHotels } from '@/lib/db/queries';
 
-export default function OfertasPage() {
+export default async function OfertasPage() {
+  const [packages, hotels] = await Promise.all([getPackages(), getHotels()]);
+
   return (
     <>
       <PageHeader
@@ -45,12 +46,11 @@ export default function OfertasPage() {
               </Link>
             </div>
             <div className="relative aspect-[4/3] rounded-2xl overflow-hidden">
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=1200&q=80"
                 alt="Luna de miel"
-                fill
-                className="object-cover"
-                sizes="50vw"
+                className="absolute inset-0 w-full h-full object-cover"
               />
             </div>
           </div>
@@ -99,12 +99,11 @@ export default function OfertasPage() {
                 className="card-soft overflow-hidden hover:-translate-y-1 hover:shadow-soft-lg group"
               >
                 <div className="relative aspect-[4/3]">
-                  <Image
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
                     src={pkg.image}
                     alt={pkg.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-1000"
-                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
                   />
                   <span className="absolute top-4 left-4 bg-gradient-to-r from-gold-600 to-gold-500 text-charcoal-900 px-3 py-1.5 rounded-full text-xs font-bold">
                     -{pct}%
@@ -146,12 +145,11 @@ export default function OfertasPage() {
               className="card-soft overflow-hidden hover:-translate-y-1 hover:shadow-soft-lg group"
             >
               <div className="relative aspect-[4/3]">
-                <Image
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
                   src={h.image}
                   alt={h.name}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-1000"
-                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
                 />
                 <span className="absolute top-4 left-4 bg-gradient-to-r from-plum-700 to-plum-500 text-white px-3 py-1.5 rounded-full text-xs font-bold">
                   -25%

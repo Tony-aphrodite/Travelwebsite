@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import {
   MapPin,
@@ -15,7 +14,7 @@ import {
   Star,
   type LucideIcon,
 } from 'lucide-react';
-import { hotels, villas } from '@/lib/data';
+import { getHotelById, getVillaById } from '@/lib/db/queries';
 
 const AMENITY_ICONS: Record<string, LucideIcon> = {
   WiFi: Wifi,
@@ -32,24 +31,18 @@ function getIcon(name: string) {
   return key ? AMENITY_ICONS[key] : Sparkles;
 }
 
-export function generateStaticParams() {
-  return [
-    ...hotels.map((h) => ({ id: h.id })),
-    ...villas.map((v) => ({ id: v.id })),
-  ];
-}
-
-export default function HotelDetailPage({ params }: { params: { id: string } }) {
-  const hotel = hotels.find((h) => h.id === params.id);
-  const villa = !hotel ? villas.find((v) => v.id === params.id) : null;
+export default async function HotelDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const hotel = await getHotelById(id);
+  const villa = !hotel ? await getVillaById(id) : null;
 
   if (!hotel && !villa) notFound();
 
   const item = hotel || villa!;
-  const gallery = item.gallery;
+  const gallery = (item.gallery as string[]) || [];
   const mainImage = gallery[0] || item.image;
   const extraImages = gallery.slice(1, 5);
-  const amenities = item.amenities;
+  const amenities = (item.amenities as string[]) || [];
   const price = item.price;
   const description = item.description;
   const location = item.location;
@@ -110,16 +103,17 @@ export default function HotelDetailPage({ params }: { params: { id: string } }) 
         {/* Gallery */}
         <div className="grid grid-cols-4 grid-rows-2 gap-3 h-[280px] md:h-[500px] rounded-3xl overflow-hidden mb-12">
           <div className="col-span-4 md:col-span-2 row-span-2 relative">
-            <Image src={mainImage} alt={name} fill className="object-cover" priority sizes="50vw" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={mainImage} alt={name} className="absolute inset-0 w-full h-full object-cover" />
           </div>
           {extraImages.map((img, i) => (
             <div key={i} className="relative hidden md:block">
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src={img}
                 alt={`${name} ${i + 2}`}
-                fill
-                className="object-cover"
-                sizes="25vw"
+                className="absolute inset-0 w-full h-full object-cover"
+                loading="lazy"
               />
               {i === 3 && (
                 <div className="absolute inset-0 bg-charcoal-900/40 flex items-center justify-center">

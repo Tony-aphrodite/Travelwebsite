@@ -1,8 +1,7 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Compass, Sparkles } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
-import { destinations } from '@/lib/data';
+import { getDestinations } from '@/lib/db/queries';
 
 const REGIONS = [
   { name: 'Europa', count: 34, color: 'from-plum-700 to-rose-400' },
@@ -11,7 +10,9 @@ const REGIONS = [
   { name: 'Medio Oriente', count: 12, color: 'from-plum-800 to-plum-600' },
 ];
 
-export default function DestinosPage() {
+export default async function DestinosPage() {
+  const destinations = await getDestinations();
+
   const featured = destinations[0];
   const rest = destinations.slice(1);
 
@@ -41,46 +42,52 @@ export default function DestinosPage() {
       </section>
 
       {/* Featured */}
-      <section className="container-site mb-16">
-        <div className="flex items-center gap-2 mb-6">
-          <Sparkles size={16} className="text-gold-600" />
-          <span className="eyebrow">Destino del mes</span>
-        </div>
-        <article className="card-soft overflow-hidden grid lg:grid-cols-2">
-          <div className="relative aspect-[4/3] lg:aspect-auto min-h-[380px]">
-            <Image src={featured.image} alt={featured.name} fill className="object-cover" sizes="50vw" />
+      {featured && (
+        <section className="container-site mb-16">
+          <div className="flex items-center gap-2 mb-6">
+            <Sparkles size={16} className="text-gold-600" />
+            <span className="eyebrow">Destino del mes</span>
           </div>
-          <div className="p-10 lg:p-14 flex flex-col justify-center">
-            <div className="text-xs uppercase tracking-widest text-gold-700 mb-2 font-semibold">
-              {featured.country}
+          <article className="card-soft overflow-hidden grid lg:grid-cols-2">
+            <div className="relative aspect-[4/3] lg:aspect-auto min-h-[380px]">
+              <img
+                src={featured.image}
+                alt={featured.name}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
             </div>
-            <h2 className="heading-lg mb-3">{featured.name}</h2>
-            <p className="font-script italic text-xl text-charcoal-700 mb-4">
-              &ldquo;{featured.tagline}&rdquo;
-            </p>
-            <p className="text-charcoal-700 leading-relaxed mb-6">
-              Descubre {featured.name} como nunca antes. Nuestras viajeras lo describen como el
-              lugar donde el tiempo se detiene, las puestas de sol pintan el cielo y cada rincon
-              guarda un secreto por descubrir.
-            </p>
-            <div className="flex items-baseline gap-2 mb-6">
-              <span className="text-sm text-charcoal-500">Desde</span>
-              <span className="font-display text-4xl text-plum-700">
-                ${featured.priceFrom.toLocaleString()}
-              </span>
-              <span className="text-sm text-charcoal-500">USD</span>
+            <div className="p-10 lg:p-14 flex flex-col justify-center">
+              <div className="text-xs uppercase tracking-widest text-gold-700 mb-2 font-semibold">
+                {featured.country}
+              </div>
+              <h2 className="heading-lg mb-3">{featured.name}</h2>
+              <p className="font-script italic text-xl text-charcoal-700 mb-4">
+                &ldquo;{featured.tagline}&rdquo;
+              </p>
+              <p className="text-charcoal-700 leading-relaxed mb-6">
+                Descubre {featured.name} como nunca antes. Nuestras viajeras lo describen como el
+                lugar donde el tiempo se detiene, las puestas de sol pintan el cielo y cada rincon
+                guarda un secreto por descubrir.
+              </p>
+              <div className="flex items-baseline gap-2 mb-6">
+                <span className="text-sm text-charcoal-500">Desde</span>
+                <span className="font-display text-4xl text-plum-700">
+                  ${featured.priceFrom.toLocaleString()}
+                </span>
+                <span className="text-sm text-charcoal-500">USD</span>
+              </div>
+              <div className="flex gap-3">
+                <Link href="/paquetes" className="btn btn-primary btn-md">
+                  Ver paquetes
+                </Link>
+                <Link href="/hoteles" className="btn btn-outline btn-md">
+                  Explorar hoteles
+                </Link>
+              </div>
             </div>
-            <div className="flex gap-3">
-              <Link href="/paquetes" className="btn btn-primary btn-md">
-                Ver paquetes
-              </Link>
-              <Link href="/hoteles" className="btn btn-outline btn-md">
-                Explorar hoteles
-              </Link>
-            </div>
-          </div>
-        </article>
-      </section>
+          </article>
+        </section>
+      )}
 
       {/* Grid */}
       <section className="container-site pb-24">
@@ -98,12 +105,11 @@ export default function DestinosPage() {
               className="card-soft overflow-hidden group block"
             >
               <div className="relative aspect-[4/5]">
-                <Image
+                <img
                   src={d.image}
                   alt={d.name}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-1000"
-                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
+                  loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/80 via-charcoal-900/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
