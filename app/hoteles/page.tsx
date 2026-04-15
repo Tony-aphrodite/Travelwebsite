@@ -3,6 +3,7 @@ import { MapPin, Heart, Wifi, Waves, Utensils, Sparkles } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import SearchWidget from '@/components/SearchWidget';
 import FilterSidebar from '@/components/FilterSidebar';
+import SortSelect from '@/components/SortSelect';
 import { getHotels } from '@/lib/db/queries';
 
 export default async function HotelesPage({
@@ -43,38 +44,34 @@ export default async function HotelesPage({
             groups={[
               {
                 title: 'Estrellas',
+                paramKey: 'stars',
                 options: [
-                  { label: '5 estrellas', count: 48 },
-                  { label: '4 estrellas', count: 126 },
-                  { label: '3 estrellas', count: 89 },
-                ],
-              },
-              {
-                title: 'Valoracion',
-                options: [
-                  { label: 'Excepcional (9+)', count: 32 },
-                  { label: 'Muy bueno (8+)', count: 87 },
-                  { label: 'Bueno (7+)', count: 142 },
+                  { label: '5 estrellas', value: '5', count: 48 },
+                  { label: '4 estrellas', value: '4', count: 126 },
+                  { label: '3 estrellas', value: '3', count: 89 },
                 ],
               },
               {
                 title: 'Amenidades',
+                paramKey: 'amenity',
                 options: [
                   { label: 'Piscina', count: 156 },
                   { label: 'Spa', count: 98 },
                   { label: 'Restaurante', count: 201 },
                   { label: 'Gimnasio', count: 178 },
-                  { label: 'WiFi gratis', count: 234 },
+                  { label: 'WiFi gratis', value: 'WiFi', count: 234 },
                   { label: 'Vista al mar', count: 67 },
                 ],
               },
               {
-                title: 'Tipo',
+                title: 'Pais',
+                paramKey: 'country',
                 options: [
-                  { label: 'Boutique', count: 45 },
-                  { label: 'Resort', count: 78 },
-                  { label: 'Villa', count: 34 },
-                  { label: 'Palacio', count: 12 },
+                  { label: 'Grecia' },
+                  { label: 'Italia' },
+                  { label: 'Francia' },
+                  { label: 'Espana' },
+                  { label: 'Japon' },
                 ],
               },
             ]}
@@ -86,13 +83,14 @@ export default async function HotelesPage({
                 <strong className="text-plum-700 font-display text-lg">{hotels.length}</strong>{' '}
                 hoteles encontrados
               </span>
-              <select className="px-4 py-2 border border-ivory-300 rounded-full bg-ivory-50 text-sm cursor-pointer">
-                <option>Ordenar por recomendado</option>
-                <option>Precio: menor a mayor</option>
-                <option>Precio: mayor a menor</option>
-                <option>Mejor valorados</option>
-                <option>Mas populares</option>
-              </select>
+              <SortSelect
+                options={[
+                  { label: 'Ordenar por recomendado', value: '' },
+                  { label: 'Precio: menor a mayor', value: 'price_asc' },
+                  { label: 'Precio: mayor a menor', value: 'price_desc' },
+                  { label: 'Mejor valorados', value: 'rating_desc' },
+                ]}
+              />
             </div>
 
             <div className="space-y-6">

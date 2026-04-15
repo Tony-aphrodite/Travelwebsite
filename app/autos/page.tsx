@@ -3,6 +3,7 @@ import { Users, Fuel, Settings, Snowflake } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import SearchWidget from '@/components/SearchWidget';
 import FilterSidebar from '@/components/FilterSidebar';
+import SortSelect from '@/components/SortSelect';
 import { getCars } from '@/lib/db/queries';
 
 export default async function AutosPage({
@@ -43,6 +44,7 @@ export default async function AutosPage({
             groups={[
               {
                 title: 'Categoria',
+                paramKey: 'category',
                 options: [
                   { label: 'Compacto', count: 12 },
                   { label: 'Sedan', count: 18 },
@@ -54,25 +56,20 @@ export default async function AutosPage({
               },
               {
                 title: 'Transmision',
-                options: [{ label: 'Automatico' }, { label: 'Manual' }],
+                paramKey: 'transmission',
+                options: [
+                  { label: 'Automatico' },
+                  { label: 'Manual' },
+                ],
               },
               {
                 title: 'Combustible',
+                paramKey: 'fuel',
                 options: [
                   { label: 'Gasolina' },
                   { label: 'Diesel' },
                   { label: 'Hibrido' },
                   { label: 'Electrico' },
-                ],
-              },
-              {
-                title: 'Compania',
-                options: [
-                  { label: 'Hertz' },
-                  { label: 'Sixt' },
-                  { label: 'Europcar' },
-                  { label: 'Avis' },
-                  { label: 'Enterprise' },
                 ],
               },
             ]}
@@ -84,11 +81,13 @@ export default async function AutosPage({
                 <strong className="text-plum-700 font-display text-lg">{cars.length}</strong>{' '}
                 vehiculos disponibles
               </span>
-              <select className="px-4 py-2 border border-ivory-300 rounded-full bg-ivory-50 text-sm cursor-pointer">
-                <option>Mas populares</option>
-                <option>Precio: menor</option>
-                <option>Precio: mayor</option>
-              </select>
+              <SortSelect
+                options={[
+                  { label: 'Mas populares', value: '' },
+                  { label: 'Precio: menor', value: 'price_asc' },
+                  { label: 'Precio: mayor', value: 'price_desc' },
+                ]}
+              />
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">

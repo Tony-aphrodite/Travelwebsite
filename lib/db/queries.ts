@@ -46,13 +46,13 @@ export async function getHotels(filters: HotelFilters = {}) {
 
   let orderBy;
   switch (filters.sort) {
-    case 'price-asc':
+    case 'price_asc':
       orderBy = asc(schema.hotels.price);
       break;
-    case 'price-desc':
+    case 'price_desc':
       orderBy = desc(schema.hotels.price);
       break;
-    case 'rating':
+    case 'rating_desc':
       orderBy = desc(schema.hotels.rating);
       break;
     default:
@@ -98,8 +98,8 @@ export async function getFlights(filters: FlightFilters = {}) {
 
   let orderBy;
   switch (filters.sort) {
-    case 'price-asc': orderBy = asc(schema.flights.price); break;
-    case 'price-desc': orderBy = desc(schema.flights.price); break;
+    case 'price_asc': orderBy = asc(schema.flights.price); break;
+    case 'price_desc': orderBy = desc(schema.flights.price); break;
     default: orderBy = asc(schema.flights.price);
   }
 
@@ -139,9 +139,9 @@ export async function getVillas(filters: VillaFilters = {}) {
 
   let orderBy;
   switch (filters.sort) {
-    case 'price-asc': orderBy = asc(schema.villas.price); break;
-    case 'price-desc': orderBy = desc(schema.villas.price); break;
-    case 'rating': orderBy = desc(schema.villas.rating); break;
+    case 'price_asc': orderBy = asc(schema.villas.price); break;
+    case 'price_desc': orderBy = desc(schema.villas.price); break;
+    case 'rating_desc': orderBy = desc(schema.villas.rating); break;
     default: orderBy = desc(schema.villas.rating);
   }
 
@@ -176,8 +176,8 @@ export async function getPackages(filters: PackageFilters = {}) {
 
   let orderBy;
   switch (filters.sort) {
-    case 'price-asc': orderBy = asc(schema.packages.price); break;
-    case 'price-desc': orderBy = desc(schema.packages.price); break;
+    case 'price_asc': orderBy = asc(schema.packages.price); break;
+    case 'price_desc': orderBy = desc(schema.packages.price); break;
     default: orderBy = asc(schema.packages.price);
   }
 
@@ -211,8 +211,8 @@ export async function getCars(filters: CarFilters = {}) {
 
   let orderBy;
   switch (filters.sort) {
-    case 'price-asc': orderBy = asc(schema.cars.price); break;
-    case 'price-desc': orderBy = desc(schema.cars.price); break;
+    case 'price_asc': orderBy = asc(schema.cars.price); break;
+    case 'price_desc': orderBy = desc(schema.cars.price); break;
     default: orderBy = asc(schema.cars.price);
   }
 
@@ -246,9 +246,9 @@ export async function getActivities(filters: ActivityFilters = {}) {
 
   let orderBy;
   switch (filters.sort) {
-    case 'price-asc': orderBy = asc(schema.activities.price); break;
-    case 'price-desc': orderBy = desc(schema.activities.price); break;
-    case 'rating': orderBy = desc(schema.activities.rating); break;
+    case 'price_asc': orderBy = asc(schema.activities.price); break;
+    case 'price_desc': orderBy = desc(schema.activities.price); break;
+    case 'rating_desc': orderBy = desc(schema.activities.rating); break;
     default: orderBy = desc(schema.activities.rating);
   }
 

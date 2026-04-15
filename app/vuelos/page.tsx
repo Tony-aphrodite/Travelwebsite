@@ -3,6 +3,7 @@ import { Plane, Clock, Briefcase } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import SearchWidget from '@/components/SearchWidget';
 import FilterSidebar from '@/components/FilterSidebar';
+import SortSelect from '@/components/SortSelect';
 import { getFlights } from '@/lib/db/queries';
 
 export default async function VuelosPage({
@@ -44,23 +45,16 @@ export default async function VuelosPage({
             groups={[
               {
                 title: 'Escalas',
+                paramKey: 'stops',
                 options: [
-                  { label: 'Directo', count: 12 },
-                  { label: '1 escala', count: 48 },
-                  { label: '2+ escalas', count: 23 },
-                ],
-              },
-              {
-                title: 'Horario salida',
-                options: [
-                  { label: 'Madrugada (0-6h)', count: 8 },
-                  { label: 'Manana (6-12h)', count: 24 },
-                  { label: 'Tarde (12-18h)', count: 31 },
-                  { label: 'Noche (18-24h)', count: 20 },
+                  { label: 'Directo', value: '0', count: 12 },
+                  { label: '1 escala', value: '1', count: 48 },
+                  { label: '2+ escalas', value: '2', count: 23 },
                 ],
               },
               {
                 title: 'Aerolinea',
+                paramKey: 'airline',
                 options: [
                   { label: 'Air France', count: 14 },
                   { label: 'Emirates', count: 9 },
@@ -71,18 +65,12 @@ export default async function VuelosPage({
               },
               {
                 title: 'Clase',
+                paramKey: 'cabin',
                 options: [
                   { label: 'Economy' },
                   { label: 'Economy Premium' },
                   { label: 'Business' },
                   { label: 'Primera' },
-                ],
-              },
-              {
-                title: 'Equipaje',
-                options: [
-                  { label: 'Incluye equipaje de mano' },
-                  { label: 'Incluye equipaje facturado' },
                 ],
               },
             ]}
@@ -94,12 +82,13 @@ export default async function VuelosPage({
                 <strong className="text-plum-700 font-display text-lg">{flights.length}</strong>{' '}
                 vuelos disponibles · CDMX → Paris
               </span>
-              <select className="px-4 py-2 border border-ivory-300 rounded-full bg-ivory-50 text-sm cursor-pointer">
-                <option>Mejor opcion</option>
-                <option>Menor precio</option>
-                <option>Menor duracion</option>
-                <option>Salida mas temprana</option>
-              </select>
+              <SortSelect
+                options={[
+                  { label: 'Mejor opcion', value: '' },
+                  { label: 'Menor precio', value: 'price_asc' },
+                  { label: 'Mayor precio', value: 'price_desc' },
+                ]}
+              />
             </div>
 
             <div className="space-y-5">

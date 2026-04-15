@@ -3,6 +3,7 @@ import { MapPin, Heart, Users, Bed, Bath } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import SearchWidget from '@/components/SearchWidget';
 import FilterSidebar from '@/components/FilterSidebar';
+import SortSelect from '@/components/SortSelect';
 import { getVillas } from '@/lib/db/queries';
 
 export default async function VillasPage({
@@ -44,41 +45,34 @@ export default async function VillasPage({
             groups={[
               {
                 title: 'Capacidad',
+                paramKey: 'guests',
                 options: [
-                  { label: '2-4 huespedes' },
-                  { label: '5-6 huespedes' },
-                  { label: '7-8 huespedes' },
-                  { label: '9+ huespedes' },
+                  { label: '2-4 huespedes', value: '4' },
+                  { label: '5-6 huespedes', value: '6' },
+                  { label: '7-8 huespedes', value: '8' },
+                  { label: '9+ huespedes', value: '9' },
                 ],
               },
               {
-                title: 'Habitaciones',
+                title: 'Pais',
+                paramKey: 'country',
                 options: [
-                  { label: '1-2 habitaciones' },
-                  { label: '3-4 habitaciones' },
-                  { label: '5+ habitaciones' },
+                  { label: 'Italia' },
+                  { label: 'Grecia' },
+                  { label: 'Espana' },
+                  { label: 'Indonesia' },
+                  { label: 'Tailandia' },
                 ],
               },
               {
                 title: 'Amenidades',
+                paramKey: 'amenity',
                 options: [
-                  { label: 'Piscina privada' },
+                  { label: 'Piscina privada', value: 'Piscina' },
                   { label: 'Vista al mar' },
                   { label: 'Cocina completa' },
                   { label: 'Chef privado' },
-                  { label: 'Jardin' },
-                  { label: 'Staff incluido' },
-                  { label: 'Pet friendly' },
                   { label: 'WiFi' },
-                ],
-              },
-              {
-                title: 'Region',
-                options: [
-                  { label: 'Mediterraneo' },
-                  { label: 'Caribe' },
-                  { label: 'Sudeste Asiatico' },
-                  { label: 'Europa' },
                 ],
               },
             ]}
@@ -90,11 +84,13 @@ export default async function VillasPage({
                 <strong className="text-plum-700 font-display text-lg">{villas.length}</strong>{' '}
                 villas exclusivas
               </span>
-              <select className="px-4 py-2 border border-ivory-300 rounded-full bg-ivory-50 text-sm cursor-pointer">
-                <option>Mas recomendadas</option>
-                <option>Precio: menor a mayor</option>
-                <option>Capacidad: mayor</option>
-              </select>
+              <SortSelect
+                options={[
+                  { label: 'Mas recomendadas', value: '' },
+                  { label: 'Precio: menor a mayor', value: 'price_asc' },
+                  { label: 'Precio: mayor a menor', value: 'price_desc' },
+                ]}
+              />
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">

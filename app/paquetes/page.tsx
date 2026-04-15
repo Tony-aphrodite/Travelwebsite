@@ -3,6 +3,7 @@ import { Check, Clock } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import SearchWidget from '@/components/SearchWidget';
 import FilterSidebar from '@/components/FilterSidebar';
+import SortSelect from '@/components/SortSelect';
 import { getPackages } from '@/lib/db/queries';
 
 export default async function PaquetesPage({
@@ -41,43 +42,25 @@ export default async function PaquetesPage({
             priceMax={6000}
             groups={[
               {
-                title: 'Tipo de viaje',
+                title: 'Destino',
+                paramKey: 'destination',
                 options: [
-                  { label: 'Luna de miel', count: 23 },
-                  { label: 'Escapada romantica', count: 45 },
-                  { label: 'Solo travel', count: 18 },
-                  { label: 'Viaje familiar', count: 34 },
-                  { label: 'Aventura', count: 29 },
-                  { label: 'Bienestar', count: 17 },
+                  { label: 'Maldivas' },
+                  { label: 'Bali' },
+                  { label: 'Santorini' },
+                  { label: 'Toscana' },
+                  { label: 'Paris' },
+                  { label: 'Japon' },
                 ],
               },
               {
                 title: 'Duracion',
+                paramKey: 'duration',
                 options: [
                   { label: '3-5 noches' },
                   { label: '6-8 noches' },
                   { label: '9-12 noches' },
                   { label: '13+ noches' },
-                ],
-              },
-              {
-                title: 'Incluye',
-                options: [
-                  { label: 'Vuelo internacional' },
-                  { label: 'Todo incluido' },
-                  { label: 'Traslados' },
-                  { label: 'Excursiones' },
-                  { label: 'Spa' },
-                ],
-              },
-              {
-                title: 'Region',
-                options: [
-                  { label: 'Europa' },
-                  { label: 'Asia' },
-                  { label: 'Oceania' },
-                  { label: 'Caribe' },
-                  { label: 'Africa' },
                 ],
               },
             ]}
@@ -89,11 +72,13 @@ export default async function PaquetesPage({
                 <strong className="text-plum-700 font-display text-lg">{packages.length}</strong>{' '}
                 paquetes curados
               </span>
-              <select className="px-4 py-2 border border-ivory-300 rounded-full bg-ivory-50 text-sm cursor-pointer">
-                <option>Mas vendidos</option>
-                <option>Mayor descuento</option>
-                <option>Precio: menor a mayor</option>
-              </select>
+              <SortSelect
+                options={[
+                  { label: 'Mas vendidos', value: '' },
+                  { label: 'Precio: menor a mayor', value: 'price_asc' },
+                  { label: 'Precio: mayor a menor', value: 'price_desc' },
+                ]}
+              />
             </div>
 
             <div className="space-y-6">

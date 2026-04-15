@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
+import { useState, useRef, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { Plane, Building2, Home, Package, Car, Compass, Search } from 'lucide-react';
 
@@ -19,9 +19,13 @@ export default function SearchWidget({ initialTab = 'vuelos' }: { initialTab?: T
   const [active, setActive] = useState<TabId>(initialTab);
   const router = useRouter();
 
-  const submit = (e: FormEvent) => {
-    e.preventDefault();
-    router.push(`/${active}`);
+  const navigate = (path: string, params: Record<string, string>) => {
+    const sp = new URLSearchParams();
+    for (const [k, v] of Object.entries(params)) {
+      if (v && v.trim()) sp.set(k, v.trim());
+    }
+    const qs = sp.toString();
+    router.push(qs ? `${path}?${qs}` : path);
   };
 
   return (
@@ -45,12 +49,12 @@ export default function SearchWidget({ initialTab = 'vuelos' }: { initialTab?: T
       </div>
 
       {/* Forms */}
-      {active === 'vuelos' && <FlightForm onSubmit={submit} />}
-      {active === 'hoteles' && <HotelForm onSubmit={submit} />}
-      {active === 'villas' && <VillaForm onSubmit={submit} />}
-      {active === 'paquetes' && <PackageForm onSubmit={submit} />}
-      {active === 'autos' && <CarForm onSubmit={submit} />}
-      {active === 'actividades' && <ActivityForm onSubmit={submit} />}
+      {active === 'vuelos' && <FlightForm navigate={navigate} />}
+      {active === 'hoteles' && <HotelForm navigate={navigate} />}
+      {active === 'villas' && <VillaForm navigate={navigate} />}
+      {active === 'paquetes' && <PackageForm navigate={navigate} />}
+      {active === 'autos' && <CarForm navigate={navigate} />}
+      {active === 'actividades' && <ActivityForm navigate={navigate} />}
     </div>
   );
 }
@@ -81,9 +85,22 @@ function Submit() {
   );
 }
 
-function FlightForm({ onSubmit }: { onSubmit: (e: FormEvent) => void }) {
+type NavigateFn = (path: string, params: Record<string, string>) => void;
+
+function FlightForm({ navigate }: { navigate: NavigateFn }) {
+  const fromRef = useRef<HTMLInputElement>(null);
+  const toRef = useRef<HTMLInputElement>(null);
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    navigate('/vuelos', {
+      fromCity: fromRef.current?.value || '',
+      toCity: toRef.current?.value || '',
+    });
+  };
+
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={handleSubmit}>
       <div className="flex gap-6 mb-4 text-sm">
         <label className="flex items-center gap-1.5 cursor-pointer">
           <input type="radio" name="trip" defaultChecked className="accent-plum-700" />
@@ -100,10 +117,10 @@ function FlightForm({ onSubmit }: { onSubmit: (e: FormEvent) => void }) {
       </div>
       <div className="flex flex-wrap gap-4 items-end">
         <Field label="Desde" className="flex-1 min-w-[160px]">
-          <input className="field-input" defaultValue="Ciudad de Mexico" />
+          <input ref={fromRef} className="field-input" defaultValue="Ciudad de Mexico" />
         </Field>
         <Field label="Hacia" className="flex-1 min-w-[160px]">
-          <input className="field-input" defaultValue="Paris, Francia" />
+          <input ref={toRef} className="field-input" defaultValue="Paris, Francia" />
         </Field>
         <Field label="Salida" className="flex-1 min-w-[140px]">
           <input className="field-input" type="date" defaultValue="2026-05-15" />
@@ -124,11 +141,20 @@ function FlightForm({ onSubmit }: { onSubmit: (e: FormEvent) => void }) {
   );
 }
 
-function HotelForm({ onSubmit }: { onSubmit: (e: FormEvent) => void }) {
+function HotelForm({ navigate }: { navigate: NavigateFn }) {
+  const destRef = useRef<HTMLInputElement>(null);
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    navigate('/hoteles', {
+      q: destRef.current?.value || '',
+    });
+  };
+
   return (
-    <form onSubmit={onSubmit} className="flex flex-wrap gap-4 items-end">
+    <form onSubmit={handleSubmit} className="flex flex-wrap gap-4 items-end">
       <Field label="Destino" className="flex-1 min-w-[200px]">
-        <input className="field-input" defaultValue="Santorini, Grecia" />
+        <input ref={destRef} className="field-input" placeholder="Santorini, Grecia" />
       </Field>
       <Field label="Entrada" className="flex-1 min-w-[140px]">
         <input className="field-input" type="date" defaultValue="2026-05-15" />
@@ -148,11 +174,20 @@ function HotelForm({ onSubmit }: { onSubmit: (e: FormEvent) => void }) {
   );
 }
 
-function VillaForm({ onSubmit }: { onSubmit: (e: FormEvent) => void }) {
+function VillaForm({ navigate }: { navigate: NavigateFn }) {
+  const regionRef = useRef<HTMLInputElement>(null);
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    navigate('/villas', {
+      q: regionRef.current?.value || '',
+    });
+  };
+
   return (
-    <form onSubmit={onSubmit} className="flex flex-wrap gap-4 items-end">
+    <form onSubmit={handleSubmit} className="flex flex-wrap gap-4 items-end">
       <Field label="Region" className="flex-1 min-w-[200px]">
-        <input className="field-input" defaultValue="Toscana, Italia" />
+        <input ref={regionRef} className="field-input" placeholder="Toscana, Italia" />
       </Field>
       <Field label="Llegada" className="flex-1 min-w-[140px]">
         <input className="field-input" type="date" defaultValue="2026-06-10" />
@@ -173,14 +208,23 @@ function VillaForm({ onSubmit }: { onSubmit: (e: FormEvent) => void }) {
   );
 }
 
-function PackageForm({ onSubmit }: { onSubmit: (e: FormEvent) => void }) {
+function PackageForm({ navigate }: { navigate: NavigateFn }) {
+  const destRef = useRef<HTMLInputElement>(null);
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    navigate('/paquetes', {
+      destination: destRef.current?.value || '',
+    });
+  };
+
   return (
-    <form onSubmit={onSubmit} className="flex flex-wrap gap-4 items-end">
+    <form onSubmit={handleSubmit} className="flex flex-wrap gap-4 items-end">
       <Field label="Desde" className="flex-1 min-w-[160px]">
         <input className="field-input" defaultValue="Ciudad de Mexico" />
       </Field>
       <Field label="Hacia" className="flex-1 min-w-[160px]">
-        <input className="field-input" defaultValue="Maldivas" />
+        <input ref={destRef} className="field-input" placeholder="Maldivas" />
       </Field>
       <Field label="Salida" className="flex-1 min-w-[140px]">
         <input className="field-input" type="date" defaultValue="2026-07-01" />
@@ -199,11 +243,20 @@ function PackageForm({ onSubmit }: { onSubmit: (e: FormEvent) => void }) {
   );
 }
 
-function CarForm({ onSubmit }: { onSubmit: (e: FormEvent) => void }) {
+function CarForm({ navigate }: { navigate: NavigateFn }) {
+  const locationRef = useRef<HTMLInputElement>(null);
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    navigate('/autos', {
+      q: locationRef.current?.value || '',
+    });
+  };
+
   return (
-    <form onSubmit={onSubmit} className="flex flex-wrap gap-4 items-end">
+    <form onSubmit={handleSubmit} className="flex flex-wrap gap-4 items-end">
       <Field label="Recoger en" className="flex-1 min-w-[200px]">
-        <input className="field-input" defaultValue="Aeropuerto de Niza" />
+        <input ref={locationRef} className="field-input" placeholder="Aeropuerto de Niza" />
       </Field>
       <Field label="Devolver en" className="flex-1 min-w-[200px]">
         <input className="field-input" defaultValue="Mismo lugar" />
@@ -219,11 +272,20 @@ function CarForm({ onSubmit }: { onSubmit: (e: FormEvent) => void }) {
   );
 }
 
-function ActivityForm({ onSubmit }: { onSubmit: (e: FormEvent) => void }) {
+function ActivityForm({ navigate }: { navigate: NavigateFn }) {
+  const queryRef = useRef<HTMLInputElement>(null);
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    navigate('/actividades', {
+      q: queryRef.current?.value || '',
+    });
+  };
+
   return (
-    <form onSubmit={onSubmit} className="flex flex-wrap gap-4 items-end">
+    <form onSubmit={handleSubmit} className="flex flex-wrap gap-4 items-end">
       <Field label="Destino o experiencia" className="flex-1 min-w-[260px]">
-        <input className="field-input" defaultValue="Tour de vinedos en Toscana" />
+        <input ref={queryRef} className="field-input" placeholder="Tour de vinedos en Toscana" />
       </Field>
       <Field label="Fecha" className="flex-1 min-w-[140px]">
         <input className="field-input" type="date" defaultValue="2026-06-12" />

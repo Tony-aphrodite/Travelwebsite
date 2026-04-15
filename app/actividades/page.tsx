@@ -3,6 +3,7 @@ import { MapPin, Clock, Star } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import SearchWidget from '@/components/SearchWidget';
 import FilterSidebar from '@/components/FilterSidebar';
+import SortSelect from '@/components/SortSelect';
 import { getActivities } from '@/lib/db/queries';
 
 export default async function ActividadesPage({
@@ -43,6 +44,7 @@ export default async function ActividadesPage({
             groups={[
               {
                 title: 'Categoria',
+                paramKey: 'category',
                 options: [
                   { label: 'Gastronomia', count: 34 },
                   { label: 'Bienestar', count: 28 },
@@ -53,27 +55,15 @@ export default async function ActividadesPage({
                 ],
               },
               {
-                title: 'Duracion',
+                title: 'Ubicacion',
+                paramKey: 'location',
                 options: [
-                  { label: '< 2 horas' },
-                  { label: '2-4 horas' },
-                  { label: 'Medio dia' },
-                  { label: 'Dia completo' },
-                  { label: 'Varios dias' },
+                  { label: 'Paris' },
+                  { label: 'Toscana' },
+                  { label: 'Bali' },
+                  { label: 'Tokio' },
+                  { label: 'Santorini' },
                 ],
-              },
-              {
-                title: 'Tipo',
-                options: [
-                  { label: 'Tour privado' },
-                  { label: 'Grupo pequeno' },
-                  { label: 'Con transporte' },
-                  { label: 'Sin filas' },
-                ],
-              },
-              {
-                title: 'Valoracion',
-                options: [{ label: '5 estrellas' }, { label: '4+ estrellas' }],
               },
             ]}
           />
@@ -84,11 +74,13 @@ export default async function ActividadesPage({
                 <strong className="text-plum-700 font-display text-lg">{activities.length}</strong>{' '}
                 experiencias disponibles
               </span>
-              <select className="px-4 py-2 border border-ivory-300 rounded-full bg-ivory-50 text-sm cursor-pointer">
-                <option>Mas recomendadas</option>
-                <option>Mejor valoradas</option>
-                <option>Precio: menor</option>
-              </select>
+              <SortSelect
+                options={[
+                  { label: 'Mas recomendadas', value: '' },
+                  { label: 'Mejor valoradas', value: 'rating_desc' },
+                  { label: 'Precio: menor', value: 'price_asc' },
+                ]}
+              />
             </div>
 
             <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
