@@ -114,7 +114,7 @@ export default async function HomePage() {
             {destinations.slice(0, 5).map((dest, i) => (
               <Link
                 key={dest.id}
-                href={`/hotel/${dest.id}`}
+                href={`/hoteles?country=${encodeURIComponent(dest.country)}`}
                 className={`relative rounded-3xl overflow-hidden shadow-soft-md cursor-pointer group transition-all duration-500 hover:-translate-y-2 hover:shadow-soft-xl bg-ivory-200 ${
                   i === 0
                     ? 'col-span-12 md:col-span-6 row-span-2 aspect-[4/5] md:aspect-auto'
