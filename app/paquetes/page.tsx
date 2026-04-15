@@ -38,6 +38,7 @@ export default async function PaquetesPage({
       <section className="pb-24">
         <div className="container-site grid lg:grid-cols-[300px_1fr] gap-8">
           <FilterSidebar
+            currentParams={params}
             priceMin={1000}
             priceMax={6000}
             groups={[
@@ -73,6 +74,7 @@ export default async function PaquetesPage({
                 paquetes curados
               </span>
               <SortSelect
+                currentParams={params}
                 options={[
                   { label: 'Mas vendidos', value: '' },
                   { label: 'Precio: menor a mayor', value: 'price_asc' },

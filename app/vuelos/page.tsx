@@ -40,6 +40,7 @@ export default async function VuelosPage({
       <section className="pb-24">
         <div className="container-site grid lg:grid-cols-[300px_1fr] gap-8">
           <FilterSidebar
+            currentParams={params}
             priceMin={0}
             priceMax={3000}
             groups={[
@@ -83,6 +84,7 @@ export default async function VuelosPage({
                 vuelos disponibles · CDMX → Paris
               </span>
               <SortSelect
+                currentParams={params}
                 options={[
                   { label: 'Mejor opcion', value: '' },
                   { label: 'Menor precio', value: 'price_asc' },

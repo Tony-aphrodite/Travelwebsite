@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useCallback } from 'react';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 
 export type FilterGroup = {
   title: string;
@@ -13,33 +13,32 @@ export default function FilterSidebar({
   groups,
   priceMin = 0,
   priceMax = 2500,
+  currentParams = {},
 }: {
   groups: FilterGroup[];
   priceMin?: number;
   priceMax?: number;
+  currentParams?: Record<string, string>;
 }) {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
-  // Initialize checked state from current URL
-  const initChecked = useCallback(() => {
+  // Initialize checked state from currentParams prop
+  const [checked, setChecked] = useState<Record<string, Set<string>>>(() => {
     const state: Record<string, Set<string>> = {};
     for (const g of groups) {
-      const raw = searchParams.get(g.paramKey);
+      const raw = currentParams[g.paramKey];
       state[g.paramKey] = raw ? new Set(raw.split(',')) : new Set();
     }
     return state;
-  }, [groups, searchParams]);
+  });
 
-  const [checked, setChecked] = useState<Record<string, Set<string>>>(initChecked);
-
-  // Initialize price from URL or defaults
+  // Initialize price from currentParams or defaults
   const [min, setMin] = useState(
-    searchParams.get('priceMin') ? Number(searchParams.get('priceMin')) : priceMin,
+    currentParams.priceMin ? Number(currentParams.priceMin) : priceMin,
   );
   const [max, setMax] = useState(
-    searchParams.get('priceMax') ? Number(searchParams.get('priceMax')) : priceMax,
+    currentParams.priceMax ? Number(currentParams.priceMax) : priceMax,
   );
 
   const pct = (v: number) => ((v - priceMin) / (priceMax - priceMin)) * 100;
@@ -56,22 +55,23 @@ export default function FilterSidebar({
   };
 
   const applyFilters = () => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams();
+
+    // Preserve existing params that aren't managed by this sidebar
+    const managedKeys = new Set(['priceMin', 'priceMax', ...groups.map((g) => g.paramKey)]);
+    for (const [k, v] of Object.entries(currentParams)) {
+      if (!managedKeys.has(k)) params.set(k, v);
+    }
 
     // Set price params (only if changed from defaults)
     if (min > priceMin) params.set('priceMin', String(min));
-    else params.delete('priceMin');
-
     if (max < priceMax) params.set('priceMax', String(max));
-    else params.delete('priceMax');
 
     // Set checkbox params
     for (const g of groups) {
       const set = checked[g.paramKey];
       if (set && set.size > 0) {
         params.set(g.paramKey, Array.from(set).join(','));
-      } else {
-        params.delete(g.paramKey);
       }
     }
 

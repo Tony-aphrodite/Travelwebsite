@@ -41,6 +41,7 @@ export default async function HotelesPage({
       <section className="pb-24">
         <div className="container-site grid lg:grid-cols-[300px_1fr] gap-8">
           <FilterSidebar
+            currentParams={params}
             groups={[
               {
                 title: 'Estrellas',
@@ -84,6 +85,7 @@ export default async function HotelesPage({
                 hoteles encontrados
               </span>
               <SortSelect
+                currentParams={params}
                 options={[
                   { label: 'Ordenar por recomendado', value: '' },
                   { label: 'Precio: menor a mayor', value: 'price_asc' },

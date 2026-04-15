@@ -40,6 +40,7 @@ export default async function VillasPage({
       <section className="pb-24">
         <div className="container-site grid lg:grid-cols-[300px_1fr] gap-8">
           <FilterSidebar
+            currentParams={params}
             priceMin={100}
             priceMax={2000}
             groups={[
@@ -85,6 +86,7 @@ export default async function VillasPage({
                 villas exclusivas
               </span>
               <SortSelect
+                currentParams={params}
                 options={[
                   { label: 'Mas recomendadas', value: '' },
                   { label: 'Precio: menor a mayor', value: 'price_asc' },

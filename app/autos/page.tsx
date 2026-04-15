@@ -39,6 +39,7 @@ export default async function AutosPage({
       <section className="pb-24">
         <div className="container-site grid lg:grid-cols-[300px_1fr] gap-8">
           <FilterSidebar
+            currentParams={params}
             priceMin={30}
             priceMax={500}
             groups={[
@@ -82,6 +83,7 @@ export default async function AutosPage({
                 vehiculos disponibles
               </span>
               <SortSelect
+                currentParams={params}
                 options={[
                   { label: 'Mas populares', value: '' },
                   { label: 'Precio: menor', value: 'price_asc' },

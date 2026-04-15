@@ -39,6 +39,7 @@ export default async function ActividadesPage({
       <section className="pb-24">
         <div className="container-site grid lg:grid-cols-[300px_1fr] gap-8">
           <FilterSidebar
+            currentParams={params}
             priceMin={50}
             priceMax={600}
             groups={[
@@ -75,6 +76,7 @@ export default async function ActividadesPage({
                 experiencias disponibles
               </span>
               <SortSelect
+                currentParams={params}
                 options={[
                   { label: 'Mas recomendadas', value: '' },
                   { label: 'Mejor valoradas', value: 'rating_desc' },
