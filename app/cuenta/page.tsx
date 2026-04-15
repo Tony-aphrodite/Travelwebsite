@@ -50,6 +50,18 @@ type Booking = {
   createdAt: string;
 };
 
+function getBookingDetailUrl(type: string, itemId: string) {
+  switch (type) {
+    case 'hotel': return `/hotel/${itemId}`;
+    case 'villa': return `/hotel/${itemId}`;
+    case 'package': return `/paquetes`;
+    case 'flight': return `/vuelos`;
+    case 'car': return `/autos`;
+    case 'activity': return `/actividades`;
+    default: return '/';
+  }
+}
+
 type Favorite = {
   id: number;
   type: string;
@@ -298,7 +310,7 @@ function ResumenTab({
               <span>· {upcomingBooking.guests} huespedes</span>
             </div>
             <div className="flex gap-2 mt-5">
-              <button className="btn btn-primary btn-sm">Ver detalle</button>
+              <Link href={getBookingDetailUrl(upcomingBooking.type, upcomingBooking.itemId)} className="btn btn-primary btn-sm">Ver detalle</Link>
             </div>
           </article>
         </div>
