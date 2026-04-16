@@ -62,7 +62,6 @@ function UserArea() {
   const user = session?.user;
   const isLoggedIn = status === 'authenticated' && !!user;
 
-  if (status === 'loading') return null;
   if (!isLoggedIn) return <AuthButtons />;
 
   return (
