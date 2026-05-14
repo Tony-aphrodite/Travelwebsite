@@ -305,6 +305,13 @@ export async function removeCartItem(id: number, userId: string) {
     .where(and(eq(schema.cartItems.id, id), eq(schema.cartItems.userId, userId)));
 }
 
+export async function updateCartItemQuantity(id: number, userId: string, quantity: number) {
+  return db.update(schema.cartItems)
+    .set({ quantity })
+    .where(and(eq(schema.cartItems.id, id), eq(schema.cartItems.userId, userId)))
+    .returning();
+}
+
 export async function clearCart(userId: string) {
   return db.delete(schema.cartItems).where(eq(schema.cartItems.userId, userId));
 }

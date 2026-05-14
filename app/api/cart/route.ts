@@ -1,7 +1,13 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { getCartItems, addCartItem, removeCartItem } from '@/lib/db/queries';
+import { getCartItems, addCartItem, removeCartItem, updateCartItemQuantity } from '@/lib/db/queries';
 import { addToCartSchema } from '@/lib/validators';
+import { z } from 'zod';
+
+const updateQtySchema = z.object({
+  id: z.number().int().positive(),
+  quantity: z.number().int().min(1).max(99),
+});
 
 export async function GET() {
   const session = await auth();
@@ -30,6 +36,25 @@ export async function POST(req: Request) {
   });
 
   return NextResponse.json(item[0], { status: 201 });
+}
+
+export async function PATCH(req: Request) {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+  }
+
+  const body = await req.json();
+  const parsed = updateQtySchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: 'Datos invalidos' }, { status: 400 });
+  }
+
+  const updated = await updateCartItemQuantity(parsed.data.id, session.user.id, parsed.data.quantity);
+  if (updated.length === 0) {
+    return NextResponse.json({ error: 'No encontrado' }, { status: 404 });
+  }
+  return NextResponse.json(updated[0]);
 }
 
 export async function DELETE(req: Request) {
