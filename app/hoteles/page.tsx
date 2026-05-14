@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { MapPin, Heart, Wifi, Waves, Utensils, Sparkles } from 'lucide-react';
+import { MapPin, Wifi, Waves, Utensils, Sparkles } from 'lucide-react';
+import FavoriteButton from '@/components/FavoriteButton';
 import PageHeader from '@/components/PageHeader';
 import SearchWidget from '@/components/SearchWidget';
 import FilterSidebar from '@/components/FilterSidebar';
@@ -108,9 +109,9 @@ export default async function HotelesPage({
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 hover:scale-105"
                       loading="lazy"
                     />
-                    <button className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 text-plum-700 hover:bg-plum-700 hover:text-white flex items-center justify-center transition-colors">
-                      <Heart size={18} />
-                    </button>
+                    <div className="absolute top-4 right-4">
+                      <FavoriteButton type="hotel" itemId={hotel.id} />
+                    </div>
                   </div>
 
                   <div className="p-7">
