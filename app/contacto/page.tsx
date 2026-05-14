@@ -242,7 +242,7 @@ export default function ContactoPage() {
                 />
                 <span>
                   Acepto la{' '}
-                  <Link href="#" className="text-plum-700 underline">
+                  <Link href="/nosotros#privacidad" className="text-plum-700 underline">
                     politica de privacidad
                   </Link>{' '}
                   y recibir comunicaciones de Aurelia Viajes.
@@ -273,9 +273,9 @@ export default function ContactoPage() {
             <div className="card-soft p-7">
               <h3 className="font-display text-xl mb-4">Siguenos</h3>
               <div className="flex gap-3">
-                <SocialBtn icon={Instagram} />
-                <SocialBtn icon={Facebook} />
-                <SocialBtn icon={Twitter} />
+                <SocialBtn icon={Instagram} href="https://instagram.com/aurelia.viajes" label="Instagram" />
+                <SocialBtn icon={Facebook} href="https://facebook.com/aureliaviajes" label="Facebook" />
+                <SocialBtn icon={Twitter} href="https://twitter.com/aureliaviajes" label="Twitter" />
               </div>
               <p className="text-xs text-charcoal-500 mt-4">
                 @aurelia.viajes — Inspiracion diaria para viajeras elegantes
@@ -371,10 +371,16 @@ function QuickCard({
   );
 }
 
-function SocialBtn({ icon: Icon }: { icon: LucideIcon }) {
+function SocialBtn({ icon: Icon, href, label }: { icon: LucideIcon; href: string; label: string }) {
   return (
-    <button className="w-11 h-11 rounded-full bg-ivory-100 hover:bg-plum-700 text-plum-700 hover:text-white flex items-center justify-center transition-colors">
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={label}
+      className="w-11 h-11 rounded-full bg-ivory-100 hover:bg-plum-700 text-plum-700 hover:text-white flex items-center justify-center transition-colors"
+    >
       <Icon size={18} />
-    </button>
+    </a>
   );
 }
