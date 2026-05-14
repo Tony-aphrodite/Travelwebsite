@@ -544,9 +544,55 @@ function RecompensasTab() {
 }
 
 function DatosTab({ userName, userEmail }: { userName: string; userEmail: string }) {
-  const nameParts = userName.split(' ');
-  const firstName = nameParts[0] || '';
-  const lastName = nameParts.slice(1).join(' ') || '';
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [country, setCountry] = useState('');
+  const [birthDate, setBirthDate] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  useEffect(() => {
+    fetch('/api/user/profile')
+      .then((r) => r.json())
+      .then((data) => {
+        if (!data || data.error) return;
+        const parts = (data.name || userName || '').split(' ');
+        setFirstName(parts[0] || '');
+        setLastName(parts.slice(1).join(' ') || '');
+        setPhone(data.phone || '');
+        setCountry(data.country || '');
+      })
+      .finally(() => setLoading(false));
+  }, [userName]);
+
+  const handleSave = async () => {
+    const fullName = `${firstName.trim()} ${lastName.trim()}`.trim();
+    if (fullName.length < 2) {
+      setMessage({ type: 'error', text: 'El nombre es obligatorio' });
+      return;
+    }
+    setSaving(true);
+    setMessage(null);
+    try {
+      const res = await fetch('/api/user/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: fullName, phone, country }),
+      });
+      if (res.ok) {
+        setMessage({ type: 'success', text: 'Cambios guardados' });
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setMessage({ type: 'error', text: data.error || 'No se pudo guardar' });
+      }
+    } catch {
+      setMessage({ type: 'error', text: 'Error de red' });
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <div>
@@ -557,11 +603,11 @@ function DatosTab({ userName, userEmail }: { userName: string; userEmail: string
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
             <label className="field-label">Nombre</label>
-            <input type="text" defaultValue={firstName} className="field-input" />
+            <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} className="field-input" disabled={loading} />
           </div>
           <div>
             <label className="field-label">Apellidos</label>
-            <input type="text" defaultValue={lastName} className="field-input" />
+            <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} className="field-input" disabled={loading} />
           </div>
           <div>
             <label className="field-label">Email</label>
@@ -569,15 +615,15 @@ function DatosTab({ userName, userEmail }: { userName: string; userEmail: string
           </div>
           <div>
             <label className="field-label">Telefono</label>
-            <input type="tel" placeholder="+52 55 1234 5678" className="field-input" />
+            <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+52 55 1234 5678" className="field-input" disabled={loading} />
           </div>
           <div>
             <label className="field-label">Pais</label>
-            <input type="text" placeholder="Mexico" className="field-input" />
+            <input type="text" value={country} onChange={(e) => setCountry(e.target.value)} placeholder="Mexico" className="field-input" disabled={loading} />
           </div>
           <div>
             <label className="field-label">Fecha de nacimiento</label>
-            <input type="date" className="field-input" />
+            <input type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} className="field-input" />
           </div>
         </div>
 
@@ -593,9 +639,17 @@ function DatosTab({ userName, userEmail }: { userName: string; userEmail: string
 
         <hr className="border-ivory-200" />
 
+        {message && (
+          <p className={`text-sm ${message.type === 'success' ? 'text-sage-500' : 'text-rose-700'}`}>
+            {message.text}
+          </p>
+        )}
+
         <div className="flex gap-3">
-          <button className="btn btn-primary btn-md">Guardar cambios</button>
-          <button className="btn btn-ghost btn-md">Cancelar</button>
+          <button onClick={handleSave} disabled={saving || loading} className="btn btn-primary btn-md">
+            {saving ? (<><Loader2 size={14} className="animate-spin" /> Guardando...</>) : 'Guardar cambios'}
+          </button>
+          <button onClick={() => setMessage(null)} className="btn btn-ghost btn-md">Cancelar</button>
         </div>
       </div>
     </div>
