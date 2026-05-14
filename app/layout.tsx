@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter, Playfair_Display, Cormorant_Garamond } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -43,11 +43,22 @@ export const metadata: Metadata = {
     siteName: 'Aurelia Viajes',
     title: 'Aurelia Viajes — El arte de viajar, redescubierto',
     description: 'Experiencias de viaje de lujo curadas para ti.',
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Aurelia Viajes' }],
   },
   twitter: {
     card: 'summary_large_image',
+    title: 'Aurelia Viajes',
+    description: 'Experiencias de viaje de lujo curadas para ti.',
+    images: ['/og-image.png'],
   },
+  robots: { index: true, follow: true },
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
+};
+
+export const viewport: Viewport = {
+  themeColor: '#1668E3',
+  width: 'device-width',
+  initialScale: 1,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
