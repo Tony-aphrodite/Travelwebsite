@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import {
@@ -403,35 +403,41 @@ function ViajesTab({ bookings }: { bookings: Booking[] }) {
       ) : (
         <div className="space-y-4">
           {filtered.map((b) => (
-            <article key={b.id} className="card-soft overflow-hidden p-5">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <span className={`status-pill ${statusStyle(b.status)}`}>
-                    {statusLabel(b.status)}
-                  </span>
-                  <h3 className="font-display text-xl mt-3">{b.itemName}</h3>
-                  <div className="text-xs text-charcoal-500 mt-1 uppercase tracking-wider">
-                    {b.type}
-                  </div>
-                  {b.checkIn && (
-                    <div className="text-sm text-charcoal-700 mt-3 flex items-center gap-1">
-                      <Calendar size={13} className="text-plum-700" />
-                      {new Date(b.checkIn).toLocaleDateString('es-ES')}
-                      {b.checkOut &&
-                        ` - ${new Date(b.checkOut).toLocaleDateString('es-ES')}`}
+            <Link
+              key={b.id}
+              href={`/cuenta/viajes/${b.id}`}
+              className="block"
+            >
+              <article className="card-soft overflow-hidden p-5 hover:shadow-soft-md transition-shadow">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <span className={`status-pill ${statusStyle(b.status)}`}>
+                      {statusLabel(b.status)}
+                    </span>
+                    <h3 className="font-display text-xl mt-3">{b.itemName}</h3>
+                    <div className="text-xs text-charcoal-500 mt-1 uppercase tracking-wider">
+                      {b.type}
                     </div>
-                  )}
-                </div>
-                <div className="text-right">
-                  <div className="font-display text-xl text-plum-700">
-                    ${b.total.toLocaleString()}
+                    {b.checkIn && (
+                      <div className="text-sm text-charcoal-700 mt-3 flex items-center gap-1">
+                        <Calendar size={13} className="text-plum-700" />
+                        {new Date(b.checkIn).toLocaleDateString('es-ES')}
+                        {b.checkOut &&
+                          ` - ${new Date(b.checkOut).toLocaleDateString('es-ES')}`}
+                      </div>
+                    )}
                   </div>
-                  <div className="text-xs text-charcoal-500">
-                    +{b.pointsEarned} puntos
+                  <div className="text-right">
+                    <div className="font-display text-xl text-plum-700">
+                      ${b.total.toLocaleString()}
+                    </div>
+                    <div className="text-xs text-charcoal-500">
+                      +{b.pointsEarned} puntos
+                    </div>
                   </div>
                 </div>
-              </div>
-            </article>
+              </article>
+            </Link>
           ))}
         </div>
       )}
@@ -656,41 +662,95 @@ function DatosTab({ userName, userEmail }: { userName: string; userEmail: string
   );
 }
 
+type NotifKey = 'offers' | 'tripReminders' | 'newsletter' | 'blog' | 'priceAlerts';
+type NotifPrefs = Record<NotifKey, boolean>;
+
+const NOTIF_LABELS: { key: NotifKey; label: string; desc: string }[] = [
+  { key: 'offers', label: 'Ofertas exclusivas para miembros', desc: 'Promociones flash y descuentos' },
+  { key: 'tripReminders', label: 'Recordatorios de viaje', desc: 'Alertas 48h antes de tu check-in' },
+  { key: 'newsletter', label: 'Newsletter Aurelia', desc: 'Destinos curados cada semana' },
+  { key: 'blog', label: 'Blog de viajes', desc: 'Nuevos articulos y guias' },
+  { key: 'priceAlerts', label: 'Alertas de precio', desc: 'Cuando bajan los vuelos que buscas' },
+];
+
 function NotificacionesTab() {
-  const prefs = [
-    { label: 'Ofertas exclusivas para miembros', desc: 'Promociones flash y descuentos', on: true },
-    { label: 'Recordatorios de viaje', desc: 'Alertas 48h antes de tu check-in', on: true },
-    { label: 'Newsletter Aurelia', desc: 'Destinos curados cada semana', on: true },
-    { label: 'Blog de viajes', desc: 'Nuevos articulos y guias', on: false },
-    { label: 'Alertas de precio', desc: 'Cuando bajan los vuelos que buscas', on: false },
-  ];
+  const [prefs, setPrefs] = useState<NotifPrefs>({
+    offers: true, tripReminders: true, newsletter: true, blog: false, priceAlerts: false,
+  });
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    fetch('/api/user/notifications')
+      .then((r) => r.json())
+      .then((data) => {
+        if (data && !data.error) {
+          setPrefs({
+            offers: !!data.offers,
+            tripReminders: !!data.tripReminders,
+            newsletter: !!data.newsletter,
+            blog: !!data.blog,
+            priceAlerts: !!data.priceAlerts,
+          });
+        }
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  const toggle = (key: NotifKey) => {
+    const next = { ...prefs, [key]: !prefs[key] };
+    setPrefs(next);
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    setSaving(true);
+    saveTimer.current = setTimeout(async () => {
+      try {
+        await fetch('/api/user/notifications', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(next),
+        });
+      } finally {
+        setSaving(false);
+      }
+    }, 400);
+  };
+
   return (
     <div>
       <h1 className="heading-lg mb-2">Notificaciones</h1>
-      <p className="text-charcoal-500 mb-6">Elige que quieres recibir y cuando</p>
+      <p className="text-charcoal-500 mb-6">
+        Elige que quieres recibir y cuando
+        {saving && <span className="ml-2 text-xs text-plum-700">guardando...</span>}
+      </p>
       <div className="card-soft p-2">
-        {prefs.map((p, i) => (
-          <div
-            key={i}
-            className="flex items-center justify-between gap-4 p-5 border-b border-ivory-200 last:border-0"
-          >
-            <div>
-              <div className="font-semibold text-charcoal-900">{p.label}</div>
-              <div className="text-xs text-charcoal-500">{p.desc}</div>
-            </div>
-            <button
-              className={`relative w-12 h-6 rounded-full transition-colors ${
-                p.on ? 'bg-plum-700' : 'bg-ivory-300'
-              }`}
+        {NOTIF_LABELS.map((p) => {
+          const on = prefs[p.key];
+          return (
+            <div
+              key={p.key}
+              className="flex items-center justify-between gap-4 p-5 border-b border-ivory-200 last:border-0"
             >
-              <span
-                className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow-soft transition-transform ${
-                  p.on ? 'translate-x-6' : 'translate-x-0.5'
-                }`}
-              />
-            </button>
-          </div>
-        ))}
+              <div>
+                <div className="font-semibold text-charcoal-900">{p.label}</div>
+                <div className="text-xs text-charcoal-500">{p.desc}</div>
+              </div>
+              <button
+                disabled={loading}
+                onClick={() => toggle(p.key)}
+                aria-pressed={on}
+                aria-label={p.label}
+                className={`relative w-12 h-6 rounded-full transition-colors ${on ? 'bg-plum-700' : 'bg-ivory-300'} disabled:opacity-50`}
+              >
+                <span
+                  className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow-soft transition-transform ${
+                    on ? 'translate-x-6' : 'translate-x-0.5'
+                  }`}
+                />
+              </button>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
