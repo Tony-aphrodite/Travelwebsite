@@ -3,6 +3,7 @@ import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
 import * as schema from '@/lib/db/schema';
 import { desc } from 'drizzle-orm';
+import { adminBlogSchema } from '@/lib/validators';
 
 async function requireAdmin() {
   const session = await auth();
@@ -20,7 +21,13 @@ export async function GET() {
 export async function POST(req: Request) {
   const session = await requireAdmin();
   if (!session) return NextResponse.json({ error: 'No autorizado' }, { status: 403 });
+
   const body = await req.json();
-  const post = await db.insert(schema.blogPosts).values(body).returning();
+  const parsed = adminBlogSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: 'Datos invalidos', details: parsed.error.flatten() }, { status: 400 });
+  }
+
+  const post = await db.insert(schema.blogPosts).values(parsed.data).returning();
   return NextResponse.json(post[0], { status: 201 });
 }
