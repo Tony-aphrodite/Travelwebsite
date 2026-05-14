@@ -13,57 +13,63 @@ const config: Config = {
         sans: ['var(--font-inter)', 'sans-serif'],
       },
       colors: {
-        // Primary brand — Expedia-style deep navy → vibrant blue
+        // Primary brand — deep editorial navy ink (matches "enamoran" reference)
         plum: {
-          900: '#0A1E3D',
-          800: '#0F2C5C',
-          700: '#1668E3',
-          600: '#2D7FF0',
-          500: '#4D94F5',
+          900: '#0B1535',
+          800: '#131F45',
+          700: '#1A2954',
+          600: '#2A3B6C',
+          500: '#4D6191',
+          100: '#DDE0EB',
         },
-        // Deals / accent — vibrant coral/red (was soft pink)
+        // Warm contrast — terracotta / sale price (harmonizes with cream)
         rose: {
-          900: '#B81E3F',
-          700: '#E63956',
-          500: '#FF6B7E',
-          300: '#FFD0D6',
-          100: '#FFF0F2',
+          900: '#7E2A22',
+          700: '#B0463A',
+          500: '#D87761',
+          400: '#E4977E',
+          300: '#F0B9AB',
+          100: '#FBE9E3',
         },
-        // CTA highlight — Expedia signature yellow
+        // Aged-amber complement to cream
         gold: {
-          700: '#E6A800',
-          600: '#FFC72C',
-          500: '#FFD55A',
-          300: '#FFE699',
+          700: '#A07025',
+          600: '#C49435',
+          500: '#DCB060',
+          400: '#E2BF7C',
+          300: '#EAD09A',
+          100: '#F5E6C5',
         },
-        // Clean backgrounds with cool tint
+        // Cream backgrounds (parchment palette)
         ivory: {
-          50: '#FFFFFF',
-          100: '#F7F9FC',
-          200: '#EEF2F8',
-          300: '#DCE3EC',
+          50: '#FBF4E0',
+          100: '#F0DEB4',
+          200: '#E5CF98',
+          300: '#D4BB7A',
         },
-        // Crisp text colors
+        // Text on cream — deep navy keeps strong contrast
         charcoal: {
-          900: '#0F1B2D',
-          700: '#2E3A4D',
+          900: '#0B1535',
+          700: '#2C3856',
           500: '#6B7280',
           300: '#9CA3AF',
         },
-        // Success / available — vibrant green
+        // Subtle success / available
         sage: {
-          500: '#00A65A',
-          300: '#7ED9A8',
+          500: '#5C8C66',
+          400: '#84B08B',
+          300: '#B0CBA4',
+          100: '#DDEBD7',
         },
       },
       borderRadius: {
         'xl-soft': '36px',
       },
       boxShadow: {
-        'soft': '0 2px 8px rgba(15, 27, 45, 0.05)',
-        'soft-md': '0 8px 24px rgba(15, 27, 45, 0.10)',
-        'soft-lg': '0 20px 50px rgba(15, 27, 45, 0.14)',
-        'soft-xl': '0 30px 80px rgba(22, 104, 227, 0.20)',
+        'soft': '0 2px 8px rgba(11, 21, 53, 0.05)',
+        'soft-md': '0 8px 24px rgba(11, 21, 53, 0.10)',
+        'soft-lg': '0 20px 50px rgba(11, 21, 53, 0.14)',
+        'soft-xl': '0 30px 80px rgba(11, 21, 53, 0.20)',
       },
       animation: {
         'float': 'float 8s ease-in-out infinite',

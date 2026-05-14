@@ -85,7 +85,7 @@ export default async function AutosPage({
           />
 
           <div>
-            <div className="flex justify-between items-center mb-6 flex-wrap gap-4 bg-white rounded-2xl px-6 py-4 shadow-soft">
+            <div className="flex justify-between items-center mb-6 flex-wrap gap-4 bg-ivory-50 rounded-2xl px-6 py-4 shadow-soft">
               <span className="text-charcoal-500 text-sm">
                 <strong className="text-plum-700 font-display text-lg">{cars.length}</strong>{' '}
                 vehiculos disponibles
@@ -113,7 +113,7 @@ export default async function AutosPage({
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 hover:scale-105"
                       loading="lazy"
                     />
-                    <div className="absolute top-4 left-4 bg-white/95 px-3 py-1 rounded-full text-xs font-semibold text-plum-700">
+                    <div className="absolute top-4 left-4 bg-ivory-50/95 px-3 py-1 rounded-full text-xs font-semibold text-plum-700">
                       {car.category}
                     </div>
                   </div>

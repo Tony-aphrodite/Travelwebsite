@@ -3,10 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --plum-700: #1668E3;
-  --gold-600: #FFC72C;
-  --rose-100: #FFF0F2;
-  --ivory-100: #F7F9FC;
+  --plum-700: #1A2954;
+  --plum-900: #0B1535;
+  --gold-600: #C49435;
+  --rose-100: #FBE9E3;
+  --ivory-50: #FBF4E0;
+  --ivory-100: #F0DEB4;
 }
 
 html {
@@ -14,8 +16,8 @@ html {
 }
 
 body {
-  background: #F7F9FC;
-  color: #0F1B2D;
+  background: #F0DEB4;
+  color: #0B1535;
   font-feature-settings: "ss01", "cv11";
   -webkit-font-smoothing: antialiased;
 }
@@ -45,16 +47,16 @@ body {
     @apply inline-flex items-center justify-center gap-2 rounded-full font-sans font-semibold text-sm tracking-wide whitespace-nowrap transition-all duration-500 ease-out;
   }
   .btn-primary {
-    @apply bg-gold-600 text-plum-900 shadow-[0_8px_20px_rgba(255,199,44,0.45)] hover:bg-gold-500 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(255,199,44,0.55)];
+    @apply bg-plum-700 text-ivory-50 shadow-[0_8px_20px_rgba(11,21,53,0.20)] hover:bg-plum-900 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(11,21,53,0.30)];
   }
   .btn-gold {
-    @apply bg-gradient-to-br from-gold-600 to-gold-500 text-plum-900 shadow-[0_8px_20px_rgba(255,199,44,0.45)] hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(255,199,44,0.55)];
+    @apply bg-gradient-to-br from-gold-600 to-gold-500 text-plum-900 shadow-[0_8px_20px_rgba(196,148,53,0.35)] hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(196,148,53,0.45)];
   }
   .btn-outline {
-    @apply bg-transparent text-plum-700 border border-plum-700 hover:bg-plum-700 hover:text-white;
+    @apply bg-transparent text-plum-700 border border-plum-700 hover:bg-plum-700 hover:text-ivory-50;
   }
   .btn-ghost {
-    @apply bg-transparent text-charcoal-700 hover:bg-rose-100 hover:text-plum-700;
+    @apply bg-transparent text-charcoal-700 hover:bg-ivory-50 hover:text-plum-700;
   }
   .btn-sm { @apply px-5 py-2.5 text-xs; }
   .btn-md { @apply px-7 py-3.5 text-sm; }
@@ -62,29 +64,29 @@ body {
 
   .heading-xl {
     font-family: var(--font-playfair), serif;
-    @apply font-semibold tracking-[-0.02em] leading-[1.05];
+    @apply font-semibold tracking-[-0.02em] leading-[1.05] text-plum-900;
     font-size: clamp(2.5rem, 5vw, 4.5rem);
   }
   .heading-lg {
     font-family: var(--font-playfair), serif;
-    @apply font-semibold tracking-[-0.02em] leading-[1.15];
+    @apply font-semibold tracking-[-0.02em] leading-[1.15] text-plum-900;
     font-size: clamp(2rem, 4vw, 3.25rem);
   }
   .heading-md {
     font-family: var(--font-playfair), serif;
-    @apply font-semibold tracking-[-0.02em] leading-tight;
+    @apply font-semibold tracking-[-0.02em] leading-tight text-plum-900;
     font-size: clamp(1.5rem, 2.5vw, 2rem);
   }
 
   .card-soft {
-    @apply bg-white rounded-3xl shadow-soft transition-all duration-500 ease-out;
+    @apply bg-ivory-50 rounded-3xl shadow-soft transition-all duration-500 ease-out;
   }
 
   .field-label {
     @apply text-[11px] font-semibold uppercase tracking-[0.1em] text-charcoal-500 mb-1.5 block;
   }
   .field-input {
-    @apply w-full px-4 py-3 rounded-lg border border-ivory-300 bg-ivory-50 font-sans text-[15px] text-charcoal-900 transition-all duration-300 outline-none focus:border-plum-700 focus:bg-white focus:ring-4 focus:ring-plum-700/10;
+    @apply w-full px-4 py-3 rounded-lg border border-ivory-300 bg-ivory-50 font-sans text-[15px] text-charcoal-900 transition-all duration-300 outline-none focus:border-plum-700 focus:ring-4 focus:ring-plum-700/10;
   }
 
   .amenity-chip {
@@ -96,7 +98,7 @@ body {
   }
   .status-confirmed { @apply bg-sage-500/15 text-sage-500; }
   .status-pending { @apply bg-gold-600/15 text-gold-700; }
-  .status-cancelled { @apply bg-red-500/15 text-red-600; }
+  .status-cancelled { @apply bg-rose-700/15 text-rose-700; }
 }
 
 @layer utilities {
@@ -122,23 +124,23 @@ body {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: white;
-  border: 3px solid #1668E3;
-  box-shadow: 0 2px 8px rgba(22, 104, 227, 0.30);
+  background: #FBF4E0;
+  border: 3px solid #1A2954;
+  box-shadow: 0 2px 8px rgba(11, 21, 53, 0.30);
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
 }
 .price-slider::-webkit-slider-thumb:hover {
   transform: scale(1.15);
-  box-shadow: 0 4px 12px rgba(22, 104, 227, 0.45);
+  box-shadow: 0 4px 12px rgba(11, 21, 53, 0.45);
 }
 .price-slider::-moz-range-thumb {
   pointer-events: all;
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: white;
-  border: 3px solid #1668E3;
-  box-shadow: 0 2px 8px rgba(22, 104, 227, 0.30);
+  background: #FBF4E0;
+  border: 3px solid #1A2954;
+  box-shadow: 0 2px 8px rgba(11, 21, 53, 0.30);
   cursor: pointer;
 }

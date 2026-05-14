@@ -525,7 +525,7 @@ function RecompensasTab() {
         {tiers.map((tier) => (
           <div
             key={tier.name}
-            className="rounded-2xl p-6 bg-white border border-ivory-200"
+            className="rounded-2xl p-6 bg-ivory-50 border border-ivory-200"
           >
             <div className="flex items-center gap-2 mb-2">
               <Sparkles size={16} className="text-plum-700" />

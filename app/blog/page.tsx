@@ -37,7 +37,7 @@ export default async function BlogPage({
                 alt={featured.title}
                 className="absolute inset-0 w-full h-full object-cover"
               />
-              <span className="absolute top-5 left-5 bg-white/95 text-plum-700 px-3 py-1.5 rounded-full text-xs font-semibold">
+              <span className="absolute top-5 left-5 bg-ivory-50/95 text-plum-700 px-3 py-1.5 rounded-full text-xs font-semibold">
                 Destacado
               </span>
             </div>
@@ -90,7 +90,7 @@ export default async function BlogPage({
                     alt={post.title}
                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
                   />
-                  <span className="absolute top-4 left-4 bg-white/95 text-plum-700 px-3 py-1 rounded-full text-[10px] uppercase tracking-widest font-semibold">
+                  <span className="absolute top-4 left-4 bg-ivory-50/95 text-plum-700 px-3 py-1 rounded-full text-[10px] uppercase tracking-widest font-semibold">
                     {post.category}
                   </span>
                 </div>

@@ -86,7 +86,7 @@ export default async function VuelosPage({
           />
 
           <div>
-            <div className="flex justify-between items-center mb-6 flex-wrap gap-4 bg-white rounded-2xl px-6 py-4 shadow-soft">
+            <div className="flex justify-between items-center mb-6 flex-wrap gap-4 bg-ivory-50 rounded-2xl px-6 py-4 shadow-soft">
               <span className="text-charcoal-500 text-sm">
                 <strong className="text-plum-700 font-display text-lg">{flights.length}</strong>{' '}
                 vuelos disponibles · CDMX → Paris
@@ -130,7 +130,7 @@ export default async function VuelosPage({
                     </div>
                     <div className="text-center relative min-w-[140px]">
                       <div className="absolute left-0 right-0 top-1/2 h-px bg-ivory-300" />
-                      <div className="relative inline-block bg-white px-3">
+                      <div className="relative inline-block bg-ivory-50 px-3">
                         <Plane size={16} className="text-plum-700 inline" />
                       </div>
                       <div className="flex gap-3 justify-center mt-2 text-[11px] text-charcoal-500">

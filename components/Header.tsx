@@ -95,7 +95,7 @@ function UserArea() {
         </button>
 
         {userMenuOpen && (
-          <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-2xl shadow-soft-lg border border-ivory-200 py-2 animate-in fade-in slide-in-from-top-2">
+          <div className="absolute right-0 top-full mt-2 w-56 bg-ivory-50 rounded-2xl shadow-soft-lg border border-ivory-200 py-2 animate-in fade-in slide-in-from-top-2">
             <div className="px-4 py-3 border-b border-ivory-200">
               <p className="text-sm font-semibold text-charcoal-900 truncate">{user?.name}</p>
               <p className="text-xs text-charcoal-500 truncate">{user?.email}</p>

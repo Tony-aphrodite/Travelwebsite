@@ -108,7 +108,7 @@ export default async function OfertasPage() {
                   <span className="absolute top-4 left-4 bg-gradient-to-r from-gold-600 to-gold-500 text-charcoal-900 px-3 py-1.5 rounded-full text-xs font-bold">
                     -{pct}%
                   </span>
-                  <span className="absolute top-4 right-4 bg-white/95 text-plum-700 px-2 py-1 rounded-full text-[10px] uppercase tracking-widest font-semibold flex items-center gap-1">
+                  <span className="absolute top-4 right-4 bg-ivory-50/95 text-plum-700 px-2 py-1 rounded-full text-[10px] uppercase tracking-widest font-semibold flex items-center gap-1">
                     <Clock size={10} /> 48h
                   </span>
                 </div>

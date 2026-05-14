@@ -60,7 +60,7 @@ export default function NewsletterForm({ variant = 'light' }: { variant?: 'light
         onChange={(e) => setEmail(e.target.value)}
         placeholder="tu@correo.com"
         required
-        className="flex-1 px-6 py-4 rounded-full border border-ivory-300 bg-white text-[15px] outline-none focus:border-plum-700 focus:ring-4 focus:ring-plum-700/10"
+        className="flex-1 px-6 py-4 rounded-full border border-ivory-300 bg-ivory-50 text-[15px] outline-none focus:border-plum-700 focus:ring-4 focus:ring-plum-700/10"
       />
       <button type="submit" className="btn btn-primary btn-md" disabled={status === 'loading'}>
         {status === 'loading' ? 'Enviando...' : 'Suscribirme'}

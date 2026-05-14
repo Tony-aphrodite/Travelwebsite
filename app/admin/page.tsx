@@ -294,7 +294,7 @@ export default function AdminPage() {
         </aside>
 
         <div>
-          <header className="bg-white border-b border-ivory-200 px-8 py-4 flex items-center justify-between flex-wrap gap-4">
+          <header className="bg-ivory-50 border-b border-ivory-200 px-8 py-4 flex items-center justify-between flex-wrap gap-4">
             <div>
               <h1 className="font-display text-2xl text-plum-700 capitalize">{panel}</h1>
               <div className="text-xs text-charcoal-500">
@@ -747,7 +747,7 @@ function ModalShell({ title, onClose, children }: { title: string; onClose: () =
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-3xl max-w-2xl w-full my-8 shadow-soft-xl"
+        className="bg-ivory-50 rounded-3xl max-w-2xl w-full my-8 shadow-soft-xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between p-6 border-b border-ivory-200">

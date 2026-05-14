@@ -88,7 +88,7 @@ export default async function VillasPage({
           />
 
           <div>
-            <div className="flex justify-between items-center mb-6 flex-wrap gap-4 bg-white rounded-2xl px-6 py-4 shadow-soft">
+            <div className="flex justify-between items-center mb-6 flex-wrap gap-4 bg-ivory-50 rounded-2xl px-6 py-4 shadow-soft">
               <span className="text-charcoal-500 text-sm">
                 <strong className="text-plum-700 font-display text-lg">{villas.length}</strong>{' '}
                 villas exclusivas
@@ -116,10 +116,10 @@ export default async function VillasPage({
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 hover:scale-105"
                       loading="lazy"
                     />
-                    <button className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 text-plum-700 flex items-center justify-center hover:bg-plum-700 hover:text-white transition-colors">
+                    <button className="absolute top-4 right-4 w-10 h-10 rounded-full bg-ivory-50/90 text-plum-700 flex items-center justify-center hover:bg-plum-700 hover:text-ivory-50 transition-colors">
                       <Heart size={18} />
                     </button>
-                    <div className="absolute top-4 left-4 bg-white px-3 py-1.5 rounded-full flex items-center gap-1.5 text-xs font-semibold">
+                    <div className="absolute top-4 left-4 bg-ivory-50 px-3 py-1.5 rounded-full flex items-center gap-1.5 text-xs font-semibold">
                       <span className="text-gold-600">★</span>
                       {villa.rating} · {villa.reviewCount}
                     </div>

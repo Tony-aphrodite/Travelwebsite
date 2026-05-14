@@ -74,7 +74,7 @@ export default async function HomePage() {
                 className="absolute inset-0 w-full h-full object-cover"
               />
             </div>
-            <div className="absolute bottom-16 right-5 bg-white p-4 rounded-2xl shadow-soft-lg flex items-center gap-3 animate-float">
+            <div className="absolute bottom-16 right-5 bg-ivory-50 p-4 rounded-2xl shadow-soft-lg flex items-center gap-3 animate-float">
               <div className="w-11 h-11 rounded-full bg-gradient-to-br from-gold-600 to-rose-500 flex items-center justify-center text-white">
                 <Award size={20} />
               </div>

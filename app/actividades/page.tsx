@@ -78,7 +78,7 @@ export default async function ActividadesPage({
           />
 
           <div>
-            <div className="flex justify-between items-center mb-6 flex-wrap gap-4 bg-white rounded-2xl px-6 py-4 shadow-soft">
+            <div className="flex justify-between items-center mb-6 flex-wrap gap-4 bg-ivory-50 rounded-2xl px-6 py-4 shadow-soft">
               <span className="text-charcoal-500 text-sm">
                 <strong className="text-plum-700 font-display text-lg">{activities.length}</strong>{' '}
                 experiencias disponibles

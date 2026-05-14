@@ -221,7 +221,7 @@ export default function CarritoPage() {
                         alt={it.itemName}
                         className="absolute inset-0 w-full h-full object-cover"
                       />
-                      <span className="absolute top-3 left-3 bg-white/95 text-plum-700 text-[10px] uppercase tracking-widest px-2 py-1 rounded-full font-semibold">
+                      <span className="absolute top-3 left-3 bg-ivory-50/95 text-plum-700 text-[10px] uppercase tracking-widest px-2 py-1 rounded-full font-semibold">
                         {it.type}
                       </span>
                     </div>
@@ -261,7 +261,7 @@ export default function CarritoPage() {
                         <div className="flex items-center gap-2 bg-ivory-100 rounded-full px-2 py-1">
                           <button
                             onClick={() => updateQty(it.id, -1)}
-                            className="w-7 h-7 rounded-full bg-white text-plum-700 flex items-center justify-center hover:bg-plum-700 hover:text-white transition-colors"
+                            className="w-7 h-7 rounded-full bg-ivory-50 text-plum-700 flex items-center justify-center hover:bg-plum-700 hover:text-ivory-50 transition-colors"
                           >
                             <Minus size={12} />
                           </button>
@@ -270,7 +270,7 @@ export default function CarritoPage() {
                           </span>
                           <button
                             onClick={() => updateQty(it.id, 1)}
-                            className="w-7 h-7 rounded-full bg-white text-plum-700 flex items-center justify-center hover:bg-plum-700 hover:text-white transition-colors"
+                            className="w-7 h-7 rounded-full bg-ivory-50 text-plum-700 flex items-center justify-center hover:bg-plum-700 hover:text-ivory-50 transition-colors"
                           >
                             <Plus size={12} />
                           </button>
@@ -330,7 +330,7 @@ export default function CarritoPage() {
                     </button>
                   </div>
                   {promoError && (
-                    <p className="text-xs text-rose-400 mt-1">{promoError}</p>
+                    <p className="text-xs text-rose-700 mt-1">{promoError}</p>
                   )}
                 </div>
 

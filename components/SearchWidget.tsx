@@ -29,7 +29,7 @@ export default function SearchWidget({ initialTab = 'vuelos' }: { initialTab?: T
   };
 
   return (
-    <div className="max-w-[1120px] mx-auto bg-white rounded-3xl shadow-soft-xl p-6 md:p-8">
+    <div className="max-w-[1120px] mx-auto bg-ivory-50 rounded-3xl shadow-soft-xl p-6 md:p-8">
       {/* Tabs */}
       <div className="flex gap-1 border-b border-ivory-200 mb-6 overflow-x-auto">
         {TABS.map(({ id, label, Icon }) => (
