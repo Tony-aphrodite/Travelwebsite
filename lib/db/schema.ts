@@ -325,3 +325,27 @@ export const newsletterSubscribers = pgTable('newsletter_subscribers', {
   subscribedAt: timestamp('subscribed_at').defaultNow().notNull(),
   isActive: boolean('is_active').default(true).notNull(),
 });
+
+// ─── NOTIFICATION PREFERENCES ───────────────────────
+export const notificationPrefs = pgTable('notification_prefs', {
+  userId: text('user_id').primaryKey().references(() => users.id, { onDelete: 'cascade' }),
+  offers: boolean('offers').default(true).notNull(),
+  tripReminders: boolean('trip_reminders').default(true).notNull(),
+  newsletter: boolean('newsletter').default(true).notNull(),
+  blog: boolean('blog').default(false).notNull(),
+  priceAlerts: boolean('price_alerts').default(false).notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+// ─── PASSWORD RESET TOKENS ──────────────────────────
+export const passwordResetTokens = pgTable('password_reset_tokens', {
+  id: serial('id').primaryKey(),
+  userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  tokenHash: text('token_hash').notNull(),
+  expiresAt: timestamp('expires_at', { mode: 'date' }).notNull(),
+  usedAt: timestamp('used_at', { mode: 'date' }),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+}, (t) => [
+  uniqueIndex('prt_token_idx').on(t.tokenHash),
+  index('prt_user_idx').on(t.userId),
+]);

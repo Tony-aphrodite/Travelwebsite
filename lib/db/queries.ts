@@ -21,6 +21,8 @@ export type HotelFilters = {
   amenity?: string;
   sort?: string;
   q?: string;
+  page?: number;
+  pageSize?: number;
 };
 
 export async function getHotels(filters: HotelFilters = {}) {
@@ -59,7 +61,13 @@ export async function getHotels(filters: HotelFilters = {}) {
       orderBy = desc(schema.hotels.rating);
   }
 
-  return db.select().from(schema.hotels).where(and(...conditions)).orderBy(orderBy);
+  const pageSize = Math.max(1, Math.min(50, filters.pageSize ?? 12));
+  const page = Math.max(1, filters.page ?? 1);
+  return db.select().from(schema.hotels)
+    .where(and(...conditions))
+    .orderBy(orderBy)
+    .limit(pageSize)
+    .offset((page - 1) * pageSize);
 }
 
 export async function getHotelById(id: string) {
@@ -75,6 +83,8 @@ export type FlightFilters = {
   priceMax?: number;
   stops?: number;
   sort?: string;
+  page?: number;
+  pageSize?: number;
 };
 
 export async function getFlights(filters: FlightFilters = {}) {
@@ -103,7 +113,13 @@ export async function getFlights(filters: FlightFilters = {}) {
     default: orderBy = asc(schema.flights.price);
   }
 
-  return db.select().from(schema.flights).where(and(...conditions)).orderBy(orderBy);
+  const pageSize = Math.max(1, Math.min(50, filters.pageSize ?? 12));
+  const page = Math.max(1, filters.page ?? 1);
+  return db.select().from(schema.flights)
+    .where(and(...conditions))
+    .orderBy(orderBy)
+    .limit(pageSize)
+    .offset((page - 1) * pageSize);
 }
 
 // ─── VILLAS ─────────────────────────────────────────
@@ -114,6 +130,8 @@ export type VillaFilters = {
   guests?: number;
   sort?: string;
   q?: string;
+  page?: number;
+  pageSize?: number;
 };
 
 export async function getVillas(filters: VillaFilters = {}) {
@@ -145,7 +163,13 @@ export async function getVillas(filters: VillaFilters = {}) {
     default: orderBy = desc(schema.villas.rating);
   }
 
-  return db.select().from(schema.villas).where(and(...conditions)).orderBy(orderBy);
+  const pageSize = Math.max(1, Math.min(50, filters.pageSize ?? 12));
+  const page = Math.max(1, filters.page ?? 1);
+  return db.select().from(schema.villas)
+    .where(and(...conditions))
+    .orderBy(orderBy)
+    .limit(pageSize)
+    .offset((page - 1) * pageSize);
 }
 
 export async function getVillaById(id: string) {
@@ -159,6 +183,8 @@ export type PackageFilters = {
   priceMin?: number;
   priceMax?: number;
   sort?: string;
+  page?: number;
+  pageSize?: number;
 };
 
 export async function getPackages(filters: PackageFilters = {}) {
@@ -181,7 +207,13 @@ export async function getPackages(filters: PackageFilters = {}) {
     default: orderBy = asc(schema.packages.price);
   }
 
-  return db.select().from(schema.packages).where(and(...conditions)).orderBy(orderBy);
+  const pageSize = Math.max(1, Math.min(50, filters.pageSize ?? 12));
+  const page = Math.max(1, filters.page ?? 1);
+  return db.select().from(schema.packages)
+    .where(and(...conditions))
+    .orderBy(orderBy)
+    .limit(pageSize)
+    .offset((page - 1) * pageSize);
 }
 
 // ─── CARS ───────────────────────────────────────────
@@ -191,6 +223,8 @@ export type CarFilters = {
   priceMax?: number;
   transmission?: string;
   sort?: string;
+  page?: number;
+  pageSize?: number;
 };
 
 export async function getCars(filters: CarFilters = {}) {
@@ -216,7 +250,13 @@ export async function getCars(filters: CarFilters = {}) {
     default: orderBy = asc(schema.cars.price);
   }
 
-  return db.select().from(schema.cars).where(and(...conditions)).orderBy(orderBy);
+  const pageSize = Math.max(1, Math.min(50, filters.pageSize ?? 12));
+  const page = Math.max(1, filters.page ?? 1);
+  return db.select().from(schema.cars)
+    .where(and(...conditions))
+    .orderBy(orderBy)
+    .limit(pageSize)
+    .offset((page - 1) * pageSize);
 }
 
 // ─── ACTIVITIES ─────────────────────────────────────
@@ -226,6 +266,8 @@ export type ActivityFilters = {
   priceMin?: number;
   priceMax?: number;
   sort?: string;
+  page?: number;
+  pageSize?: number;
 };
 
 export async function getActivities(filters: ActivityFilters = {}) {
@@ -252,7 +294,13 @@ export async function getActivities(filters: ActivityFilters = {}) {
     default: orderBy = desc(schema.activities.rating);
   }
 
-  return db.select().from(schema.activities).where(and(...conditions)).orderBy(orderBy);
+  const pageSize = Math.max(1, Math.min(50, filters.pageSize ?? 12));
+  const page = Math.max(1, filters.page ?? 1);
+  return db.select().from(schema.activities)
+    .where(and(...conditions))
+    .orderBy(orderBy)
+    .limit(pageSize)
+    .offset((page - 1) * pageSize);
 }
 
 // ─── BLOG ───────────────────────────────────────────
@@ -425,6 +473,106 @@ export async function getReviewsForItem(type: string, itemId: string) {
     .leftJoin(schema.users, eq(schema.reviews.userId, schema.users.id))
     .where(and(eq(schema.reviews.type, type as any), eq(schema.reviews.itemId, itemId)))
     .orderBy(desc(schema.reviews.createdAt));
+}
+
+// ─── NOTIFICATION PREFERENCES ───────────────────────
+export async function getNotificationPrefs(userId: string) {
+  const rows = await db.select().from(schema.notificationPrefs)
+    .where(eq(schema.notificationPrefs.userId, userId));
+  return rows[0] ?? null;
+}
+
+export async function upsertNotificationPrefs(
+  userId: string,
+  prefs: { offers: boolean; tripReminders: boolean; newsletter: boolean; blog: boolean; priceAlerts: boolean }
+) {
+  return db.insert(schema.notificationPrefs)
+    .values({ userId, ...prefs })
+    .onConflictDoUpdate({
+      target: schema.notificationPrefs.userId,
+      set: { ...prefs, updatedAt: new Date() },
+    })
+    .returning();
+}
+
+// ─── PASSWORD RESET ─────────────────────────────────
+export async function createPasswordResetToken(userId: string, tokenHash: string, expiresAt: Date) {
+  return db.insert(schema.passwordResetTokens)
+    .values({ userId, tokenHash, expiresAt })
+    .returning();
+}
+
+export async function getPasswordResetToken(tokenHash: string) {
+  const rows = await db.select().from(schema.passwordResetTokens)
+    .where(eq(schema.passwordResetTokens.tokenHash, tokenHash));
+  return rows[0] ?? null;
+}
+
+export async function markPasswordResetTokenUsed(id: number) {
+  return db.update(schema.passwordResetTokens)
+    .set({ usedAt: new Date() })
+    .where(eq(schema.passwordResetTokens.id, id));
+}
+
+export async function updateUserPassword(userId: string, hashedPassword: string) {
+  return db.update(schema.users)
+    .set({ hashedPassword, updatedAt: new Date() })
+    .where(eq(schema.users.id, userId));
+}
+
+export async function getUserByEmail(email: string) {
+  const rows = await db.select().from(schema.users)
+    .where(eq(schema.users.email, email));
+  return rows[0] ?? null;
+}
+
+// ─── BOOKING DETAIL ─────────────────────────────────
+export async function getBookingById(id: string, userId?: string) {
+  const conditions = userId
+    ? and(eq(schema.bookings.id, id), eq(schema.bookings.userId, userId))
+    : eq(schema.bookings.id, id);
+  const rows = await db.select().from(schema.bookings).where(conditions);
+  return rows[0] ?? null;
+}
+
+// ─── ADMIN BOOKINGS ─────────────────────────────────
+export async function getAllBookings(limit = 50) {
+  return db.select({
+    id: schema.bookings.id,
+    type: schema.bookings.type,
+    itemName: schema.bookings.itemName,
+    status: schema.bookings.status,
+    checkIn: schema.bookings.checkIn,
+    checkOut: schema.bookings.checkOut,
+    guests: schema.bookings.guests,
+    total: schema.bookings.total,
+    createdAt: schema.bookings.createdAt,
+    userId: schema.bookings.userId,
+    userName: schema.users.name,
+    userEmail: schema.users.email,
+  })
+    .from(schema.bookings)
+    .leftJoin(schema.users, eq(schema.bookings.userId, schema.users.id))
+    .orderBy(desc(schema.bookings.createdAt))
+    .limit(limit);
+}
+
+export async function getRecentBookings(limit = 6) {
+  return getAllBookings(limit);
+}
+
+// ─── COUNT HELPERS (for pagination) ─────────────────
+export async function countHotels(filters: HotelFilters = {}): Promise<number> {
+  const conditions = [eq(schema.hotels.isActive, true)];
+  if (filters.country) conditions.push(eq(schema.hotels.country, filters.country));
+  if (filters.priceMin !== undefined) conditions.push(gte(schema.hotels.price, filters.priceMin));
+  if (filters.priceMax !== undefined) conditions.push(lte(schema.hotels.price, filters.priceMax));
+  if (filters.stars && filters.stars.length > 0) conditions.push(inArray(schema.hotels.stars, filters.stars));
+  if (filters.q) {
+    conditions.push(sql`(${schema.hotels.name} ILIKE ${'%' + filters.q + '%'} OR ${schema.hotels.location} ILIKE ${'%' + filters.q + '%'})`);
+  }
+  const [r] = await db.select({ c: sql<number>`count(*)` }).from(schema.hotels).where(and(...conditions));
+  return Number(r.c);
 }
 
 // ─── ADMIN ──────────────────────────────────────────
