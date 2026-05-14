@@ -15,6 +15,8 @@ import {
 import { getHotelById, getVillaById } from '@/lib/db/queries';
 import FavoriteButton from '@/components/FavoriteButton';
 import ShareButton from '@/components/ShareButton';
+import ReviewSection from '@/components/ReviewSection';
+import HotelBookingCard from '@/components/HotelBookingCard';
 
 const AMENITY_ICONS: Record<string, LucideIcon> = {
   WiFi: Wifi,
@@ -182,20 +184,22 @@ export default async function HotelDetailPage({ params }: { params: Promise<{ id
               </div>
             </section>
 
-            {/* Reviews */}
-            <section className="py-8">
-              <h2 className="heading-md mb-6">Opiniones de viajeras</h2>
+            {/* Reviews (real data + submission form) */}
+            <ReviewSection type={hotel ? 'hotel' : 'villa'} itemId={item.id} />
+
+            {/* Legacy mocked block kept disabled below */}
+            <section className="hidden">
               <div className="grid md:grid-cols-2 gap-6">
                 {[
                   {
                     name: 'Sofia M.',
                     date: 'Marzo 2026',
-                    text: 'Un lugar magico. Cada detalle estaba cuidado al maximo. Las vistas desde la habitacion son de otro mundo.',
+                    text: 'placeholder',
                   },
                   {
                     name: 'Ana C.',
                     date: 'Febrero 2026',
-                    text: 'El servicio fue impecable. Nos hicieron sentir como reinas desde el momento que llegamos. Volveremos sin duda.',
+                    text: 'placeholder',
                   },
                 ].map((r) => (
                   <div key={r.name} className="card-soft p-6">
@@ -215,57 +219,13 @@ export default async function HotelDetailPage({ params }: { params: Promise<{ id
 
           {/* Booking card */}
           <aside className="h-fit lg:sticky lg:top-28">
-            <div className="card-soft p-8 shadow-soft-lg">
-              <div className="flex items-baseline gap-2 mb-6 pb-6 border-b border-ivory-200">
-                <strong className="font-display text-4xl text-plum-700">${price}</strong>
-                <span className="text-charcoal-500 text-sm">USD / noche</span>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3 mb-4">
-                <div>
-                  <label className="field-label">Entrada</label>
-                  <input type="date" defaultValue="2026-05-15" className="field-input" />
-                </div>
-                <div>
-                  <label className="field-label">Salida</label>
-                  <input type="date" defaultValue="2026-05-20" className="field-input" />
-                </div>
-              </div>
-              <div className="mb-4">
-                <label className="field-label">Huespedes</label>
-                <select className="field-input">
-                  <option>2 Adultos</option>
-                  <option>2 Adultos · 1 Nino</option>
-                  <option>4 Adultos</option>
-                </select>
-              </div>
-
-              <div className="p-5 bg-ivory-100 rounded-xl my-5 text-sm">
-                <div className="flex justify-between mb-2">
-                  <span>${price} x 5 noches</span>
-                  <span>${price * 5}</span>
-                </div>
-                <div className="flex justify-between mb-2">
-                  <span>Impuestos</span>
-                  <span>${Math.round(price * 5 * 0.12)}</span>
-                </div>
-                <div className="flex justify-between text-sage-500">
-                  <span>Descuento Aurelia Society</span>
-                  <span>-${Math.round(price * 0.05)}</span>
-                </div>
-                <div className="flex justify-between pt-3 mt-3 border-t border-ivory-300 font-display text-lg text-plum-700 font-semibold">
-                  <span>Total</span>
-                  <span>${Math.round(price * 5 * 1.12 - price * 0.05)}</span>
-                </div>
-              </div>
-
-              <Link href="/carrito" className="btn btn-primary btn-lg w-full">
-                Reservar ahora
-              </Link>
-              <p className="text-center text-xs text-charcoal-500 mt-3">
-                No se te cobrara aun. Cancelacion gratis.
-              </p>
-            </div>
+            <HotelBookingCard
+              type={hotel ? 'hotel' : 'villa'}
+              itemId={item.id}
+              itemName={name}
+              itemImage={mainImage}
+              unitPrice={price}
+            />
           </aside>
         </div>
       </div>
