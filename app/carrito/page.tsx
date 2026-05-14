@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSession } from 'next-auth/react';
 import {
   ShoppingBag,
@@ -56,13 +56,47 @@ export default function CarritoPage() {
     }
   }, [status]);
 
+  const qtyTimers = useRef<Map<number, ReturnType<typeof setTimeout>>>(new Map());
+
   const updateQty = (id: number, delta: number) => {
+    let nextQty = 1;
+    let prevQty = 1;
     setItems((prev) =>
-      prev.map((it) =>
-        it.id === id ? { ...it, quantity: Math.max(1, it.quantity + delta) } : it
-      )
+      prev.map((it) => {
+        if (it.id !== id) return it;
+        prevQty = it.quantity;
+        nextQty = Math.min(99, Math.max(1, it.quantity + delta));
+        return { ...it, quantity: nextQty };
+      })
     );
+
+    if (nextQty === prevQty) return;
+
+    const existing = qtyTimers.current.get(id);
+    if (existing) clearTimeout(existing);
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch('/api/cart', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, quantity: nextQty }),
+        });
+        if (!res.ok) throw new Error('Update failed');
+      } catch {
+        setItems((prev) => prev.map((it) => (it.id === id ? { ...it, quantity: prevQty } : it)));
+      } finally {
+        qtyTimers.current.delete(id);
+      }
+    }, 400);
+    qtyTimers.current.set(id, timer);
   };
+
+  useEffect(() => {
+    return () => {
+      qtyTimers.current.forEach((t) => clearTimeout(t));
+      qtyTimers.current.clear();
+    };
+  }, []);
 
   const removeItem = async (id: number) => {
     setRemoving(id);
@@ -84,14 +118,21 @@ export default function CarritoPage() {
     }
   };
 
+  const [checkoutError, setCheckoutError] = useState('');
+
   const handleCheckout = async () => {
     setCheckingOut(true);
+    setCheckoutError('');
     try {
       const res = await fetch('/api/stripe/checkout', { method: 'POST' });
       const data = await res.json();
-      if (data.url) {
+      if (res.ok && data.url) {
         window.location.href = data.url;
+        return;
       }
+      setCheckoutError(data.error || 'No fue posible iniciar el pago. Intenta de nuevo.');
+    } catch {
+      setCheckoutError('Error de red. Verifica tu conexion e intenta de nuevo.');
     } finally {
       setCheckingOut(false);
     }
@@ -336,6 +377,9 @@ export default function CarritoPage() {
                     'Confirmar y pagar'
                   )}
                 </button>
+                {checkoutError && (
+                  <p className="text-center text-xs text-rose-700 mt-3">{checkoutError}</p>
+                )}
                 <p className="text-center text-xs text-charcoal-500 mt-3">
                   Cancelacion gratis hasta 48h antes del viaje
                 </p>
