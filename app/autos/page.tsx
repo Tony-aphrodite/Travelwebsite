@@ -4,7 +4,10 @@ import PageHeader from '@/components/PageHeader';
 import SearchWidget from '@/components/SearchWidget';
 import FilterSidebar from '@/components/FilterSidebar';
 import SortSelect from '@/components/SortSelect';
+import Pagination from '@/components/Pagination';
 import { getCars } from '@/lib/db/queries';
+
+const PAGE_SIZE = 12;
 
 export default async function AutosPage({
   searchParams,
@@ -12,6 +15,7 @@ export default async function AutosPage({
   searchParams: Promise<Record<string, string>>;
 }) {
   const params = await searchParams;
+  const page = Math.max(1, Number(params.page || '1') || 1);
 
   const filters = {
     category: params.category || undefined,
@@ -19,9 +23,13 @@ export default async function AutosPage({
     priceMax: params.priceMax ? Number(params.priceMax) : undefined,
     transmission: params.transmission || undefined,
     sort: params.sort || undefined,
+    page,
+    pageSize: PAGE_SIZE + 1,
   };
 
-  const cars = await getCars(filters);
+  const rows = await getCars(filters);
+  const hasNext = rows.length > PAGE_SIZE;
+  const cars = rows.slice(0, PAGE_SIZE);
 
   return (
     <>
@@ -153,6 +161,13 @@ export default async function AutosPage({
                 </article>
               ))}
             </div>
+
+            <Pagination
+              basePath="/autos"
+              searchParams={params}
+              currentPage={page}
+              hasNext={hasNext}
+            />
           </div>
         </div>
       </section>

@@ -4,7 +4,10 @@ import PageHeader from '@/components/PageHeader';
 import SearchWidget from '@/components/SearchWidget';
 import FilterSidebar from '@/components/FilterSidebar';
 import SortSelect from '@/components/SortSelect';
+import Pagination from '@/components/Pagination';
 import { getFlights } from '@/lib/db/queries';
+
+const PAGE_SIZE = 12;
 
 export default async function VuelosPage({
   searchParams,
@@ -12,6 +15,7 @@ export default async function VuelosPage({
   searchParams: Promise<Record<string, string>>;
 }) {
   const params = await searchParams;
+  const page = Math.max(1, Number(params.page || '1') || 1);
 
   const filters = {
     fromCity: params.fromCity || undefined,
@@ -20,9 +24,13 @@ export default async function VuelosPage({
     priceMax: params.priceMax ? Number(params.priceMax) : undefined,
     stops: params.stops ? Number(params.stops) : undefined,
     sort: params.sort || undefined,
+    page,
+    pageSize: PAGE_SIZE + 1,
   };
 
-  const flights = await getFlights(filters);
+  const rows = await getFlights(filters);
+  const hasNext = rows.length > PAGE_SIZE;
+  const flights = rows.slice(0, PAGE_SIZE);
 
   return (
     <>
@@ -158,6 +166,13 @@ export default async function VuelosPage({
                 </article>
               ))}
             </div>
+
+            <Pagination
+              basePath="/vuelos"
+              searchParams={params}
+              currentPage={page}
+              hasNext={hasNext}
+            />
           </div>
         </div>
       </section>

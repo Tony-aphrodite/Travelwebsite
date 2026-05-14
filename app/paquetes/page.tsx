@@ -4,7 +4,10 @@ import PageHeader from '@/components/PageHeader';
 import SearchWidget from '@/components/SearchWidget';
 import FilterSidebar from '@/components/FilterSidebar';
 import SortSelect from '@/components/SortSelect';
+import Pagination from '@/components/Pagination';
 import { getPackages } from '@/lib/db/queries';
+
+const PAGE_SIZE = 12;
 
 export default async function PaquetesPage({
   searchParams,
@@ -12,15 +15,20 @@ export default async function PaquetesPage({
   searchParams: Promise<Record<string, string>>;
 }) {
   const params = await searchParams;
+  const page = Math.max(1, Number(params.page || '1') || 1);
 
   const filters = {
     destination: params.destination || undefined,
     priceMin: params.priceMin ? Number(params.priceMin) : undefined,
     priceMax: params.priceMax ? Number(params.priceMax) : undefined,
     sort: params.sort || undefined,
+    page,
+    pageSize: PAGE_SIZE + 1,
   };
 
-  const packages = await getPackages(filters);
+  const rows = await getPackages(filters);
+  const hasNext = rows.length > PAGE_SIZE;
+  const packages = rows.slice(0, PAGE_SIZE);
 
   return (
     <>
@@ -143,6 +151,13 @@ export default async function PaquetesPage({
                 </article>
               ))}
             </div>
+
+            <Pagination
+              basePath="/paquetes"
+              searchParams={params}
+              currentPage={page}
+              hasNext={hasNext}
+            />
           </div>
         </div>
       </section>

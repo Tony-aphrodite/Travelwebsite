@@ -4,7 +4,10 @@ import PageHeader from '@/components/PageHeader';
 import SearchWidget from '@/components/SearchWidget';
 import FilterSidebar from '@/components/FilterSidebar';
 import SortSelect from '@/components/SortSelect';
+import Pagination from '@/components/Pagination';
 import { getVillas } from '@/lib/db/queries';
+
+const PAGE_SIZE = 12;
 
 export default async function VillasPage({
   searchParams,
@@ -12,6 +15,7 @@ export default async function VillasPage({
   searchParams: Promise<Record<string, string>>;
 }) {
   const params = await searchParams;
+  const page = Math.max(1, Number(params.page || '1') || 1);
 
   const filters = {
     country: params.country || undefined,
@@ -20,9 +24,13 @@ export default async function VillasPage({
     guests: params.guests ? Number(params.guests) : undefined,
     sort: params.sort || undefined,
     q: params.q || undefined,
+    page,
+    pageSize: PAGE_SIZE + 1,
   };
 
-  const villas = await getVillas(filters);
+  const rows = await getVillas(filters);
+  const hasNext = rows.length > PAGE_SIZE;
+  const villas = rows.slice(0, PAGE_SIZE);
 
   return (
     <>
@@ -154,6 +162,13 @@ export default async function VillasPage({
                 </article>
               ))}
             </div>
+
+            <Pagination
+              basePath="/villas"
+              searchParams={params}
+              currentPage={page}
+              hasNext={hasNext}
+            />
           </div>
         </div>
       </section>
