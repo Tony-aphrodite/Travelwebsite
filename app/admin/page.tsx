@@ -83,6 +83,26 @@ export default function AdminPage() {
     }
   }, [status, isAdmin]);
 
+  const deleteHotel = async (id: string, name: string) => {
+    if (!confirm(`Eliminar el hotel "${name}"? Esta accion no se puede deshacer.`)) return;
+    const res = await fetch(`/api/admin/hotels/${id}`, { method: 'DELETE' });
+    if (res.ok) {
+      setHotels((prev) => prev.filter((h) => h.id !== id));
+    } else {
+      alert('No se pudo eliminar el hotel');
+    }
+  };
+
+  const deletePackage = async (id: string, title: string) => {
+    if (!confirm(`Eliminar el paquete "${title}"?`)) return;
+    const res = await fetch(`/api/admin/packages/${id}`, { method: 'DELETE' });
+    if (res.ok) {
+      setPackages((prev) => prev.filter((p) => p.id !== id));
+    } else {
+      alert('No se pudo eliminar el paquete');
+    }
+  };
+
   if (status === 'loading') {
     return (
       <div className="min-h-screen bg-ivory-100 flex items-center justify-center">
@@ -208,8 +228,8 @@ export default function AdminPage() {
               <>
                 {panel === 'dashboard' && <Dashboard />}
                 {panel === 'reservas' && <Reservas />}
-                {panel === 'hoteles' && <Hoteles hotels={hotels} />}
-                {panel === 'paquetes' && <Paquetes packages={packages} />}
+                {panel === 'hoteles' && <Hoteles hotels={hotels} onDelete={deleteHotel} />}
+                {panel === 'paquetes' && <Paquetes packages={packages} onDelete={deletePackage} />}
                 {panel === 'usuarios' && <Usuarios />}
                 {panel === 'reportes' && <Reportes />}
               </>
@@ -460,7 +480,7 @@ function Reservas() {
   );
 }
 
-function Hoteles({ hotels }: { hotels: HotelRow[] }) {
+function Hoteles({ hotels, onDelete }: { hotels: HotelRow[]; onDelete: (id: string, name: string) => void }) {
   return (
     <div className="space-y-5">
       <div className="flex justify-between items-center">
@@ -490,10 +510,19 @@ function Hoteles({ hotels }: { hotels: HotelRow[] }) {
               <div className="flex items-center justify-between">
                 <div className="font-display text-xl text-plum-700">${h.price}<small className="text-xs text-charcoal-500 font-sans ml-1">/ noche</small></div>
                 <div className="flex gap-1">
-                  <button className="w-8 h-8 rounded-full bg-ivory-100 hover:bg-plum-100 text-plum-700 flex items-center justify-center">
+                  <button
+                    className="w-8 h-8 rounded-full bg-ivory-100 hover:bg-plum-100 text-plum-700 flex items-center justify-center"
+                    title="Editar (proximamente)"
+                    aria-label="Editar"
+                  >
                     <Edit size={13} />
                   </button>
-                  <button className="w-8 h-8 rounded-full bg-ivory-100 hover:bg-rose-100 text-rose-400 flex items-center justify-center">
+                  <button
+                    onClick={() => onDelete(h.id, h.name)}
+                    className="w-8 h-8 rounded-full bg-ivory-100 hover:bg-rose-100 text-rose-700 flex items-center justify-center"
+                    title="Eliminar"
+                    aria-label="Eliminar"
+                  >
                     <Trash2 size={13} />
                   </button>
                 </div>
@@ -506,7 +535,7 @@ function Hoteles({ hotels }: { hotels: HotelRow[] }) {
   );
 }
 
-function Paquetes({ packages }: { packages: PackageRow[] }) {
+function Paquetes({ packages, onDelete }: { packages: PackageRow[]; onDelete: (id: string, title: string) => void }) {
   return (
     <div className="space-y-5">
       <div className="flex justify-between items-center">
@@ -544,10 +573,19 @@ function Paquetes({ packages }: { packages: PackageRow[] }) {
                 )}
               </div>
               <div className="flex gap-1">
-                <button className="w-9 h-9 rounded-full bg-ivory-100 hover:bg-plum-100 text-plum-700 flex items-center justify-center">
+                <button
+                  className="w-9 h-9 rounded-full bg-ivory-100 hover:bg-plum-100 text-plum-700 flex items-center justify-center"
+                  title="Editar (proximamente)"
+                  aria-label="Editar"
+                >
                   <Edit size={14} />
                 </button>
-                <button className="w-9 h-9 rounded-full bg-ivory-100 hover:bg-rose-100 text-rose-400 flex items-center justify-center">
+                <button
+                  onClick={() => onDelete(p.id, p.title)}
+                  className="w-9 h-9 rounded-full bg-ivory-100 hover:bg-rose-100 text-rose-700 flex items-center justify-center"
+                  title="Eliminar"
+                  aria-label="Eliminar"
+                >
                   <Trash2 size={14} />
                 </button>
               </div>
