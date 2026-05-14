@@ -3,20 +3,20 @@
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { Heart } from 'lucide-react';
+import { Heart, Loader2 } from 'lucide-react';
 
-export default function FavoriteButton({
-  type,
-  itemId,
-  initialFavorited = false,
-}: {
+type Props = {
   type: 'hotel' | 'villa' | 'package' | 'flight' | 'car' | 'activity';
   itemId: string;
   initialFavorited?: boolean;
-}) {
+  variant?: 'icon' | 'text';
+};
+
+export default function FavoriteButton({ type, itemId, initialFavorited = false, variant = 'icon' }: Props) {
   const { data: session } = useSession();
   const router = useRouter();
   const [favorited, setFavorited] = useState(initialFavorited);
+  const [pending, setPending] = useState(false);
 
   async function handleClick(e: React.MouseEvent) {
     e.preventDefault();
@@ -27,28 +27,44 @@ export default function FavoriteButton({
       return;
     }
 
-    const res = await fetch('/api/favorites', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ type, itemId }),
-    });
-
-    if (res.ok) {
-      const data = await res.json();
-      setFavorited(data.action === 'added');
+    setPending(true);
+    try {
+      const res = await fetch('/api/favorites', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type, itemId }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setFavorited(data.action === 'added');
+      }
+    } finally {
+      setPending(false);
     }
+  }
+
+  if (variant === 'text') {
+    return (
+      <button onClick={handleClick} disabled={pending} className="btn btn-ghost btn-sm" aria-pressed={favorited}>
+        {pending ? <Loader2 size={16} className="animate-spin" /> : <Heart size={16} fill={favorited ? 'currentColor' : 'none'} />}
+        {favorited ? 'Guardado' : 'Guardar'}
+      </button>
+    );
   }
 
   return (
     <button
       onClick={handleClick}
+      disabled={pending}
+      aria-pressed={favorited}
+      aria-label={favorited ? 'Quitar de favoritos' : 'Agregar a favoritos'}
       className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
         favorited
           ? 'bg-plum-700 text-white'
           : 'bg-white/90 text-plum-700 hover:bg-plum-700 hover:text-white'
       }`}
     >
-      <Heart size={18} fill={favorited ? 'currentColor' : 'none'} />
+      {pending ? <Loader2 size={16} className="animate-spin" /> : <Heart size={18} fill={favorited ? 'currentColor' : 'none'} />}
     </button>
   );
 }
