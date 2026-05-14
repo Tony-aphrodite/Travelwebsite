@@ -23,3 +23,12 @@ export function calculateTaxes(subtotal: number, rate = 0.16): number {
 export function absoluteUrl(path: string): string {
   return `${process.env.NEXT_PUBLIC_APP_URL}${path}`;
 }
+
+export function escapeHtml(input: unknown): string {
+  return String(input ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}

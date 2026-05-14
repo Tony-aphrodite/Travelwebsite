@@ -56,10 +56,83 @@ export const hotelFilterSchema = z.object({
   q: z.string().optional(),
 });
 
+export const adminHotelSchema = z.object({
+  id: z.string().min(1),
+  name: z.string().min(2).max(120),
+  location: z.string().min(2).max(120),
+  country: z.string().min(2).max(80),
+  image: z.string().url(),
+  gallery: z.array(z.string().url()).optional().default([]),
+  rating: z.number().min(0).max(5),
+  reviewCount: z.number().int().min(0).optional().default(0),
+  ratingLabel: z.string().max(80),
+  stars: z.number().int().min(1).max(5),
+  price: z.number().int().positive(),
+  oldPrice: z.number().int().positive().nullable().optional(),
+  description: z.string().min(10),
+  amenities: z.array(z.string()).optional().default([]),
+  tags: z.array(z.string()).optional().default([]),
+  lat: z.number().nullable().optional(),
+  lng: z.number().nullable().optional(),
+  isActive: z.boolean().optional().default(true),
+});
+
+export const adminPackageSchema = z.object({
+  id: z.string().min(1),
+  title: z.string().min(2).max(160),
+  destination: z.string().min(2).max(120),
+  image: z.string().url(),
+  duration: z.string().max(60),
+  includes: z.array(z.string()).optional().default([]),
+  price: z.number().int().positive(),
+  oldPrice: z.number().int().min(0),
+  badge: z.string().max(60),
+  description: z.string().min(10),
+  isActive: z.boolean().optional().default(true),
+});
+
+export const adminBlogSchema = z.object({
+  slug: z.string().min(2).max(160),
+  title: z.string().min(2).max(200),
+  excerpt: z.string().min(10).max(500),
+  content: z.string().optional(),
+  category: z.string().max(60),
+  readTime: z.string().max(20),
+  image: z.string().url(),
+  author: z.string().min(2).max(100),
+  authorId: z.string().optional(),
+  publishedAt: z.coerce.date().optional(),
+  isPublished: z.boolean().optional().default(false),
+});
+
+export const adminActivitySchema = z.object({
+  id: z.string().min(1),
+  title: z.string().min(2).max(160),
+  location: z.string().min(2).max(120),
+  image: z.string().url(),
+  duration: z.string().max(60),
+  price: z.number().int().positive(),
+  rating: z.number().min(0).max(5),
+  reviewCount: z.number().int().min(0).optional().default(0),
+  category: z.string().max(60),
+  description: z.string().min(10),
+  lat: z.number().nullable().optional(),
+  lng: z.number().nullable().optional(),
+  isActive: z.boolean().optional().default(true),
+});
+
+export const profileUpdateSchema = z.object({
+  name: z.string().min(2).max(120),
+  phone: z.string().max(40).optional().nullable(),
+  country: z.string().max(80).optional().nullable(),
+});
+
 export const contactSchema = z.object({
-  name: z.string().min(2),
+  name: z.string().min(2).max(80),
+  lastName: z.string().max(80).optional().default(''),
   email: z.string().email(),
-  phone: z.string().optional(),
-  subject: z.string().min(2),
-  message: z.string().min(10),
+  phone: z.string().max(40).optional().default(''),
+  reason: z.string().max(80).optional().default('Consulta general'),
+  subject: z.string().max(120).optional().default(''),
+  message: z.string().min(10).max(4000),
 });
