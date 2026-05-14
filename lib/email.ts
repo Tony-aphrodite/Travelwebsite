@@ -66,6 +66,46 @@ export async function sendBookingConfirmation({
   });
 }
 
+export async function sendPasswordResetEmail({
+  to,
+  name,
+  resetUrl,
+}: {
+  to: string;
+  name: string;
+  resetUrl: string;
+}) {
+  return resend.emails.send({
+    from: process.env.EMAIL_FROM || 'Aurelia Viajes <noreply@aureliaviajes.com>',
+    to,
+    subject: 'Restablece tu contraseña',
+    html: `
+      <div style="font-family: -apple-system, Segoe UI, Roboto, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; color: ${BRAND.text};">
+        <div style="text-align: center; margin-bottom: 32px;">
+          <h1 style="color: ${BRAND.primary}; font-size: 28px; margin: 0; letter-spacing: -0.5px;">Aurelia Viajes</h1>
+        </div>
+        <h2 style="color: ${BRAND.text}; margin: 0 0 16px;">Hola ${name},</h2>
+        <p style="color: ${BRAND.text}; font-size: 16px; line-height: 1.6; margin: 0 0 16px;">
+          Recibimos una solicitud para restablecer la contraseña de tu cuenta.
+          Haz clic en el boton para crear una nueva contraseña. El enlace expira en <strong>60 minutos</strong>.
+        </p>
+        <p style="text-align: center; margin: 32px 0;">
+          <a href="${resetUrl}" style="display: inline-block; background: ${BRAND.accent}; color: ${BRAND.primaryDark}; padding: 14px 32px; border-radius: 999px; text-decoration: none; font-size: 15px; font-weight: 700;">
+            Restablecer contraseña
+          </a>
+        </p>
+        <p style="color: ${BRAND.muted}; font-size: 13px; line-height: 1.6;">
+          Si no solicitaste este cambio, ignora este correo &mdash; tu contraseña no se modificara.
+        </p>
+        <hr style="border: none; border-top: 1px solid ${BRAND.border}; margin: 24px 0;" />
+        <p style="color: ${BRAND.muted}; font-size: 12px; text-align: center; margin: 0;">
+          Aurelia Viajes
+        </p>
+      </div>
+    `,
+  });
+}
+
 export async function sendWelcomeEmail({
   to,
   name,
