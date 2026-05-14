@@ -27,17 +27,27 @@ export async function GET() {
   return NextResponse.json(users);
 }
 
+const ALLOWED_ROLES = ['user', 'admin'] as const;
+type AllowedRole = typeof ALLOWED_ROLES[number];
+
 export async function PUT(req: Request) {
   const session = await requireAdmin();
   if (!session) return NextResponse.json({ error: 'No autorizado' }, { status: 403 });
 
   const { userId, role } = await req.json();
-  if (!userId || !role) {
-    return NextResponse.json({ error: 'userId y role requeridos' }, { status: 400 });
+  if (typeof userId !== 'string' || !userId) {
+    return NextResponse.json({ error: 'userId requerido' }, { status: 400 });
+  }
+  if (!ALLOWED_ROLES.includes(role)) {
+    return NextResponse.json({ error: 'Rol invalido' }, { status: 400 });
+  }
+
+  if (userId === session.user!.id && role !== 'admin') {
+    return NextResponse.json({ error: 'No puedes quitar tu propio rol de admin' }, { status: 400 });
   }
 
   await db.update(schema.users)
-    .set({ role, updatedAt: new Date() })
+    .set({ role: role as AllowedRole, updatedAt: new Date() })
     .where(eq(schema.users.id, userId));
 
   return NextResponse.json({ ok: true });
