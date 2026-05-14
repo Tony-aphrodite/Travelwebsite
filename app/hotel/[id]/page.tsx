@@ -9,12 +9,12 @@ import {
   Dumbbell,
   Sparkles,
   Coffee,
-  Heart,
-  Share2,
   Star,
   type LucideIcon,
 } from 'lucide-react';
 import { getHotelById, getVillaById } from '@/lib/db/queries';
+import FavoriteButton from '@/components/FavoriteButton';
+import ShareButton from '@/components/ShareButton';
 
 const AMENITY_ICONS: Record<string, LucideIcon> = {
   WiFi: Wifi,
@@ -89,14 +89,8 @@ export default async function HotelDetailPage({ params }: { params: Promise<{ id
             </div>
           </div>
           <div className="flex gap-2">
-            <button className="btn btn-ghost btn-sm">
-              <Share2 size={16} />
-              Compartir
-            </button>
-            <button className="btn btn-ghost btn-sm">
-              <Heart size={16} />
-              Guardar
-            </button>
+            <ShareButton title={name} text={`${name} en ${location}`} />
+            <FavoriteButton type={hotel ? 'hotel' : 'villa'} itemId={item.id} variant="text" />
           </div>
         </div>
 
