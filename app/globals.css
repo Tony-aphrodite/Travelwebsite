@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --plum-700: #6B2C5F;
-  --gold-600: #C9A961;
-  --rose-100: #FBEDF0;
-  --ivory-100: #FAF7F2;
+  --plum-700: #1668E3;
+  --gold-600: #FFC72C;
+  --rose-100: #FFF0F2;
+  --ivory-100: #F7F9FC;
 }
 
 html {
@@ -14,8 +14,8 @@ html {
 }
 
 body {
-  background: #FAF7F2;
-  color: #2D2424;
+  background: #F7F9FC;
+  color: #0F1B2D;
   font-feature-settings: "ss01", "cv11";
   -webkit-font-smoothing: antialiased;
 }
@@ -45,10 +45,10 @@ body {
     @apply inline-flex items-center justify-center gap-2 rounded-full font-sans font-semibold text-sm tracking-wide whitespace-nowrap transition-all duration-500 ease-out;
   }
   .btn-primary {
-    @apply bg-plum-700 text-white shadow-[0_8px_20px_rgba(107,44,95,0.25)] hover:bg-plum-800 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(107,44,95,0.35)];
+    @apply bg-gold-600 text-plum-900 shadow-[0_8px_20px_rgba(255,199,44,0.45)] hover:bg-gold-500 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(255,199,44,0.55)];
   }
   .btn-gold {
-    @apply bg-gradient-to-br from-gold-600 to-gold-500 text-charcoal-900 shadow-[0_8px_20px_rgba(201,169,97,0.3)] hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(201,169,97,0.4)];
+    @apply bg-gradient-to-br from-gold-600 to-gold-500 text-plum-900 shadow-[0_8px_20px_rgba(255,199,44,0.45)] hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(255,199,44,0.55)];
   }
   .btn-outline {
     @apply bg-transparent text-plum-700 border border-plum-700 hover:bg-plum-700 hover:text-white;
@@ -123,14 +123,14 @@ body {
   height: 22px;
   border-radius: 50%;
   background: white;
-  border: 3px solid #6B2C5F;
-  box-shadow: 0 2px 8px rgba(107, 44, 95, 0.25);
+  border: 3px solid #1668E3;
+  box-shadow: 0 2px 8px rgba(22, 104, 227, 0.30);
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
 }
 .price-slider::-webkit-slider-thumb:hover {
   transform: scale(1.15);
-  box-shadow: 0 4px 12px rgba(107, 44, 95, 0.35);
+  box-shadow: 0 4px 12px rgba(22, 104, 227, 0.45);
 }
 .price-slider::-moz-range-thumb {
   pointer-events: all;
@@ -138,7 +138,7 @@ body {
   height: 18px;
   border-radius: 50%;
   background: white;
-  border: 3px solid #6B2C5F;
-  box-shadow: 0 2px 8px rgba(107, 44, 95, 0.25);
+  border: 3px solid #1668E3;
+  box-shadow: 0 2px 8px rgba(22, 104, 227, 0.30);
   cursor: pointer;
 }

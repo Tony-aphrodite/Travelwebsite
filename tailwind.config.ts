@@ -13,51 +13,57 @@ const config: Config = {
         sans: ['var(--font-inter)', 'sans-serif'],
       },
       colors: {
+        // Primary brand — Expedia-style deep navy → vibrant blue
         plum: {
-          900: '#3D1A35',
-          800: '#4E2344',
-          700: '#6B2C5F',
-          600: '#8A3B7A',
-          500: '#A85396',
+          900: '#0A1E3D',
+          800: '#0F2C5C',
+          700: '#1668E3',
+          600: '#2D7FF0',
+          500: '#4D94F5',
         },
+        // Deals / accent — vibrant coral/red (was soft pink)
         rose: {
-          900: '#8B4A5C',
-          700: '#C47B8B',
-          500: '#E8A5B5',
-          300: '#F5D5DC',
-          100: '#FBEDF0',
+          900: '#B81E3F',
+          700: '#E63956',
+          500: '#FF6B7E',
+          300: '#FFD0D6',
+          100: '#FFF0F2',
         },
+        // CTA highlight — Expedia signature yellow
         gold: {
-          700: '#A88449',
-          600: '#C9A961',
-          500: '#D4B97D',
-          300: '#E8D5A8',
+          700: '#E6A800',
+          600: '#FFC72C',
+          500: '#FFD55A',
+          300: '#FFE699',
         },
+        // Clean backgrounds with cool tint
         ivory: {
-          50: '#FEFCF8',
-          100: '#FAF7F2',
-          200: '#F3EDE3',
-          300: '#E8DFD0',
+          50: '#FFFFFF',
+          100: '#F7F9FC',
+          200: '#EEF2F8',
+          300: '#DCE3EC',
         },
+        // Crisp text colors
         charcoal: {
-          900: '#2D2424',
-          700: '#4A3D3D',
-          500: '#7A6B6B',
-          300: '#B8A9A9',
+          900: '#0F1B2D',
+          700: '#2E3A4D',
+          500: '#6B7280',
+          300: '#9CA3AF',
         },
+        // Success / available — vibrant green
         sage: {
-          500: '#8FA68E',
-          300: '#C4D4C2',
+          500: '#00A65A',
+          300: '#7ED9A8',
         },
       },
       borderRadius: {
         'xl-soft': '36px',
       },
       boxShadow: {
-        'soft': '0 2px 8px rgba(61, 26, 53, 0.04)',
-        'soft-md': '0 8px 24px rgba(61, 26, 53, 0.08)',
-        'soft-lg': '0 20px 50px rgba(61, 26, 53, 0.12)',
-        'soft-xl': '0 30px 80px rgba(61, 26, 53, 0.18)',
+        'soft': '0 2px 8px rgba(15, 27, 45, 0.05)',
+        'soft-md': '0 8px 24px rgba(15, 27, 45, 0.10)',
+        'soft-lg': '0 20px 50px rgba(15, 27, 45, 0.14)',
+        'soft-xl': '0 30px 80px rgba(22, 104, 227, 0.20)',
       },
       animation: {
         'float': 'float 8s ease-in-out infinite',

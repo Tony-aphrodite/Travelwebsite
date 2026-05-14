@@ -215,7 +215,7 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(212,165,116,0.3),transparent_50%),radial-gradient(circle_at_80%_20%,rgba(232,165,181,0.2),transparent_50%)] pointer-events-none" />
         <div className="container-site grid lg:grid-cols-2 gap-16 items-center relative z-10">
           <div>
-            <span className="eyebrow" style={{ color: '#D4B97D' }}>
+            <span className="eyebrow !text-gold-500 before:!bg-gold-500">
               Aurelia Society
             </span>
             <h2 className="heading-lg mt-4 mb-6 text-white">
