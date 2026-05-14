@@ -34,7 +34,7 @@ export default function ForgotPage() {
   }
 
   return (
-    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-ivory-100 to-rose-100 px-6 pt-24 pb-16">
+    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-plum-800 to-plum-700 px-6 pt-24 pb-16">
       <div className="card-soft p-10 w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="font-display text-3xl text-charcoal-900 mb-2">Recuperar contraseña</h1>

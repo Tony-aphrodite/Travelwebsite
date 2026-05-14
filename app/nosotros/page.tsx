@@ -172,11 +172,11 @@ export default async function NosotrosPage() {
       </section>
 
       {/* Testimonials */}
-      <section className="bg-rose-100 py-20">
+      <section className="bg-plum-800 py-20">
         <div className="container-site">
           <div className="text-center mb-12">
             <span className="eyebrow">Lo que dicen</span>
-            <h2 className="heading-lg mt-3">Voces de viajeras</h2>
+            <h2 className="heading-lg mt-3 text-ivory-50">Voces de viajeras</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {testimonials.map((t, i) => (

@@ -16,17 +16,17 @@ export default async function HomePage() {
   return (
     <>
       {/* HERO */}
-      <section className="relative pt-32 pb-32 overflow-hidden bg-gradient-to-br from-ivory-100 to-rose-100 min-h-screen">
-        <div className="absolute w-[400px] h-[400px] -top-24 -right-24 rounded-full bg-gold-600/20 blur-3xl pointer-events-none" />
-        <div className="absolute w-[300px] h-[300px] -bottom-12 left-[10%] rounded-full bg-rose-500/20 blur-3xl pointer-events-none" />
+      <section className="relative pt-32 pb-32 overflow-hidden bg-gradient-to-br from-plum-800 to-plum-700 min-h-screen">
+        <div className="absolute w-[400px] h-[400px] -top-24 -right-24 rounded-full bg-gold-600/25 blur-3xl pointer-events-none" />
+        <div className="absolute w-[300px] h-[300px] -bottom-12 left-[10%] rounded-full bg-gold-500/15 blur-3xl pointer-events-none" />
 
         <div className="max-w-[1440px] mx-auto px-6 lg:px-10 grid lg:grid-cols-[1.1fr_0.9fr] gap-16 items-center relative z-10">
           <div className="max-w-[600px]">
             <span className="eyebrow">Coleccion 2026</span>
-            <h1 className="heading-xl mt-6 mb-6 text-balance">
+            <h1 className="heading-xl mt-6 mb-6 text-balance text-ivory-50">
               El arte de viajar, <span className="italic-script">redescubierto</span> para ti.
             </h1>
-            <p className="text-[18px] text-charcoal-700 mb-8 max-w-[500px] leading-relaxed">
+            <p className="text-[18px] text-ivory-50/80 mb-8 max-w-[500px] leading-relaxed">
               Aurelia crea experiencias de viaje que combinan el lujo discreto con el alma de cada
               destino. Vuelos, hoteles boutique, villas privadas y momentos que recordaras para
               siempre.
@@ -39,17 +39,17 @@ export default async function HomePage() {
                 Explorar destinos
               </Link>
             </div>
-            <div className="flex gap-10 mt-12 pt-8 border-t border-ivory-300 flex-wrap">
+            <div className="flex gap-10 mt-12 pt-8 border-t border-ivory-50/15 flex-wrap">
               {[
                 { value: '120+', label: 'Destinos curados' },
                 { value: '15k', label: 'Viajeras felices' },
                 { value: '4.9', label: 'Valoracion' },
               ].map((stat) => (
                 <div key={stat.label}>
-                  <strong className="font-display text-4xl text-plum-700 block leading-none">
+                  <strong className="font-display text-4xl text-gold-500 block leading-none">
                     {stat.value}
                   </strong>
-                  <span className="text-xs text-charcoal-500 uppercase tracking-wider">
+                  <span className="text-xs text-ivory-50/60 uppercase tracking-wider">
                     {stat.label}
                   </span>
                 </div>
@@ -104,7 +104,7 @@ export default async function HomePage() {
                 Lugares que <span className="italic-script">enamoran</span>
               </h2>
             </div>
-            <p className="max-w-md text-charcoal-500">
+            <p className="max-w-md text-ivory-50/70">
               Una seleccion cuidada de destinos para tu proxima escapada. Desde playas turquesa
               hasta ciudades historicas.
             </p>
@@ -326,11 +326,11 @@ export default async function HomePage() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-24 bg-ivory-100">
+      <section className="py-24 bg-plum-800">
         <div className="container-site">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <span className="eyebrow">Voces de nuestras viajeras</span>
-            <h2 className="heading-lg mt-4">
+            <h2 className="heading-lg mt-4 text-ivory-50">
               Historias que <span className="italic-script">inspiran</span>
             </h2>
           </div>
@@ -418,13 +418,13 @@ export default async function HomePage() {
       </section>
 
       {/* NEWSLETTER */}
-      <section className="py-20 bg-gradient-to-br from-rose-100 to-ivory-100">
+      <section className="py-20 bg-gradient-to-br from-plum-900 to-plum-700">
         <div className="container-site max-w-2xl text-center">
           <span className="eyebrow">Carta de Aurelia</span>
-          <h2 className="heading-lg mt-4 mb-4">
+          <h2 className="heading-lg mt-4 mb-4 text-ivory-50">
             Inspiracion en tu <span className="italic-script">bandeja de entrada</span>
           </h2>
-          <p className="text-charcoal-500 mb-8">
+          <p className="text-ivory-50/70 mb-8">
             Suscribete a nuestra carta mensual y recibe ofertas exclusivas, guias de viaje curadas y
             avances de nuevos destinos.
           </p>

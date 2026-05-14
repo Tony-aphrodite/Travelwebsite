@@ -24,14 +24,14 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
   return (
     <>
-      <section className="pt-28 pb-16 bg-gradient-to-br from-ivory-100 to-rose-100">
+      <section className="pt-28 pb-16 bg-gradient-to-br from-plum-800 to-plum-700">
         <div className="container-site max-w-3xl">
-          <Link href="/blog" className="inline-flex items-center gap-2 text-sm text-plum-700 mb-6 hover:underline">
+          <Link href="/blog" className="inline-flex items-center gap-2 text-sm text-gold-500 mb-6 hover:underline">
             <ArrowLeft size={16} /> Volver al diario
           </Link>
           <span className="eyebrow">{post.category}</span>
-          <h1 className="heading-lg mt-4 mb-6">{post.title}</h1>
-          <div className="flex items-center gap-6 text-sm text-charcoal-500">
+          <h1 className="heading-lg mt-4 mb-6 text-ivory-50">{post.title}</h1>
+          <div className="flex items-center gap-6 text-sm text-ivory-50/70">
             <span className="flex items-center gap-1.5"><User size={14} /> {post.author}</span>
             <span className="flex items-center gap-1.5"><Clock size={14} /> {post.readTime}</span>
           </div>

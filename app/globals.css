@@ -16,8 +16,8 @@ html {
 }
 
 body {
-  background: #F0DEB4;
-  color: #0B1535;
+  background: #1A2954;
+  color: #FBF4E0;
   font-feature-settings: "ss01", "cv11";
   -webkit-font-smoothing: antialiased;
 }
@@ -31,62 +31,64 @@ body {
   }
 
   .eyebrow {
-    @apply inline-block text-xs font-semibold uppercase tracking-[0.2em] text-gold-700 relative pl-12;
+    @apply inline-block text-xs font-semibold uppercase tracking-[0.2em] text-gold-500 relative pl-12;
   }
   .eyebrow::before {
     content: '';
-    @apply absolute left-0 top-1/2 w-8 h-px bg-gold-600;
+    @apply absolute left-0 top-1/2 w-8 h-px bg-gold-500;
   }
 
   .italic-script {
     font-family: var(--font-playfair), serif;
-    @apply italic font-normal text-plum-700;
+    @apply italic font-normal text-gold-500;
   }
 
   .btn {
     @apply inline-flex items-center justify-center gap-2 rounded-full font-sans font-semibold text-sm tracking-wide whitespace-nowrap transition-all duration-500 ease-out;
   }
   .btn-primary {
-    @apply bg-plum-700 text-ivory-50 shadow-[0_8px_20px_rgba(11,21,53,0.20)] hover:bg-plum-900 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(11,21,53,0.30)];
+    @apply bg-gold-600 text-plum-900 shadow-[0_8px_20px_rgba(196,148,53,0.40)] hover:bg-gold-500 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(196,148,53,0.55)];
   }
   .btn-gold {
-    @apply bg-gradient-to-br from-gold-600 to-gold-500 text-plum-900 shadow-[0_8px_20px_rgba(196,148,53,0.35)] hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(196,148,53,0.45)];
+    @apply bg-gradient-to-br from-gold-600 to-gold-500 text-plum-900 shadow-[0_8px_20px_rgba(196,148,53,0.40)] hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(196,148,53,0.55)];
   }
   .btn-outline {
-    @apply bg-transparent text-plum-700 border border-plum-700 hover:bg-plum-700 hover:text-ivory-50;
+    @apply bg-transparent text-ivory-50 border border-ivory-50/40 hover:bg-ivory-50 hover:text-plum-900 hover:border-ivory-50;
   }
   .btn-ghost {
-    @apply bg-transparent text-charcoal-700 hover:bg-ivory-50 hover:text-plum-700;
+    @apply bg-transparent text-ivory-50 hover:bg-ivory-50/10 hover:text-gold-500;
   }
   .btn-sm { @apply px-5 py-2.5 text-xs; }
   .btn-md { @apply px-7 py-3.5 text-sm; }
   .btn-lg { @apply px-9 py-4 text-base; }
 
+  /* Headings inherit color so they work on both navy body and cream cards */
   .heading-xl {
     font-family: var(--font-playfair), serif;
-    @apply font-semibold tracking-[-0.02em] leading-[1.05] text-plum-900;
+    @apply font-semibold tracking-[-0.02em] leading-[1.05];
     font-size: clamp(2.5rem, 5vw, 4.5rem);
   }
   .heading-lg {
     font-family: var(--font-playfair), serif;
-    @apply font-semibold tracking-[-0.02em] leading-[1.15] text-plum-900;
+    @apply font-semibold tracking-[-0.02em] leading-[1.15];
     font-size: clamp(2rem, 4vw, 3.25rem);
   }
   .heading-md {
     font-family: var(--font-playfair), serif;
-    @apply font-semibold tracking-[-0.02em] leading-tight text-plum-900;
+    @apply font-semibold tracking-[-0.02em] leading-tight;
     font-size: clamp(1.5rem, 2.5vw, 2rem);
   }
 
+  /* Cards are cream paper on navy body — set their own dark text default */
   .card-soft {
-    @apply bg-ivory-50 rounded-3xl shadow-soft transition-all duration-500 ease-out;
+    @apply bg-ivory-50 text-charcoal-900 rounded-3xl shadow-soft transition-all duration-500 ease-out;
   }
 
   .field-label {
     @apply text-[11px] font-semibold uppercase tracking-[0.1em] text-charcoal-500 mb-1.5 block;
   }
   .field-input {
-    @apply w-full px-4 py-3 rounded-lg border border-ivory-300 bg-ivory-50 font-sans text-[15px] text-charcoal-900 transition-all duration-300 outline-none focus:border-plum-700 focus:ring-4 focus:ring-plum-700/10;
+    @apply w-full px-4 py-3 rounded-lg border border-ivory-300 bg-ivory-50 font-sans text-[15px] text-charcoal-900 transition-all duration-300 outline-none focus:border-plum-700 focus:ring-4 focus:ring-plum-700/20;
   }
 
   .amenity-chip {
@@ -125,14 +127,14 @@ body {
   height: 22px;
   border-radius: 50%;
   background: #FBF4E0;
-  border: 3px solid #1A2954;
-  box-shadow: 0 2px 8px rgba(11, 21, 53, 0.30);
+  border: 3px solid #C49435;
+  box-shadow: 0 2px 8px rgba(11, 21, 53, 0.40);
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
 }
 .price-slider::-webkit-slider-thumb:hover {
   transform: scale(1.15);
-  box-shadow: 0 4px 12px rgba(11, 21, 53, 0.45);
+  box-shadow: 0 4px 12px rgba(11, 21, 53, 0.60);
 }
 .price-slider::-moz-range-thumb {
   pointer-events: all;
@@ -140,7 +142,7 @@ body {
   height: 18px;
   border-radius: 50%;
   background: #FBF4E0;
-  border: 3px solid #1A2954;
-  box-shadow: 0 2px 8px rgba(11, 21, 53, 0.30);
+  border: 3px solid #C49435;
+  box-shadow: 0 2px 8px rgba(11, 21, 53, 0.40);
   cursor: pointer;
 }

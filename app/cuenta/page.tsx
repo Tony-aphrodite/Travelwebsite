@@ -99,7 +99,7 @@ export default function CuentaPage() {
 
   if (status === 'loading' || status === 'unauthenticated') {
     return (
-      <div className="pt-28 pb-20 bg-ivory-100 min-h-screen flex items-center justify-center">
+      <div className="pt-28 pb-20 min-h-screen flex items-center justify-center">
         <Loader2 size={40} className="text-plum-700 animate-spin" />
       </div>
     );
@@ -112,10 +112,10 @@ export default function CuentaPage() {
   const userRole = (user as any)?.role || 'user';
 
   return (
-    <div className="pt-28 pb-20 bg-ivory-100 min-h-screen">
+    <div className="pt-28 pb-20 min-h-screen">
       <div className="container-site">
-        <div className="text-xs text-charcoal-500 mb-6 flex gap-2 uppercase tracking-wider">
-          <Link href="/" className="text-plum-700">
+        <div className="text-xs text-ivory-50/60 mb-6 flex gap-2 uppercase tracking-wider">
+          <Link href="/" className="text-gold-500">
             Inicio
           </Link>
           <span>/</span>

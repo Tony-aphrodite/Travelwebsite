@@ -3,7 +3,7 @@ import { CheckCircle } from 'lucide-react';
 
 export default function CheckoutSuccessPage() {
   return (
-    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-ivory-100 to-rose-100 px-6 pt-24 pb-16">
+    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-plum-800 to-plum-700 px-6 pt-24 pb-16">
       <div className="card-soft p-12 w-full max-w-lg text-center">
         <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-sage-300/30 flex items-center justify-center">
           <CheckCircle size={40} className="text-sage-500" />
