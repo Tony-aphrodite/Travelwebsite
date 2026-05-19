@@ -8,9 +8,9 @@ const BRAND = {
   accent: '#C49435',       // Aged amber
   text: '#0B1535',
   muted: '#6B7280',
-  border: '#D4BB7A',
-  bgSoft: '#FBF4E0',       // Light cream
-  bgMain: '#F0DEB4',       // Main cream
+  border: '#E5E5E5',
+  bgSoft: '#F5F5F5',       // Light gray
+  bgMain: '#FFFFFF',       // White
 } as const;
 
 export async function sendBookingConfirmation({

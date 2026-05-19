@@ -7,8 +7,8 @@
   --plum-900: #0B1535;
   --gold-600: #C49435;
   --rose-100: #FBE9E3;
-  --ivory-50: #FBF4E0;
-  --ivory-100: #F0DEB4;
+  --ivory-50: #FFFFFF;
+  --ivory-100: #F5F5F5;
 }
 
 html {
@@ -53,10 +53,17 @@ body {
     @apply bg-gradient-to-br from-gold-600 to-gold-500 text-plum-900 shadow-[0_8px_20px_rgba(196,148,53,0.40)] hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(196,148,53,0.55)];
   }
   .btn-outline {
-    @apply bg-transparent text-ivory-50 border border-ivory-50/40 hover:bg-ivory-50 hover:text-plum-900 hover:border-ivory-50;
+    @apply bg-transparent text-plum-700 border border-plum-700 hover:bg-plum-700 hover:text-ivory-50;
   }
   .btn-ghost {
-    @apply bg-transparent text-ivory-50 hover:bg-ivory-50/10 hover:text-gold-500;
+    @apply bg-transparent text-charcoal-700 hover:bg-ivory-100 hover:text-plum-700;
+  }
+  /* Variants for dark/navy backgrounds — apply alongside btn-outline / btn-ghost */
+  .btn-on-dark.btn-outline {
+    @apply text-ivory-50 border-ivory-50/40 hover:bg-ivory-50 hover:text-plum-900 hover:border-ivory-50;
+  }
+  .btn-on-dark.btn-ghost {
+    @apply text-ivory-50 hover:bg-ivory-50/10 hover:text-gold-500;
   }
   .btn-sm { @apply px-5 py-2.5 text-xs; }
   .btn-md { @apply px-7 py-3.5 text-sm; }

@@ -36,7 +36,7 @@ class AuthBoundary extends Component<
 function AuthButtons() {
   return (
     <>
-      <Link href="/auth/login" className="btn btn-outline btn-sm">
+      <Link href="/auth/login" className="btn btn-outline btn-on-dark btn-sm">
         <User size={16} />
         Iniciar sesion
       </Link>

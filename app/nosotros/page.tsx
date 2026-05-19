@@ -202,10 +202,10 @@ export default async function NosotrosPage() {
 
       {/* CTA */}
       <section className="container-site py-20 text-center">
-        <h2 className="heading-lg mb-4">
+        <h2 className="heading-lg mb-4 text-ivory-50">
           Lista para tu <span className="italic-script">proxima aventura</span>?
         </h2>
-        <p className="text-charcoal-500 max-w-xl mx-auto mb-8">
+        <p className="text-ivory-50/70 max-w-xl mx-auto mb-8">
           Deja que nuestras expertas diseñen un viaje a tu medida. Sin compromiso, sin costo
           inicial, solo inspiracion.
         </p>
@@ -213,7 +213,7 @@ export default async function NosotrosPage() {
           <Link href="/contacto" className="btn btn-primary btn-lg">
             Hablar con una experta
           </Link>
-          <Link href="/destinos" className="btn btn-outline btn-lg">
+          <Link href="/destinos" className="btn btn-outline btn-on-dark btn-lg">
             Explorar destinos
           </Link>
         </div>

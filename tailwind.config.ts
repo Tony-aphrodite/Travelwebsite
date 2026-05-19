@@ -40,12 +40,12 @@ const config: Config = {
           300: '#EAD09A',
           100: '#F5E6C5',
         },
-        // Cream backgrounds (parchment palette)
+        // Clean white surfaces (replaced cream parchment palette per client request)
         ivory: {
-          50: '#FBF4E0',
-          100: '#F0DEB4',
-          200: '#E5CF98',
-          300: '#D4BB7A',
+          50: '#FFFFFF',
+          100: '#F5F5F5',
+          200: '#E5E5E5',
+          300: '#D4D4D8',
         },
         // Text on cream — deep navy keeps strong contrast
         charcoal: {

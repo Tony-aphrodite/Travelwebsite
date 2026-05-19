@@ -31,7 +31,7 @@ export default function Pagination({
       {currentPage > 1 ? (
         <Link
           href={buildUrl(basePath, searchParams, currentPage - 1)}
-          className="btn btn-outline btn-sm"
+          className="btn btn-outline btn-on-dark btn-sm"
           rel="prev"
         >
           <ChevronLeft size={14} /> Anterior
@@ -42,12 +42,12 @@ export default function Pagination({
         </span>
       )}
 
-      <span className="text-sm text-charcoal-500">Pagina {currentPage}</span>
+      <span className="text-sm text-ivory-50/70">Pagina {currentPage}</span>
 
       {hasNext ? (
         <Link
           href={buildUrl(basePath, searchParams, currentPage + 1)}
-          className="btn btn-outline btn-sm"
+          className="btn btn-outline btn-on-dark btn-sm"
           rel="next"
         >
           Siguiente <ChevronRight size={14} />

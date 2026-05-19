@@ -35,7 +35,7 @@ export default async function HomePage() {
               <Link href="#search" className="btn btn-primary btn-lg">
                 Planifica tu viaje
               </Link>
-              <Link href="/destinos" className="btn btn-outline btn-lg">
+              <Link href="/destinos" className="btn btn-outline btn-on-dark btn-lg">
                 Explorar destinos
               </Link>
             </div>
