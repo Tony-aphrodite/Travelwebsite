@@ -64,7 +64,7 @@ export default async function BookingDetailPage({
       <div className="container-site max-w-4xl">
         <Link
           href="/cuenta?tab=viajes"
-          className="inline-flex items-center gap-2 text-sm text-gold-500 hover:underline mb-6"
+          className="inline-flex items-center gap-2 text-sm text-plum-700 hover:underline mb-6"
         >
           <ArrowLeft size={14} /> Volver a mis viajes
         </Link>

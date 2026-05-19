@@ -114,28 +114,28 @@ export default function ContactoPage() {
             title="WhatsApp"
             value="+52 55 1234 5678"
             action="Chatear ahora"
-            accent="bg-gradient-to-br from-sage-500 to-sage-400"
+            iconColor="text-sage-500"
           />
           <QuickCard
             icon={Phone}
             title="Llamanos"
             value="+52 55 5000 1234"
             action="Lun-Sab 9-20h"
-            accent="bg-gradient-to-br from-plum-700 to-plum-500"
+            iconColor="text-plum-700"
           />
           <QuickCard
             icon={Mail}
             title="Email"
             value="hola@aurelia.com"
             action="Respuesta en 2h"
-            accent="bg-gradient-to-br from-gold-600 to-gold-400"
+            iconColor="text-gold-600"
           />
           <QuickCard
             icon={Clock}
             title="Atencion 24/7"
             value="Para clientes activos"
             action="En destino"
-            accent="bg-gradient-to-br from-rose-400 to-rose-300"
+            iconColor="text-rose-500"
           />
         </div>
       </section>
@@ -304,13 +304,13 @@ export default function ContactoPage() {
               </dl>
             </div>
 
-            <div className="rounded-2xl bg-gradient-to-br from-plum-800 to-plum-700 p-7 text-white">
-              <h3 className="font-display text-xl mb-3">Respuesta garantizada</h3>
-              <p className="text-sm text-white/80 mb-4">
+            <div className="rounded-2xl bg-ivory-100 border border-ivory-200 p-7 text-charcoal-900">
+              <h3 className="font-display text-xl mb-3 text-plum-900">Respuesta garantizada</h3>
+              <p className="text-sm text-charcoal-700 mb-4">
                 Respondemos todos los mensajes en menos de 2 horas habiles. Si necesitas algo
                 urgente, llamanos directamente.
               </p>
-              <div className="text-xs text-gold-400 uppercase tracking-widest">
+              <div className="text-xs text-gold-700 uppercase tracking-widest font-semibold">
                 Tiempo medio: 42 min
               </div>
             </div>
@@ -353,20 +353,20 @@ function QuickCard({
   title,
   value,
   action,
-  accent,
+  iconColor,
 }: {
   icon: LucideIcon;
   title: string;
   value: string;
   action: string;
-  accent: string;
+  iconColor: string;
 }) {
   return (
-    <div className={`rounded-2xl p-6 text-white shadow-soft ${accent}`}>
-      <Icon size={22} className="mb-3 opacity-90" />
-      <div className="text-xs uppercase tracking-widest opacity-80">{title}</div>
-      <div className="font-display text-lg leading-tight mt-1">{value}</div>
-      <div className="text-xs opacity-80 mt-2">{action}</div>
+    <div className="rounded-2xl p-6 bg-ivory-50 border border-ivory-200 shadow-soft">
+      <Icon size={22} className={`mb-3 ${iconColor}`} />
+      <div className="text-xs uppercase tracking-widest text-charcoal-500">{title}</div>
+      <div className="font-display text-lg leading-tight mt-1 text-plum-900">{value}</div>
+      <div className="text-xs text-charcoal-500 mt-2">{action}</div>
     </div>
   );
 }

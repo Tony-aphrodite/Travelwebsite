@@ -16,8 +16,8 @@ html {
 }
 
 body {
-  background: #1A2954;
-  color: #FBF4E0;
+  background: #FFFFFF;
+  color: #0B1535;
   font-feature-settings: "ss01", "cv11";
   -webkit-font-smoothing: antialiased;
 }
@@ -69,24 +69,24 @@ body {
   .btn-md { @apply px-7 py-3.5 text-sm; }
   .btn-lg { @apply px-9 py-4 text-base; }
 
-  /* Headings inherit color so they work on both navy body and cream cards */
+  /* Headings on the white theme — deep navy ink for editorial feel */
   .heading-xl {
     font-family: var(--font-playfair), serif;
-    @apply font-semibold tracking-[-0.02em] leading-[1.05];
+    @apply font-semibold tracking-[-0.02em] leading-[1.05] text-plum-900;
     font-size: clamp(2.5rem, 5vw, 4.5rem);
   }
   .heading-lg {
     font-family: var(--font-playfair), serif;
-    @apply font-semibold tracking-[-0.02em] leading-[1.15];
+    @apply font-semibold tracking-[-0.02em] leading-[1.15] text-plum-900;
     font-size: clamp(2rem, 4vw, 3.25rem);
   }
   .heading-md {
     font-family: var(--font-playfair), serif;
-    @apply font-semibold tracking-[-0.02em] leading-tight;
+    @apply font-semibold tracking-[-0.02em] leading-tight text-plum-900;
     font-size: clamp(1.5rem, 2.5vw, 2rem);
   }
 
-  /* Cards are cream paper on navy body — set their own dark text default */
+  /* Content cards — white surface with dark text */
   .card-soft {
     @apply bg-ivory-50 text-charcoal-900 rounded-3xl shadow-soft transition-all duration-500 ease-out;
   }

@@ -116,18 +116,18 @@ export default async function BlogPage({
 
       {/* Newsletter */}
       <section className="container-site pb-24">
-        <div className="rounded-3xl bg-gradient-to-br from-plum-800 to-plum-700 p-10 lg:p-14 text-white text-center relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-gold-500/20 rounded-full blur-3xl" />
+        <div className="rounded-3xl bg-ivory-100 border border-ivory-200 p-10 lg:p-14 text-charcoal-900 text-center relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gold-300/30 rounded-full blur-3xl" />
           <div className="relative max-w-xl mx-auto">
-            <span className="text-xs uppercase tracking-widest text-gold-400">Newsletter</span>
-            <h2 className="font-display text-4xl mt-3 mb-4">
-              Historias de viaje en tu <span className="italic-script text-gold-400">buzon</span>
+            <span className="text-xs uppercase tracking-widest text-gold-700 font-semibold">Newsletter</span>
+            <h2 className="font-display text-4xl mt-3 mb-4 text-plum-900">
+              Historias de viaje en tu <span className="italic-script">buzon</span>
             </h2>
-            <p className="text-white/80 mb-6">
+            <p className="text-charcoal-700 mb-6">
               Cada domingo, una nueva guia curada por nuestras expertas. Sin spam, solo
               inspiracion.
             </p>
-            <NewsletterForm variant="dark" />
+            <NewsletterForm />
           </div>
         </div>
       </section>

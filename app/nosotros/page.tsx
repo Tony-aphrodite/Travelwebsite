@@ -104,16 +104,16 @@ export default async function NosotrosPage() {
       </section>
 
       {/* Stats */}
-      <section className="bg-plum-900 text-white py-16">
+      <section className="bg-ivory-100 text-charcoal-900 py-16">
         <div className="container-site">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {STATS.map((s) => {
               const Icon = s.icon;
               return (
                 <div key={s.label} className="text-center">
-                  <Icon size={28} className="text-gold-400 mx-auto mb-3" />
-                  <div className="font-display text-5xl text-gold-400 mb-1">{s.value}</div>
-                  <div className="text-sm text-white/70 uppercase tracking-wider">{s.label}</div>
+                  <Icon size={28} className="text-gold-600 mx-auto mb-3" />
+                  <div className="font-display text-5xl text-plum-700 mb-1">{s.value}</div>
+                  <div className="text-sm text-charcoal-500 uppercase tracking-wider">{s.label}</div>
                 </div>
               );
             })}
@@ -172,11 +172,11 @@ export default async function NosotrosPage() {
       </section>
 
       {/* Testimonials */}
-      <section className="bg-plum-800 py-20">
+      <section className="bg-ivory-100 py-20">
         <div className="container-site">
           <div className="text-center mb-12">
             <span className="eyebrow">Lo que dicen</span>
-            <h2 className="heading-lg mt-3 text-ivory-50">Voces de viajeras</h2>
+            <h2 className="heading-lg mt-3">Voces de viajeras</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {testimonials.map((t, i) => (
@@ -202,10 +202,10 @@ export default async function NosotrosPage() {
 
       {/* CTA */}
       <section className="container-site py-20 text-center">
-        <h2 className="heading-lg mb-4 text-ivory-50">
+        <h2 className="heading-lg mb-4">
           Lista para tu <span className="italic-script">proxima aventura</span>?
         </h2>
-        <p className="text-ivory-50/70 max-w-xl mx-auto mb-8">
+        <p className="text-charcoal-500 max-w-xl mx-auto mb-8">
           Deja que nuestras expertas diseñen un viaje a tu medida. Sin compromiso, sin costo
           inicial, solo inspiracion.
         </p>
@@ -213,7 +213,7 @@ export default async function NosotrosPage() {
           <Link href="/contacto" className="btn btn-primary btn-lg">
             Hablar con una experta
           </Link>
-          <Link href="/destinos" className="btn btn-outline btn-on-dark btn-lg">
+          <Link href="/destinos" className="btn btn-outline btn-lg">
             Explorar destinos
           </Link>
         </div>

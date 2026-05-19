@@ -3,14 +3,14 @@ import { Resend } from 'resend';
 export const resend = new Resend(process.env.RESEND_API_KEY);
 
 const BRAND = {
-  primary: '#1A2954',      // Editorial navy ink
-  primaryDark: '#0B1535',  // Deepest navy
-  accent: '#C49435',       // Aged amber
+  primary: '#1A2954',      // Editorial navy ink (text + accents)
+  primaryDark: '#0B1535',  // Deepest navy (headings)
+  accent: '#C49435',       // Aged amber (highlights)
   text: '#0B1535',
   muted: '#6B7280',
   border: '#E5E5E5',
-  bgSoft: '#F5F5F5',       // Light gray
-  bgMain: '#FFFFFF',       // White
+  bgSoft: '#F5F5F5',       // Very light gray section
+  bgMain: '#FFFFFF',       // Pure white card/body
 } as const;
 
 export async function sendBookingConfirmation({

@@ -114,8 +114,8 @@ export default function CuentaPage() {
   return (
     <div className="pt-28 pb-20 min-h-screen">
       <div className="container-site">
-        <div className="text-xs text-ivory-50/60 mb-6 flex gap-2 uppercase tracking-wider">
-          <Link href="/" className="text-gold-500">
+        <div className="text-xs text-charcoal-500 mb-6 flex gap-2 uppercase tracking-wider">
+          <Link href="/" className="text-plum-700">
             Inicio
           </Link>
           <span>/</span>

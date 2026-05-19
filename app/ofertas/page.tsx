@@ -17,21 +17,21 @@ export default async function OfertasPage() {
 
       {/* Flash deal */}
       <section className="container-site -mt-8 relative z-10 mb-16">
-        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-plum-900 via-plum-800 to-plum-700 p-10 lg:p-14 text-white shadow-soft-xl">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-gold-500/20 rounded-full blur-3xl -translate-y-20 translate-x-20" />
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-rose-400/20 rounded-full blur-3xl translate-y-20" />
+        <div className="relative rounded-3xl overflow-hidden bg-ivory-50 p-10 lg:p-14 text-charcoal-900 shadow-soft-xl border border-ivory-200">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-gold-300/30 rounded-full blur-3xl -translate-y-20 translate-x-20" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-rose-100/60 rounded-full blur-3xl translate-y-20" />
           <div className="relative grid md:grid-cols-2 gap-8 items-center">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <Flame size={18} className="text-gold-400" />
-                <span className="text-xs uppercase tracking-widest text-gold-400">
+                <Flame size={18} className="text-gold-600" />
+                <span className="text-xs uppercase tracking-widest text-gold-700 font-semibold">
                   Oferta flash
                 </span>
               </div>
-              <h2 className="font-display text-4xl lg:text-5xl mb-4 leading-tight">
-                40% OFF en <span className="italic-script text-gold-400">lunas de miel</span>
+              <h2 className="font-display text-4xl lg:text-5xl mb-4 leading-tight text-plum-900">
+                40% OFF en <span className="italic-script">lunas de miel</span>
               </h2>
-              <p className="text-white/80 mb-6 leading-relaxed">
+              <p className="text-charcoal-700 mb-6 leading-relaxed">
                 Reserva antes del 30 de abril tu luna de miel en Maldivas, Bali o Santorini.
                 Incluye upgrade gratuito y cena romantica.
               </p>
@@ -64,19 +64,19 @@ export default async function OfertasPage() {
             icon={Percent}
             title="Hasta 50% OFF"
             desc="Hoteles seleccionados"
-            color="bg-gradient-to-br from-plum-700 to-plum-500"
+            iconColor="text-plum-700"
           />
           <CategoryCard
             icon={Sparkles}
             title="Solo para miembros"
             desc="Aurelia Society exclusivo"
-            color="bg-gradient-to-br from-gold-600 to-gold-400"
+            iconColor="text-gold-600"
           />
           <CategoryCard
             icon={Tag}
             title="Ultimo minuto"
             desc="Salidas esta semana"
-            color="bg-gradient-to-br from-rose-400 to-rose-300"
+            iconColor="text-rose-500"
           />
         </div>
       </section>
@@ -186,9 +186,9 @@ export default async function OfertasPage() {
 
 function CountBox({ value, label }: { value: string; label: string }) {
   return (
-    <div className="bg-white/10 backdrop-blur rounded-xl px-4 py-3 text-center min-w-[64px]">
-      <div className="font-display text-2xl">{value}</div>
-      <div className="text-[10px] uppercase tracking-widest opacity-70">{label}</div>
+    <div className="bg-ivory-100 border border-ivory-200 rounded-xl px-4 py-3 text-center min-w-[64px]">
+      <div className="font-display text-2xl text-plum-900">{value}</div>
+      <div className="text-[10px] uppercase tracking-widest text-charcoal-500">{label}</div>
     </div>
   );
 }
@@ -197,18 +197,18 @@ function CategoryCard({
   icon: Icon,
   title,
   desc,
-  color,
+  iconColor,
 }: {
   icon: LucideIcon;
   title: string;
   desc: string;
-  color: string;
+  iconColor: string;
 }) {
   return (
-    <div className={`rounded-2xl p-8 text-white shadow-soft ${color}`}>
-      <Icon size={28} className="mb-4 opacity-90" />
-      <div className="font-display text-2xl mb-1">{title}</div>
-      <div className="text-sm opacity-80">{desc}</div>
+    <div className="rounded-2xl p-8 bg-ivory-50 border border-ivory-200 shadow-soft">
+      <Icon size={28} className={`mb-4 ${iconColor}`} />
+      <div className="font-display text-2xl mb-1 text-plum-900">{title}</div>
+      <div className="text-sm text-charcoal-500">{desc}</div>
     </div>
   );
 }

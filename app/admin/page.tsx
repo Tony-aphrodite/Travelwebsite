@@ -252,14 +252,14 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-ivory-100 pt-20">
       <div className="grid lg:grid-cols-[260px_1fr] min-h-[calc(100vh-5rem)]">
-        <aside className="bg-plum-900 text-white p-6 lg:sticky lg:top-20 lg:h-[calc(100vh-5rem)]">
-          <div className="flex items-center gap-2 mb-8 pb-6 border-b border-white/10">
+        <aside className="bg-ivory-50 text-charcoal-700 p-6 lg:sticky lg:top-20 lg:h-[calc(100vh-5rem)] border-r border-ivory-200">
+          <div className="flex items-center gap-2 mb-8 pb-6 border-b border-ivory-200">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold-500 to-gold-600 flex items-center justify-center text-plum-900 font-display text-lg">
               A
             </div>
             <div>
-              <div className="font-display text-lg">Aurelia</div>
-              <div className="text-[10px] uppercase tracking-widest text-gold-500">Panel admin</div>
+              <div className="font-display text-lg text-plum-900">Aurelia</div>
+              <div className="text-[10px] uppercase tracking-widest text-gold-700">Panel admin</div>
             </div>
           </div>
 
@@ -272,7 +272,7 @@ export default function AdminPage() {
                   key={n.key}
                   onClick={() => setPanel(n.key)}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-left transition-colors ${
-                    active ? 'bg-white/10 text-gold-500' : 'text-white/70 hover:bg-white/5 hover:text-white'
+                    active ? 'bg-plum-700/10 text-plum-700 font-semibold' : 'text-charcoal-700 hover:bg-ivory-100 hover:text-plum-700'
                   }`}
                 >
                   <Icon size={16} />
@@ -282,10 +282,10 @@ export default function AdminPage() {
             })}
           </nav>
 
-          <div className="mt-10 pt-6 border-t border-white/10 space-y-1">
+          <div className="mt-10 pt-6 border-t border-ivory-200 space-y-1">
             <Link
               href="/"
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-white/70 hover:bg-white/5 hover:text-white"
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-charcoal-700 hover:bg-ivory-100 hover:text-plum-700"
             >
               <ChevronRight size={16} />
               Volver al sitio

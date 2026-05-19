@@ -148,8 +148,8 @@ export default function CarritoPage() {
     return (
       <div className="pt-28 pb-20 min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <Loader2 size={40} className="text-gold-500 animate-spin mx-auto mb-4" />
-          <p className="text-ivory-50/70">Cargando tu carrito...</p>
+          <Loader2 size={40} className="text-plum-700 animate-spin mx-auto mb-4" />
+          <p className="text-charcoal-500">Cargando tu carrito...</p>
         </div>
       </div>
     );
@@ -177,8 +177,8 @@ export default function CarritoPage() {
   return (
     <div className="pt-28 pb-20 min-h-screen">
       <div className="container-site">
-        <div className="text-xs text-ivory-50/60 mb-6 flex gap-2 uppercase tracking-wider">
-          <Link href="/" className="text-gold-500">
+        <div className="text-xs text-charcoal-500 mb-6 flex gap-2 uppercase tracking-wider">
+          <Link href="/" className="text-plum-700">
             Inicio
           </Link>
           <span>/</span>
@@ -186,12 +186,12 @@ export default function CarritoPage() {
         </div>
 
         <div className="flex items-center gap-3 mb-10">
-          <div className="w-12 h-12 rounded-full bg-gold-600 text-plum-900 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-full bg-plum-700 text-ivory-50 flex items-center justify-center">
             <ShoppingBag size={22} />
           </div>
           <div>
-            <h1 className="heading-lg text-ivory-50">Tu viaje en construccion</h1>
-            <p className="text-ivory-50/70 text-sm">
+            <h1 className="heading-lg">Tu viaje en construccion</h1>
+            <p className="text-charcoal-500 text-sm">
               {items.length} {items.length === 1 ? 'experiencia' : 'experiencias'} en tu carrito
             </p>
           </div>

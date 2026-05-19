@@ -55,7 +55,7 @@ export default async function HotelDetailPage({ params }: { params: Promise<{ id
   const ratingLabel = hotel ? hotel.ratingLabel : 'Excepcional';
 
   return (
-    <div className="pt-28 pb-20 bg-ivory-50 text-charcoal-900">
+    <div className="pt-28 pb-20">
       <div className="container-site">
         {/* Breadcrumbs */}
         <div className="text-xs text-charcoal-500 mb-6 flex gap-2 uppercase tracking-wider">

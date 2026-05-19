@@ -16,17 +16,17 @@ export default async function HomePage() {
   return (
     <>
       {/* HERO */}
-      <section className="relative pt-32 pb-32 overflow-hidden bg-gradient-to-br from-plum-800 to-plum-700 min-h-screen">
-        <div className="absolute w-[400px] h-[400px] -top-24 -right-24 rounded-full bg-gold-600/25 blur-3xl pointer-events-none" />
-        <div className="absolute w-[300px] h-[300px] -bottom-12 left-[10%] rounded-full bg-gold-500/15 blur-3xl pointer-events-none" />
+      <section className="relative pt-32 pb-32 overflow-hidden bg-ivory-50 min-h-screen">
+        <div className="absolute w-[400px] h-[400px] -top-24 -right-24 rounded-full bg-gold-300/35 blur-3xl pointer-events-none" />
+        <div className="absolute w-[300px] h-[300px] -bottom-12 left-[10%] rounded-full bg-rose-100/60 blur-3xl pointer-events-none" />
 
         <div className="max-w-[1440px] mx-auto px-6 lg:px-10 grid lg:grid-cols-[1.1fr_0.9fr] gap-16 items-center relative z-10">
           <div className="max-w-[600px]">
             <span className="eyebrow">Coleccion 2026</span>
-            <h1 className="heading-xl mt-6 mb-6 text-balance text-ivory-50">
+            <h1 className="heading-xl mt-6 mb-6 text-balance">
               El arte de viajar, <span className="italic-script">redescubierto</span> para ti.
             </h1>
-            <p className="text-[18px] text-ivory-50/80 mb-8 max-w-[500px] leading-relaxed">
+            <p className="text-[18px] text-charcoal-700 mb-8 max-w-[500px] leading-relaxed">
               Aurelia crea experiencias de viaje que combinan el lujo discreto con el alma de cada
               destino. Vuelos, hoteles boutique, villas privadas y momentos que recordaras para
               siempre.
@@ -35,21 +35,21 @@ export default async function HomePage() {
               <Link href="#search" className="btn btn-primary btn-lg">
                 Planifica tu viaje
               </Link>
-              <Link href="/destinos" className="btn btn-outline btn-on-dark btn-lg">
+              <Link href="/destinos" className="btn btn-outline btn-lg">
                 Explorar destinos
               </Link>
             </div>
-            <div className="flex gap-10 mt-12 pt-8 border-t border-ivory-50/15 flex-wrap">
+            <div className="flex gap-10 mt-12 pt-8 border-t border-ivory-200 flex-wrap">
               {[
                 { value: '120+', label: 'Destinos curados' },
                 { value: '15k', label: 'Viajeras felices' },
                 { value: '4.9', label: 'Valoracion' },
               ].map((stat) => (
                 <div key={stat.label}>
-                  <strong className="font-display text-4xl text-gold-500 block leading-none">
+                  <strong className="font-display text-4xl text-plum-700 block leading-none">
                     {stat.value}
                   </strong>
-                  <span className="text-xs text-ivory-50/60 uppercase tracking-wider">
+                  <span className="text-xs text-charcoal-500 uppercase tracking-wider">
                     {stat.label}
                   </span>
                 </div>
@@ -104,7 +104,7 @@ export default async function HomePage() {
                 Lugares que <span className="italic-script">enamoran</span>
               </h2>
             </div>
-            <p className="max-w-md text-ivory-50/70">
+            <p className="max-w-md text-charcoal-500">
               Una seleccion cuidada de destinos para tu proxima escapada. Desde playas turquesa
               hasta ciudades historicas.
             </p>
@@ -211,18 +211,16 @@ export default async function HomePage() {
       </section>
 
       {/* REWARDS */}
-      <section className="py-24 bg-gradient-to-br from-plum-800 to-plum-700 text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(212,165,116,0.3),transparent_50%),radial-gradient(circle_at_80%_20%,rgba(232,165,181,0.2),transparent_50%)] pointer-events-none" />
+      <section className="py-24 bg-ivory-100 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(196,148,53,0.10),transparent_50%),radial-gradient(circle_at_80%_20%,rgba(216,119,97,0.08),transparent_50%)] pointer-events-none" />
         <div className="container-site grid lg:grid-cols-2 gap-16 items-center relative z-10">
           <div>
-            <span className="eyebrow !text-gold-500 before:!bg-gold-500">
-              Aurelia Society
-            </span>
-            <h2 className="heading-lg mt-4 mb-6 text-white">
-              Unete al <em className="italic text-gold-500 font-normal">club de las viajeras</em>{' '}
+            <span className="eyebrow">Aurelia Society</span>
+            <h2 className="heading-lg mt-4 mb-6">
+              Unete al <em className="italic text-gold-700 font-normal">club de las viajeras</em>{' '}
               del mundo.
             </h2>
-            <p className="text-white/80 text-[17px] mb-8 max-w-lg">
+            <p className="text-charcoal-700 text-[17px] mb-8 max-w-lg">
               Acumula puntos con cada reserva y disfruta de beneficios exclusivos: upgrades de
               habitacion, amenidades, acceso VIP y precios solo para miembros.
             </p>
@@ -235,12 +233,12 @@ export default async function HomePage() {
               ].map((t) => (
                 <div
                   key={t.tier}
-                  className="flex-1 min-w-[140px] p-5 bg-white/[0.08] border border-white/10 rounded-2xl backdrop-blur"
+                  className="flex-1 min-w-[140px] p-5 bg-ivory-50 border border-ivory-200 rounded-2xl"
                 >
-                  <strong className="font-display text-lg text-gold-500 block mb-1">
+                  <strong className="font-display text-lg text-plum-700 block mb-1">
                     {t.tier}
                   </strong>
-                  <span className="text-xs text-white/65">{t.desc}</span>
+                  <span className="text-xs text-charcoal-500">{t.desc}</span>
                 </div>
               ))}
             </div>
@@ -326,11 +324,11 @@ export default async function HomePage() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-24 bg-plum-800">
+      <section className="py-24 bg-ivory-100">
         <div className="container-site">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <span className="eyebrow">Voces de nuestras viajeras</span>
-            <h2 className="heading-lg mt-4 text-ivory-50">
+            <h2 className="heading-lg mt-4">
               Historias que <span className="italic-script">inspiran</span>
             </h2>
           </div>
@@ -418,13 +416,13 @@ export default async function HomePage() {
       </section>
 
       {/* NEWSLETTER */}
-      <section className="py-20 bg-gradient-to-br from-plum-900 to-plum-700">
+      <section className="py-20 bg-ivory-100">
         <div className="container-site max-w-2xl text-center">
           <span className="eyebrow">Carta de Aurelia</span>
-          <h2 className="heading-lg mt-4 mb-4 text-ivory-50">
+          <h2 className="heading-lg mt-4 mb-4">
             Inspiracion en tu <span className="italic-script">bandeja de entrada</span>
           </h2>
-          <p className="text-ivory-50/70 mb-8">
+          <p className="text-charcoal-700 mb-8">
             Suscribete a nuestra carta mensual y recibe ofertas exclusivas, guias de viaje curadas y
             avances de nuevos destinos.
           </p>
