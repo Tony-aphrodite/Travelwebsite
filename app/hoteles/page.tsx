@@ -41,6 +41,8 @@ export default async function HotelesPage({
         title="Hospedajes <span class='italic-script'>selectos</span>"
         subtitle="Una coleccion de los mejores hoteles del mundo, curada por nuestras especialistas."
         crumbs={[{ href: '/', label: 'Inicio' }, { label: 'Hoteles' }]}
+        bgImage="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1800&q=80&auto=format&fit=crop"
+        bgImageAlt="Piscina infinita de hotel de lujo al atardecer"
       />
 
       <div className="container-site -mt-10 relative z-10 mb-12">
