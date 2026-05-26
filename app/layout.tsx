@@ -1,28 +1,34 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, Playfair_Display, Cormorant_Garamond } from 'next/font/google';
+import { Manrope, Fraunces, Cormorant_Garamond } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
 import SessionProvider from '@/components/SessionProvider';
 import './globals.css';
 
-const inter = Inter({
+// Body sans — warm, modern, more refined than Inter
+const manrope = Manrope({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-sans',
   display: 'swap',
 });
 
-const playfair = Playfair_Display({
+// Display serif — variable editorial luxury (replaces Playfair Display)
+const fraunces = Fraunces({
   subsets: ['latin'],
-  variable: '--font-playfair',
+  weight: ['400', '500', '600', '700'],
+  style: ['normal', 'italic'],
+  axes: ['SOFT', 'opsz'],
+  variable: '--font-display',
   display: 'swap',
 });
 
+// Italic script for romantic emphasis (kept — Cormorant italic is unbeaten here)
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
   weight: ['400', '500', '600'],
   style: ['normal', 'italic'],
-  variable: '--font-cormorant',
+  variable: '--font-script',
   display: 'swap',
 });
 
@@ -63,7 +69,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className={`${inter.variable} ${playfair.variable} ${cormorant.variable}`}>
+    <html lang="es" className={`${manrope.variable} ${fraunces.variable} ${cormorant.variable}`}>
       <body className="font-sans">
         <SessionProvider>
           <Header />

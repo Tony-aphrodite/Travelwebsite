@@ -8,9 +8,9 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        display: ['var(--font-playfair)', 'serif'],
-        script: ['var(--font-cormorant)', 'serif'],
-        sans: ['var(--font-inter)', 'sans-serif'],
+        display: ['var(--font-display)', 'serif'],
+        script: ['var(--font-script)', 'serif'],
+        sans: ['var(--font-sans)', 'sans-serif'],
       },
       colors: {
         // Primary brand — deep editorial navy ink (matches "enamoran" reference)
