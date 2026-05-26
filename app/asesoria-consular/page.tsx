@@ -48,6 +48,8 @@ export default function AsesoriaConsularPage() {
         title="Asesoria <span class='italic-script'>consular</span> con respaldo legal"
         subtitle="Estados Unidos, Canadá y Europa — agenda una consulta gratuita con nuestra encargada legal para evaluar tu caso antes de viajar."
         crumbs={[{ href: '/', label: 'Inicio' }, { label: 'Asesoria consular' }]}
+        bgImage="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1800&q=80&auto=format&fit=crop"
+        bgImageAlt="Mapamundi con pasaporte y planificacion de viaje internacional"
       />
 
       {/* Regions */}

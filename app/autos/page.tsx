@@ -38,6 +38,8 @@ export default async function AutosPage({
         title="Conduce con <span class='italic-script'>libertad</span>"
         subtitle="Desde compactos para la ciudad hasta deportivos para la costa amalfitana."
         crumbs={[{ href: '/', label: 'Inicio' }, { label: 'Autos' }]}
+        bgImage="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1800&q=80&auto=format&fit=crop"
+        bgImageAlt="Auto de lujo en carretera costera"
       />
 
       <div className="container-site -mt-10 relative z-10 mb-12">

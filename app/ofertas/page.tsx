@@ -13,6 +13,8 @@ export default async function OfertasPage() {
         title="Descuentos <span class='italic-script'>que enamoran</span>"
         subtitle="Promociones limitadas, descuentos exclusivos para miembros y ofertas flash por tiempo limitado."
         crumbs={[{ href: '/', label: 'Inicio' }, { label: 'Ofertas' }]}
+        bgImage="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1800&q=80&auto=format&fit=crop"
+        bgImageAlt="Destino de lujo al atardecer con vista panoramica"
       />
 
       {/* Flash deal */}

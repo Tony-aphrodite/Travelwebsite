@@ -37,6 +37,8 @@ export default async function PaquetesPage({
         title="Viajes <span class='italic-script'>listos para soñar</span>"
         subtitle="Vuelo, hotel, experiencias y traslados. Todo pensado en un solo precio irresistible."
         crumbs={[{ href: '/', label: 'Inicio' }, { label: 'Paquetes' }]}
+        bgImage="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1800&q=80&auto=format&fit=crop"
+        bgImageAlt="Playa paradisiaca con palmeras y mar turquesa"
       />
 
       <div className="container-site -mt-10 relative z-10 mb-12">

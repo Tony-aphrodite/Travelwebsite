@@ -38,6 +38,8 @@ export default async function ActividadesPage({
         title="Momentos que <span class='italic-script'>transforman</span>"
         subtitle="Tours privados, cenas con chefs Michelin, retiros de bienestar. Experiencias unicas solo para nuestras viajeras."
         crumbs={[{ href: '/', label: 'Inicio' }, { label: 'Experiencias' }]}
+        bgImage="https://images.unsplash.com/photo-1530521954074-e64f6810b32d?w=1800&q=80&auto=format&fit=crop"
+        bgImageAlt="Globos aerostaticos al amanecer en Cappadocia"
       />
 
       <div className="container-site -mt-10 relative z-10 mb-12">

@@ -39,6 +39,8 @@ export default async function VillasPage({
         title="Tu <span class='italic-script'>refugio</span> en el mundo"
         subtitle="Villas exclusivas en los rincones mas hermosos de Europa, Asia y el Caribe."
         crumbs={[{ href: '/', label: 'Inicio' }, { label: 'Villas' }]}
+        bgImage="https://images.unsplash.com/photo-1582719508461-905c673771fd?w=1800&q=80&auto=format&fit=crop"
+        bgImageAlt="Villa privada con piscina al borde del mar"
       />
 
       <div className="container-site -mt-10 relative z-10 mb-12">
