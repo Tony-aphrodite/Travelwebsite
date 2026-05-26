@@ -127,6 +127,24 @@ export const profileUpdateSchema = z.object({
   country: z.string().max(80).optional().nullable(),
 });
 
+export const consultationSchema = z.object({
+  region: z.enum(['us', 'canada', 'europa']),
+  name: z.string().min(2).max(80),
+  email: z.string().email(),
+  phone: z.string().max(40).optional().nullable(),
+  preferredDate: z.string().refine(
+    (v) => !Number.isNaN(new Date(v).getTime()),
+    'Fecha invalida'
+  ),
+  preferredTimeSlot: z.enum(['morning', 'afternoon', 'evening']),
+  topic: z.string().min(10).max(2000),
+});
+
+export const consultationStatusUpdateSchema = z.object({
+  status: z.enum(['pending', 'confirmed', 'completed', 'cancelled']),
+  notes: z.string().max(2000).optional(),
+});
+
 export const contactSchema = z.object({
   name: z.string().min(2).max(80),
   lastName: z.string().max(80).optional().default(''),

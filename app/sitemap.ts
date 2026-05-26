@@ -7,7 +7,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://aureliaviajes.com';
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPages = [
     '', '/hoteles', '/vuelos', '/villas', '/paquetes', '/autos', '/actividades',
-    '/destinos', '/ofertas', '/blog', '/nosotros', '/contacto',
+    '/destinos', '/ofertas', '/blog', '/nosotros', '/contacto', '/asesoria-consular',
   ].map((path) => ({
     url: `${BASE_URL}${path}`,
     lastModified: new Date(),

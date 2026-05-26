@@ -67,6 +67,126 @@ export async function sendBookingConfirmation({
   });
 }
 
+const REGION_LABEL: Record<string, string> = {
+  us: 'Estados Unidos',
+  canada: 'Canada',
+  europa: 'Europa',
+};
+
+const TIMESLOT_LABEL: Record<string, string> = {
+  morning: 'Manana (9:00 - 12:00)',
+  afternoon: 'Tarde (14:00 - 17:00)',
+  evening: 'Noche (18:00 - 20:00)',
+};
+
+function fmtDate(d: Date | string) {
+  const date = typeof d === 'string' ? new Date(d) : d;
+  return date.toLocaleDateString('es-MX', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
+  });
+}
+
+/** Sent to the legal officer when a new consultation request is submitted */
+export async function sendConsultationNotification({
+  to,
+  request,
+}: {
+  to: string;
+  request: {
+    id: number;
+    region: string;
+    name: string;
+    email: string;
+    phone: string | null;
+    preferredDate: Date;
+    preferredTimeSlot: string;
+    topic: string;
+  };
+}) {
+  return resend.emails.send({
+    from: process.env.EMAIL_FROM || 'Aurelia Viajes <noreply@aureliaviajes.com>',
+    to,
+    replyTo: request.email,
+    subject: `Nueva solicitud de asesoria consular — ${REGION_LABEL[request.region]} — ${request.name}`,
+    html: `
+      <div style="font-family: -apple-system, Segoe UI, Roboto, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; color: ${BRAND.text};">
+        <h1 style="color: ${BRAND.primary}; font-size: 22px; margin: 0 0 8px;">Nueva solicitud de asesoria consular</h1>
+        <p style="color: ${BRAND.muted}; font-size: 13px; margin: 0 0 24px;">Referencia #${String(request.id).padStart(5, '0')}</p>
+
+        <div style="background: ${BRAND.bgSoft}; border-radius: 12px; padding: 20px; margin: 0 0 20px;">
+          <p style="margin: 0 0 8px;"><strong>Region:</strong> ${REGION_LABEL[request.region]}</p>
+          <p style="margin: 0 0 8px;"><strong>Fecha preferida:</strong> ${fmtDate(request.preferredDate)}</p>
+          <p style="margin: 0 0 8px;"><strong>Franja horaria:</strong> ${TIMESLOT_LABEL[request.preferredTimeSlot]}</p>
+        </div>
+
+        <div style="background: ${BRAND.bgSoft}; border-radius: 12px; padding: 20px; margin: 0 0 20px;">
+          <p style="margin: 0 0 8px;"><strong>Cliente:</strong> ${request.name}</p>
+          <p style="margin: 0 0 8px;"><strong>Email:</strong> <a href="mailto:${request.email}" style="color:${BRAND.primary}">${request.email}</a></p>
+          <p style="margin: 0;"><strong>Telefono:</strong> ${request.phone || '—'}</p>
+        </div>
+
+        <h3 style="font-size: 14px; color: ${BRAND.text}; margin: 0 0 8px;">Tema / situacion</h3>
+        <p style="background: ${BRAND.bgSoft}; border-radius: 12px; padding: 16px; white-space: pre-wrap; line-height: 1.55; margin: 0 0 24px;">${request.topic.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</p>
+
+        <p style="color: ${BRAND.muted}; font-size: 12px; margin: 0;">Responde directamente a este correo para contactar al cliente.</p>
+      </div>
+    `,
+  });
+}
+
+/** Sent to the client to confirm their request was received */
+export async function sendConsultationConfirmation({
+  to,
+  name,
+  region,
+  preferredDate,
+  preferredTimeSlot,
+}: {
+  to: string;
+  name: string;
+  region: string;
+  preferredDate: Date;
+  preferredTimeSlot: string;
+}) {
+  return resend.emails.send({
+    from: process.env.EMAIL_FROM || 'Aurelia Viajes <noreply@aureliaviajes.com>',
+    to,
+    subject: `Recibimos tu solicitud de asesoria consular — ${REGION_LABEL[region]}`,
+    html: `
+      <div style="font-family: -apple-system, Segoe UI, Roboto, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; color: ${BRAND.text};">
+        <div style="text-align: center; margin-bottom: 28px;">
+          <h1 style="color: ${BRAND.primary}; font-size: 26px; margin: 0;">Aurelia Viajes</h1>
+          <p style="color: ${BRAND.muted}; font-size: 13px; margin: 4px 0 0;">Asesoria consular</p>
+        </div>
+
+        <h2 style="color: ${BRAND.text}; font-size: 20px; margin: 0 0 12px;">Hola ${name},</h2>
+        <p style="font-size: 15px; line-height: 1.6; margin: 0 0 16px;">
+          Recibimos tu solicitud de consulta con nuestra encargada legal sobre tramites para
+          <strong>${REGION_LABEL[region]}</strong>. Gracias por confiar en nosotras.
+        </p>
+
+        <div style="background: ${BRAND.bgSoft}; border-radius: 12px; padding: 20px; margin: 16px 0;">
+          <p style="margin: 0 0 8px;"><strong>Fecha solicitada:</strong> ${fmtDate(preferredDate)}</p>
+          <p style="margin: 0;"><strong>Franja horaria:</strong> ${TIMESLOT_LABEL[preferredTimeSlot]}</p>
+        </div>
+
+        <p style="font-size: 15px; line-height: 1.6; margin: 16px 0;">
+          Te contactaremos en las proximas <strong>24 horas habiles</strong> para confirmar la cita y
+          coordinar el canal (videollamada, WhatsApp o presencial).
+        </p>
+
+        <p style="color: ${BRAND.muted}; font-size: 13px; line-height: 1.55; margin: 24px 0 0;">
+          Si necesitas algo urgente, escribenos directamente a
+          <a href="mailto:${process.env.CONTACT_INBOX || 'hola@aureliaviajes.com'}" style="color:${BRAND.primary}">${process.env.CONTACT_INBOX || 'hola@aureliaviajes.com'}</a>.
+        </p>
+
+        <hr style="border: none; border-top: 1px solid ${BRAND.border}; margin: 28px 0;" />
+        <p style="color: ${BRAND.muted}; font-size: 12px; text-align: center; margin: 0;">Aurelia Viajes &mdash; el arte de viajar, redescubierto.</p>
+      </div>
+    `,
+  });
+}
+
 export async function sendPasswordResetEmail({
   to,
   name,

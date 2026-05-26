@@ -575,6 +575,28 @@ export async function countHotels(filters: HotelFilters = {}): Promise<number> {
   return Number(r.c);
 }
 
+// ─── CONSULTATION REQUESTS ──────────────────────────
+export async function createConsultationRequest(data: typeof schema.consultationRequests.$inferInsert) {
+  return db.insert(schema.consultationRequests).values(data).returning();
+}
+
+export async function getConsultationRequests(limit = 100) {
+  return db.select().from(schema.consultationRequests)
+    .orderBy(desc(schema.consultationRequests.createdAt))
+    .limit(limit);
+}
+
+export async function updateConsultationStatus(
+  id: number,
+  status: 'pending' | 'confirmed' | 'completed' | 'cancelled',
+  notes?: string,
+) {
+  return db.update(schema.consultationRequests)
+    .set({ status, notes: notes ?? null, updatedAt: new Date() })
+    .where(eq(schema.consultationRequests.id, id))
+    .returning();
+}
+
 // ─── ADMIN ──────────────────────────────────────────
 export async function getAdminStats() {
   const [hotelCount] = await db.select({ count: sql<number>`count(*)` }).from(schema.hotels);

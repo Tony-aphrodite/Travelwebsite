@@ -12,6 +12,7 @@ const NAV_LINKS = [
   { href: '/paquetes', label: 'Paquetes' },
   { href: '/autos', label: 'Autos' },
   { href: '/actividades', label: 'Experiencias' },
+  { href: '/asesoria-consular', label: 'Asesoria' },
   { href: '/ofertas', label: 'Ofertas' },
 ];
 

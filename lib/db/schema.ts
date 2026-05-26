@@ -337,6 +337,29 @@ export const notificationPrefs = pgTable('notification_prefs', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
+// ─── CONSULTATION REQUESTS (asesoría consular) ──────
+export const consultationRegionEnum = pgEnum('consultation_region', ['us', 'canada', 'europa']);
+export const consultationStatusEnum = pgEnum('consultation_status', ['pending', 'confirmed', 'completed', 'cancelled']);
+
+export const consultationRequests = pgTable('consultation_requests', {
+  id: serial('id').primaryKey(),
+  userId: text('user_id').references(() => users.id, { onDelete: 'set null' }),
+  region: consultationRegionEnum('region').notNull(),
+  name: text('name').notNull(),
+  email: text('email').notNull(),
+  phone: text('phone'),
+  preferredDate: timestamp('preferred_date', { mode: 'date' }).notNull(),
+  preferredTimeSlot: text('preferred_time_slot').notNull(),
+  topic: text('topic').notNull(),
+  status: consultationStatusEnum('status').default('pending').notNull(),
+  notes: text('notes'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+}, (t) => [
+  index('consult_status_idx').on(t.status),
+  index('consult_date_idx').on(t.preferredDate),
+]);
+
 // ─── PASSWORD RESET TOKENS ──────────────────────────
 export const passwordResetTokens = pgTable('password_reset_tokens', {
   id: serial('id').primaryKey(),
