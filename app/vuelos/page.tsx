@@ -39,6 +39,8 @@ export default async function VuelosPage({
         title="Volar con <span class='italic-script'>estilo</span>"
         subtitle="Compara vuelos de las mejores aerolineas del mundo con tarifas exclusivas Aurelia."
         crumbs={[{ href: '/', label: 'Inicio' }, { label: 'Vuelos' }]}
+        bgImage="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1800&q=80&auto=format&fit=crop"
+        bgImageAlt="Ala de avion sobre las nubes al atardecer"
       />
 
       <div className="container-site -mt-10 relative z-10 mb-12">
