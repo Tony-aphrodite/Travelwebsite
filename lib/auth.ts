@@ -28,24 +28,52 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         password: { label: 'Contraseña', type: 'password' },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) return null;
+        // TEMP DIAGNOSTIC LOGS — remove after credentials issue is resolved.
+        console.log('[authorize] called with keys:', Object.keys(credentials || {}));
+        console.log('[authorize] email type:', typeof credentials?.email, 'length:', String(credentials?.email || '').length);
+        console.log('[authorize] password type:', typeof credentials?.password, 'length:', String(credentials?.password || '').length);
+
+        if (!credentials?.email || !credentials?.password) {
+          console.log('[authorize] returning null: missing credentials');
+          return null;
+        }
 
         const email = String(credentials.email).toLowerCase().trim();
         const password = String(credentials.password);
+        console.log('[authorize] normalized email:', JSON.stringify(email));
 
-        const rows = await db.select().from(schema.users).where(eq(schema.users.email, email));
-        const user = rows[0];
-        if (!user || !user.hashedPassword) return null;
+        try {
+          const rows = await db.select().from(schema.users).where(eq(schema.users.email, email));
+          console.log('[authorize] db rows:', rows.length);
+          const user = rows[0];
+          if (!user) {
+            console.log('[authorize] returning null: no user row');
+            return null;
+          }
+          console.log('[authorize] user:', { id: user.id, role: user.role, hasHash: !!user.hashedPassword, hashLen: user.hashedPassword?.length });
+          if (!user.hashedPassword) {
+            console.log('[authorize] returning null: no hashed password');
+            return null;
+          }
 
-        const ok = await bcrypt.compare(password, user.hashedPassword);
-        if (!ok) return null;
+          const ok = await bcrypt.compare(password, user.hashedPassword);
+          console.log('[authorize] bcrypt.compare =>', ok);
+          if (!ok) {
+            console.log('[authorize] returning null: bcrypt failed');
+            return null;
+          }
 
-        return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          image: user.image,
-        };
+          console.log('[authorize] success, returning user');
+          return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            image: user.image,
+          };
+        } catch (err) {
+          console.log('[authorize] EXCEPTION:', err);
+          return null;
+        }
       },
     }),
   ],
