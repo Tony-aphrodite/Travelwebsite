@@ -108,7 +108,7 @@ export default async function HomePage() {
       </section>
 
       {/* SEARCH WIDGET */}
-      <div id="search" className="container-site -mt-6 lg:-mt-10 relative z-20 mb-4">
+      <div id="search" className="container-site mt-6 lg:mt-10 relative z-20 mb-4">
         <SearchWidget />
       </div>
 
