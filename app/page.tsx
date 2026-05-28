@@ -57,28 +57,33 @@ export default async function HomePage() {
             </div>
           </div>
 
-          <div className="relative h-[520px] lg:h-[620px]">
-            {/* Decorative blur disc behind the main image */}
-            <div className="absolute top-[15%] right-[20%] w-[260px] h-[260px] rounded-full bg-gold-300/40 blur-3xl pointer-events-none" />
+          <div className="relative h-[540px] lg:h-[660px]">
+            {/* Decorative gold halo behind the main image */}
+            <div className="absolute top-[12%] right-[18%] w-[320px] h-[320px] rounded-full bg-gold-400/40 blur-3xl pointer-events-none" />
 
-            {/* Main image — leaf-shape, tilted right */}
-            <div
-              className="absolute w-[300px] lg:w-[360px] h-[420px] lg:h-[500px] top-2 right-8 overflow-hidden shadow-soft-xl animate-float rotate-[3deg] hover:rotate-0 transition-transform duration-700"
-              style={{ borderRadius: '6rem 1.5rem 6rem 1.5rem' }}
-            >
+            {/* Decorative gold accent dots */}
+            <div className="absolute top-8 right-4 w-2 h-2 rounded-full bg-gold-600 pointer-events-none" />
+            <div className="absolute top-16 right-12 w-1.5 h-1.5 rounded-full bg-gold-500 pointer-events-none" />
+            <div className="absolute top-1/3 left-12 w-1.5 h-1.5 rounded-full bg-gold-600 pointer-events-none" />
+            <div className="absolute bottom-32 right-1 w-1 h-1 rounded-full bg-gold-700 pointer-events-none" />
+
+            {/* Thin gold accent line — editorial detail */}
+            <div className="absolute top-[55%] left-[28%] w-12 h-px bg-gold-600 -rotate-[20deg] origin-left pointer-events-none" />
+
+            {/* MAIN IMAGE — vertical pill/capsule (rounded-full on a tall rectangle) */}
+            <div className="absolute w-[280px] lg:w-[340px] h-[440px] lg:h-[520px] top-4 right-10 rounded-full overflow-hidden shadow-[0_30px_70px_-15px_rgba(11,21,53,0.45)] animate-float">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=900&q=80"
                 alt="Destino de lujo"
                 className="absolute inset-0 w-full h-full object-cover"
               />
+              {/* Subtle inner gold ring for editorial polish */}
+              <div className="absolute inset-0 rounded-full ring-1 ring-inset ring-gold-500/30 pointer-events-none" />
             </div>
 
-            {/* Secondary image — opposite leaf-shape, tilted left, overlapping */}
-            <div
-              className="absolute w-[210px] lg:w-[260px] h-[280px] lg:h-[340px] bottom-6 left-0 overflow-hidden shadow-soft-xl animate-float-delayed -rotate-[5deg] hover:rotate-0 transition-transform duration-700 ring-4 ring-ivory-50"
-              style={{ borderRadius: '1.5rem 6rem 1.5rem 6rem' }}
-            >
+            {/* SECONDARY IMAGE — perfect circle with polaroid-style white ring */}
+            <div className="absolute w-[200px] lg:w-[240px] h-[200px] lg:h-[240px] bottom-10 left-2 rounded-full overflow-hidden ring-[10px] ring-ivory-50 shadow-[0_25px_60px_-15px_rgba(11,21,53,0.4)] animate-float-delayed">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="https://images.unsplash.com/photo-1544644181-1484b3fdfc62?w=700&q=80"
@@ -87,13 +92,13 @@ export default async function HomePage() {
               />
             </div>
 
-            {/* Award badge — sits at the intersection */}
-            <div className="absolute bottom-12 right-2 bg-ivory-50 p-4 rounded-2xl shadow-soft-lg flex items-center gap-3 animate-float ring-1 ring-ivory-200">
-              <div className="w-11 h-11 rounded-full bg-gradient-to-br from-gold-600 to-gold-500 flex items-center justify-center text-plum-900">
-                <Award size={20} />
+            {/* Award badge — editorial stamp-style, positioned at lower-right */}
+            <div className="absolute bottom-4 right-0 bg-ivory-50 px-5 py-4 rounded-2xl shadow-[0_20px_45px_-10px_rgba(11,21,53,0.25)] flex items-center gap-3 animate-float ring-1 ring-ivory-200">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gold-500 via-gold-600 to-gold-700 flex items-center justify-center text-plum-900 shadow-inner">
+                <Award size={22} />
               </div>
               <div>
-                <strong className="block text-sm text-plum-900 font-semibold">
+                <strong className="block text-sm text-plum-900 font-semibold leading-tight">
                   Premiado 2025
                 </strong>
                 <span className="text-xs text-charcoal-500">Mejor agencia boutique</span>
