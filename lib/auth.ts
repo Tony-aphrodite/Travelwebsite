@@ -77,10 +77,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             }
           }
           if (!hash) {
-            // Throw with diagnostic so we can see what keys the row actually has
-            const allKeys = Object.keys(user).join(',');
+            // Show the actual VALUE encountered for hashed_password so we
+            // can see if it's null, empty, or wrong type on Vercel.
+            const v = user['hashed_password'];
+            const tag = `t${typeof v}_v${v === null ? 'null' : v === undefined ? 'undef' : String(v).length}`;
             const error = new NoHashError();
-            error.code = `no_hash_v3_keys_${allKeys.slice(0, 60).replace(/[^a-z_,]/gi, '')}`;
+            error.code = `nohash_v4_${tag}`;
             throw error;
           }
 
