@@ -77,12 +77,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             }
           }
           if (!hash) {
-            // Show the actual VALUE encountered for hashed_password so we
-            // can see if it's null, empty, or wrong type on Vercel.
-            const v = user['hashed_password'];
-            const tag = `t${typeof v}_v${v === null ? 'null' : v === undefined ? 'undef' : String(v).length}`;
+            // Identify WHICH row Vercel sees (id + updated_at) so we can tell
+            // if Vercel is on a different DB branch / replica than local.
+            const id = String(user['id'] ?? 'noid');
+            const updatedRow = (await rawSql`
+              SELECT id, updated_at, length(hashed_password) AS hash_len
+              FROM users WHERE id = ${id}
+            `) as Array<{ id: string; updated_at: string | null; hash_len: number | null }>;
+            const r = updatedRow[0];
+            const u = r?.updated_at ? String(r.updated_at).slice(0, 19).replace(/[^0-9]/g, '') : 'noup';
+            const hl = r?.hash_len ?? 'null';
             const error = new NoHashError();
-            error.code = `nohash_v4_${tag}`;
+            error.code = `v5_id${id.slice(0, 12)}_u${u.slice(0, 14)}_hl${hl}`;
             throw error;
           }
 
