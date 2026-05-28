@@ -59,17 +59,17 @@ export default async function HomePage() {
 
           <div className="relative h-[420px] lg:h-[480px]">
             {/* Soft gold halo backdrop */}
-            <div className="absolute top-[20%] left-[25%] w-[320px] h-[320px] rounded-full bg-gold-400/30 blur-3xl pointer-events-none" />
+            <div className="absolute top-[20%] left-[28%] w-[340px] h-[340px] rounded-full bg-gold-400/30 blur-3xl pointer-events-none" />
 
             {/* Scattered decorative gold dots */}
-            <div className="absolute top-3 left-16 w-2 h-2 rounded-full bg-gold-500 pointer-events-none" />
-            <div className="absolute top-10 right-2 w-1.5 h-1.5 rounded-full bg-gold-600 pointer-events-none" />
-            <div className="absolute top-[55%] right-1 w-1 h-1 rounded-full bg-gold-700 pointer-events-none" />
-            <div className="absolute bottom-[42%] left-1 w-1.5 h-1.5 rounded-full bg-gold-500 pointer-events-none" />
-            <div className="absolute bottom-10 right-[42%] w-1 h-1 rounded-full bg-gold-600 pointer-events-none" />
+            <div className="absolute top-2 left-[40%] w-2 h-2 rounded-full bg-gold-500 pointer-events-none z-40" />
+            <div className="absolute top-[30%] left-1 w-1.5 h-1.5 rounded-full bg-gold-600 pointer-events-none z-40" />
+            <div className="absolute top-[55%] right-1 w-1 h-1 rounded-full bg-gold-700 pointer-events-none z-40" />
+            <div className="absolute bottom-[18%] left-[44%] w-1.5 h-1.5 rounded-full bg-gold-500 pointer-events-none z-40" />
+            <div className="absolute bottom-6 right-[48%] w-1 h-1 rounded-full bg-gold-600 pointer-events-none z-40" />
 
-            {/* Photo 1 — Patagonia (top-left, dramatic tilt) */}
-            <div className="absolute w-[150px] lg:w-[180px] h-[195px] lg:h-[230px] top-4 left-0 rounded-3xl overflow-hidden shadow-[0_15px_38px_-12px_rgba(11,21,53,0.32)] animate-float -rotate-[11deg]">
+            {/* Photo 1 — Patagonia (top-left, BOLD left tilt, smallest) */}
+            <div className="absolute w-[140px] lg:w-[170px] h-[180px] lg:h-[215px] top-3 left-0 rounded-3xl overflow-hidden shadow-[0_15px_38px_-12px_rgba(11,21,53,0.32)] animate-float -rotate-[18deg]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&q=80"
@@ -78,8 +78,8 @@ export default async function HomePage() {
               />
             </div>
 
-            {/* Photo 2 — Maldivas (top-right, medium tilt, largest) */}
-            <div className="absolute w-[180px] lg:w-[215px] h-[225px] lg:h-[270px] top-0 right-2 rounded-3xl overflow-hidden shadow-[0_22px_48px_-12px_rgba(11,21,53,0.40)] animate-float-delayed rotate-[7deg] z-10">
+            {/* Photo 2 — Maldivas (top-right, moderate right tilt, LARGEST) */}
+            <div className="absolute w-[200px] lg:w-[240px] h-[250px] lg:h-[300px] -top-2 right-2 rounded-3xl overflow-hidden shadow-[0_22px_48px_-12px_rgba(11,21,53,0.40)] animate-float-delayed rotate-[11deg] z-10">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=700&q=80"
@@ -88,8 +88,8 @@ export default async function HomePage() {
               />
             </div>
 
-            {/* Photo 3 — Bali (middle, soft right tilt, overlapping center) */}
-            <div className="absolute w-[170px] lg:w-[200px] h-[215px] lg:h-[255px] top-[42%] left-6 rounded-3xl overflow-hidden shadow-[0_20px_45px_-12px_rgba(11,21,53,0.38)] animate-float rotate-[4deg] z-20">
+            {/* Photo 3 — Bali (CENTER overlapping both, dramatic right tilt) */}
+            <div className="absolute w-[155px] lg:w-[185px] h-[200px] lg:h-[235px] top-[34%] left-[24%] lg:left-[28%] rounded-3xl overflow-hidden shadow-[0_22px_48px_-12px_rgba(11,21,53,0.42)] animate-float rotate-[16deg] z-20">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="https://images.unsplash.com/photo-1544644181-1484b3fdfc62?w=700&q=80"
@@ -98,8 +98,8 @@ export default async function HomePage() {
               />
             </div>
 
-            {/* Photo 4 — Santorini (front, bottom-right, holds the stamp) */}
-            <div className="absolute w-[185px] lg:w-[220px] h-[235px] lg:h-[280px] bottom-0 right-0 rounded-3xl overflow-hidden shadow-[0_25px_55px_-12px_rgba(11,21,53,0.45)] animate-float-delayed -rotate-[7deg] z-30">
+            {/* Photo 4 — Santorini (bottom-right, anchors composition, holds stamp) */}
+            <div className="absolute w-[180px] lg:w-[215px] h-[230px] lg:h-[275px] bottom-0 right-4 rounded-3xl overflow-hidden shadow-[0_25px_55px_-12px_rgba(11,21,53,0.45)] animate-float-delayed -rotate-[12deg] z-30">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=700&q=80"
@@ -108,7 +108,7 @@ export default async function HomePage() {
               />
 
               {/* Premiado 2025 — gold stamp affixed to corner */}
-              <div className="absolute -top-4 -left-4 w-[76px] h-[76px] rounded-full bg-gradient-to-br from-gold-500 via-gold-600 to-gold-700 ring-[3px] ring-ivory-50 flex flex-col items-center justify-center text-plum-900 font-bold leading-none rotate-[14deg] shadow-[0_8px_20px_rgba(11,21,53,0.30)]">
+              <div className="absolute -top-4 -left-4 w-[76px] h-[76px] rounded-full bg-gradient-to-br from-gold-500 via-gold-600 to-gold-700 ring-[3px] ring-ivory-50 flex flex-col items-center justify-center text-plum-900 font-bold leading-none rotate-[18deg] shadow-[0_8px_20px_rgba(11,21,53,0.30)]">
                 <Award size={15} className="mb-0.5" />
                 <span className="text-[8px] uppercase tracking-[0.15em]">Premiado</span>
                 <span className="font-display text-sm mt-0.5">2025</span>
@@ -116,7 +116,7 @@ export default async function HomePage() {
             </div>
 
             {/* Handwritten editorial label */}
-            <div className="absolute -bottom-1 left-2 lg:left-8 font-script italic text-xl text-gold-700 -rotate-[4deg] pointer-events-none">
+            <div className="absolute -bottom-2 left-0 lg:left-4 font-script italic text-xl text-gold-700 -rotate-[6deg] pointer-events-none z-40">
               coleccion &apos;26
             </div>
           </div>
