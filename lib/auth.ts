@@ -3,10 +3,16 @@ import Google from 'next-auth/providers/google';
 import Credentials from 'next-auth/providers/credentials';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import bcrypt from 'bcryptjs';
+import { neon } from '@neondatabase/serverless';
 import { authConfig } from './auth.config';
 import { db } from '@/lib/db';
 import * as schema from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
+
+// Raw SQL client — bypasses Drizzle's column mapping entirely for the
+// credentials lookup. Drizzle's snake_case→camelCase translation was
+// dropping the hashed_password field somewhere in the Vercel bundle.
+const rawSql = neon(process.env.DATABASE_URL!);
 
 // Diagnostic error codes — each step throws its own subclass so the
 // resulting ?code= query parameter on the redirect tells us exactly
@@ -48,30 +54,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const password = String(credentials.password);
 
         try {
-          // Explicit field selection — on Vercel, Drizzle's snake_case→camelCase
-          // column mapping was returning the row WITHOUT hashedPassword for some
-          // reason (the issue surfaced as ?code=no_hash). Naming each field by
-          // the schema reference forces the mapping.
-          const rows = await db
-            .select({
-              id: schema.users.id,
-              name: schema.users.name,
-              email: schema.users.email,
-              image: schema.users.image,
-              hashedPassword: schema.users.hashedPassword,
-            })
-            .from(schema.users)
-            .where(eq(schema.users.email, email));
+          // Use raw SQL — Drizzle's column mapping was dropping hashed_password
+          // on Vercel for unknown reasons. Direct query returns rows as plain
+          // objects with the actual DB column names.
+          const rows = (await rawSql`
+            SELECT id, name, email, image, hashed_password
+            FROM users
+            WHERE email = ${email}
+          `) as Array<{ id: string; name: string | null; email: string; image: string | null; hashed_password: string | null }>;
+
           const user = rows[0];
           if (!user) throw new NoUserError();
+          if (!user.hashed_password) throw new NoHashError();
 
-          // Belt-and-suspenders: accept the snake_case field too if for some
-          // reason camelCase isn't populated by the driver.
-          const hash =
-            user.hashedPassword ?? (user as Record<string, unknown>).hashed_password;
-          if (!hash || typeof hash !== 'string') throw new NoHashError();
-
-          const ok = await bcrypt.compare(password, hash);
+          const ok = await bcrypt.compare(password, user.hashed_password);
           if (!ok) throw new BadPasswordError();
 
           return {
@@ -81,7 +77,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             image: user.image,
           };
         } catch (err) {
-          // Re-throw our own diagnostic errors as-is; wrap anything else
           if (err instanceof CredentialsSignin) throw err;
           throw new DbExceptionError(String((err as Error)?.message || err));
         }
