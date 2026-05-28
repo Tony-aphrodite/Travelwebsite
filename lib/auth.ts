@@ -76,19 +76,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               break;
             }
           }
-          if (!hash) {
-            // Show DB connection info so we can tell which Neon DB / branch
-            // Vercel is reading from vs local.
-            const info = (await rawSql`
-              SELECT current_database() AS db,
-                     inet_server_addr()::text AS host,
-                     (SELECT count(*) FROM users) AS user_count
-            `) as Array<{ db: string; host: string | null; user_count: string }>;
-            const i = info[0];
-            const error = new NoHashError();
-            error.code = `v6_db${(i?.db || 'nodb').slice(0, 20)}_users${i?.user_count || 0}`;
-            throw error;
-          }
+          if (!hash) throw new NoHashError();
 
           const ok = await bcrypt.compare(password, hash);
           if (!ok) throw new BadPasswordError();
