@@ -48,12 +48,30 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const password = String(credentials.password);
 
         try {
-          const rows = await db.select().from(schema.users).where(eq(schema.users.email, email));
+          // Explicit field selection — on Vercel, Drizzle's snake_case→camelCase
+          // column mapping was returning the row WITHOUT hashedPassword for some
+          // reason (the issue surfaced as ?code=no_hash). Naming each field by
+          // the schema reference forces the mapping.
+          const rows = await db
+            .select({
+              id: schema.users.id,
+              name: schema.users.name,
+              email: schema.users.email,
+              image: schema.users.image,
+              hashedPassword: schema.users.hashedPassword,
+            })
+            .from(schema.users)
+            .where(eq(schema.users.email, email));
           const user = rows[0];
           if (!user) throw new NoUserError();
-          if (!user.hashedPassword) throw new NoHashError();
 
-          const ok = await bcrypt.compare(password, user.hashedPassword);
+          // Belt-and-suspenders: accept the snake_case field too if for some
+          // reason camelCase isn't populated by the driver.
+          const hash =
+            user.hashedPassword ?? (user as Record<string, unknown>).hashed_password;
+          if (!hash || typeof hash !== 'string') throw new NoHashError();
+
+          const ok = await bcrypt.compare(password, hash);
           if (!ok) throw new BadPasswordError();
 
           return {
