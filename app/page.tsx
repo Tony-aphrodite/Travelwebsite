@@ -59,76 +59,65 @@ export default async function HomePage() {
 
           <div className="relative h-[560px] lg:h-[680px]">
             {/* Soft gold halo backdrop */}
-            <div className="absolute top-[20%] left-[25%] w-[320px] h-[320px] rounded-full bg-gold-400/30 blur-3xl pointer-events-none" />
+            <div className="absolute top-[20%] left-[25%] w-[380px] h-[380px] rounded-full bg-gold-400/30 blur-3xl pointer-events-none" />
 
-            {/* Decorative "washi tape" detail — diagonal strip top-left */}
-            <div className="absolute top-2 left-20 w-16 h-5 bg-gold-300/60 -rotate-[18deg] rounded-sm shadow-sm pointer-events-none z-40" />
+            {/* Scattered decorative gold dots */}
+            <div className="absolute top-3 left-16 w-2 h-2 rounded-full bg-gold-500 pointer-events-none" />
+            <div className="absolute top-12 right-2 w-1.5 h-1.5 rounded-full bg-gold-600 pointer-events-none" />
+            <div className="absolute top-[55%] right-1 w-1 h-1 rounded-full bg-gold-700 pointer-events-none" />
+            <div className="absolute bottom-[42%] left-1 w-1.5 h-1.5 rounded-full bg-gold-500 pointer-events-none" />
+            <div className="absolute bottom-12 right-[42%] w-1 h-1 rounded-full bg-gold-600 pointer-events-none" />
 
-            {/* Polaroid #1 — Patagonia (back layer, tilted left) */}
-            <div className="absolute top-6 left-2 w-[180px] lg:w-[210px] bg-ivory-50 p-3 pb-10 -rotate-[9deg] shadow-[0_10px_35px_-10px_rgba(11,21,53,0.30)] animate-float">
-              <div className="aspect-[3/4] overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&q=80"
-                  alt="Patagonia, glaciares y montanas"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="absolute bottom-2 left-0 right-0 text-center font-script italic text-[13px] text-charcoal-700">
-                Patagonia '25
-              </div>
+            {/* Photo 1 — Patagonia (top-left, dramatic tilt) */}
+            <div className="absolute w-[180px] lg:w-[215px] h-[230px] lg:h-[275px] top-6 left-0 rounded-3xl overflow-hidden shadow-[0_18px_45px_-12px_rgba(11,21,53,0.32)] animate-float -rotate-[11deg]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&q=80"
+                alt="Patagonia, glaciares y montanas"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
             </div>
 
-            {/* Polaroid #2 — Maldivas (top right, tilted right) */}
-            <div className="absolute top-0 right-4 w-[200px] lg:w-[230px] bg-ivory-50 p-3 pb-10 rotate-[6deg] shadow-[0_15px_45px_-10px_rgba(11,21,53,0.35)] animate-float-delayed z-10">
-              <div className="aspect-[3/4] overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=700&q=80"
-                  alt="Maldivas, playa turquesa vista aerea"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="absolute bottom-2 left-0 right-0 text-center font-script italic text-[13px] text-charcoal-700">
-                Maldivas '24
-              </div>
+            {/* Photo 2 — Maldivas (top-right, medium tilt, largest) */}
+            <div className="absolute w-[215px] lg:w-[255px] h-[265px] lg:h-[320px] top-0 right-2 rounded-3xl overflow-hidden shadow-[0_25px_55px_-12px_rgba(11,21,53,0.40)] animate-float-delayed rotate-[7deg] z-10">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=700&q=80"
+                alt="Maldivas, playa turquesa vista aerea"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
             </div>
 
-            {/* Polaroid #3 — Bali (middle, slightly left) */}
-            <div className="absolute top-[40%] left-12 w-[200px] lg:w-[235px] bg-ivory-50 p-3 pb-10 -rotate-[3deg] shadow-[0_18px_50px_-10px_rgba(11,21,53,0.40)] animate-float z-20">
-              <div className="aspect-[3/4] overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="https://images.unsplash.com/photo-1544644181-1484b3fdfc62?w=700&q=80"
-                  alt="Bali, templo flotante al amanecer"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="absolute bottom-2 left-0 right-0 text-center font-script italic text-[13px] text-charcoal-700">
-                Bali '24
-              </div>
+            {/* Photo 3 — Bali (middle, soft right tilt, overlapping center) */}
+            <div className="absolute w-[200px] lg:w-[235px] h-[255px] lg:h-[300px] top-[40%] left-8 rounded-3xl overflow-hidden shadow-[0_22px_50px_-12px_rgba(11,21,53,0.38)] animate-float rotate-[4deg] z-20">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://images.unsplash.com/photo-1544644181-1484b3fdfc62?w=700&q=80"
+                alt="Bali, templo flotante al amanecer"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
             </div>
 
-            {/* Polaroid #4 — Santorini (front, most prominent, holds the stamp) */}
-            <div className="absolute bottom-2 right-2 w-[220px] lg:w-[255px] bg-ivory-50 p-3 pb-10 rotate-[5deg] shadow-[0_25px_60px_-12px_rgba(11,21,53,0.45)] animate-float-delayed z-30">
-              <div className="aspect-[3/4] overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=700&q=80"
-                  alt="Santorini, cupulas blancas sobre el mar Egeo"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="absolute bottom-2 left-0 right-0 text-center font-script italic text-[13px] text-charcoal-700">
-                Santorini '25
-              </div>
+            {/* Photo 4 — Santorini (front, bottom-right, holds the stamp) */}
+            <div className="absolute w-[220px] lg:w-[260px] h-[275px] lg:h-[330px] bottom-2 right-0 rounded-3xl overflow-hidden shadow-[0_30px_60px_-12px_rgba(11,21,53,0.45)] animate-float-delayed -rotate-[7deg] z-30">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=700&q=80"
+                alt="Santorini, cupulas blancas sobre el mar Egeo"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
 
-              {/* Premiado 2025 — vintage stamp affixed to this polaroid */}
-              <div className="absolute -top-5 -right-5 w-[88px] h-[88px] rounded-full bg-gradient-to-br from-gold-500 via-gold-600 to-gold-700 ring-[3px] ring-ivory-50 flex flex-col items-center justify-center text-plum-900 font-bold leading-none rotate-[14deg] shadow-[0_8px_20px_rgba(11,21,53,0.30)]">
+              {/* Premiado 2025 — gold stamp affixed to corner */}
+              <div className="absolute -top-5 -left-5 w-[88px] h-[88px] rounded-full bg-gradient-to-br from-gold-500 via-gold-600 to-gold-700 ring-[3px] ring-ivory-50 flex flex-col items-center justify-center text-plum-900 font-bold leading-none rotate-[14deg] shadow-[0_8px_20px_rgba(11,21,53,0.30)]">
                 <Award size={18} className="mb-0.5" />
                 <span className="text-[9px] uppercase tracking-[0.15em]">Premiado</span>
                 <span className="font-display text-base mt-0.5">2025</span>
               </div>
+            </div>
+
+            {/* Handwritten editorial label */}
+            <div className="absolute bottom-3 left-2 lg:left-8 font-script italic text-2xl text-gold-700 -rotate-[4deg] pointer-events-none">
+              coleccion &apos;26
             </div>
           </div>
         </div>
