@@ -16,11 +16,11 @@ export default async function HomePage() {
   return (
     <>
       {/* HERO */}
-      <section className="relative pt-32 pb-32 overflow-hidden bg-ivory-50 min-h-screen">
+      <section className="relative pt-28 pb-10 overflow-hidden bg-ivory-50">
         <div className="absolute w-[400px] h-[400px] -top-24 -right-24 rounded-full bg-gold-300/35 blur-3xl pointer-events-none" />
         <div className="absolute w-[300px] h-[300px] -bottom-12 left-[10%] rounded-full bg-rose-100/60 blur-3xl pointer-events-none" />
 
-        <div className="max-w-[1440px] mx-auto px-6 lg:px-10 grid lg:grid-cols-[1.1fr_0.9fr] gap-16 items-center relative z-10">
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-10 grid lg:grid-cols-[1.1fr_0.9fr] gap-10 items-center relative z-10">
           <div className="max-w-[600px]">
             <span className="eyebrow">Coleccion 2026</span>
             <h1 className="heading-xl mt-6 mb-6 text-balance">
@@ -39,7 +39,7 @@ export default async function HomePage() {
                 Explorar destinos
               </Link>
             </div>
-            <div className="flex gap-10 mt-12 pt-8 border-t border-ivory-200 flex-wrap">
+            <div className="flex gap-8 mt-8 pt-6 border-t border-ivory-200 flex-wrap">
               {[
                 { value: '120+', label: 'Destinos curados' },
                 { value: '15k', label: 'Viajeras felices' },
@@ -57,19 +57,19 @@ export default async function HomePage() {
             </div>
           </div>
 
-          <div className="relative h-[560px] lg:h-[680px]">
+          <div className="relative h-[420px] lg:h-[480px]">
             {/* Soft gold halo backdrop */}
-            <div className="absolute top-[20%] left-[25%] w-[380px] h-[380px] rounded-full bg-gold-400/30 blur-3xl pointer-events-none" />
+            <div className="absolute top-[20%] left-[25%] w-[320px] h-[320px] rounded-full bg-gold-400/30 blur-3xl pointer-events-none" />
 
             {/* Scattered decorative gold dots */}
             <div className="absolute top-3 left-16 w-2 h-2 rounded-full bg-gold-500 pointer-events-none" />
-            <div className="absolute top-12 right-2 w-1.5 h-1.5 rounded-full bg-gold-600 pointer-events-none" />
+            <div className="absolute top-10 right-2 w-1.5 h-1.5 rounded-full bg-gold-600 pointer-events-none" />
             <div className="absolute top-[55%] right-1 w-1 h-1 rounded-full bg-gold-700 pointer-events-none" />
             <div className="absolute bottom-[42%] left-1 w-1.5 h-1.5 rounded-full bg-gold-500 pointer-events-none" />
-            <div className="absolute bottom-12 right-[42%] w-1 h-1 rounded-full bg-gold-600 pointer-events-none" />
+            <div className="absolute bottom-10 right-[42%] w-1 h-1 rounded-full bg-gold-600 pointer-events-none" />
 
             {/* Photo 1 — Patagonia (top-left, dramatic tilt) */}
-            <div className="absolute w-[180px] lg:w-[215px] h-[230px] lg:h-[275px] top-6 left-0 rounded-3xl overflow-hidden shadow-[0_18px_45px_-12px_rgba(11,21,53,0.32)] animate-float -rotate-[11deg]">
+            <div className="absolute w-[150px] lg:w-[180px] h-[195px] lg:h-[230px] top-4 left-0 rounded-3xl overflow-hidden shadow-[0_15px_38px_-12px_rgba(11,21,53,0.32)] animate-float -rotate-[11deg]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&q=80"
@@ -79,7 +79,7 @@ export default async function HomePage() {
             </div>
 
             {/* Photo 2 — Maldivas (top-right, medium tilt, largest) */}
-            <div className="absolute w-[215px] lg:w-[255px] h-[265px] lg:h-[320px] top-0 right-2 rounded-3xl overflow-hidden shadow-[0_25px_55px_-12px_rgba(11,21,53,0.40)] animate-float-delayed rotate-[7deg] z-10">
+            <div className="absolute w-[180px] lg:w-[215px] h-[225px] lg:h-[270px] top-0 right-2 rounded-3xl overflow-hidden shadow-[0_22px_48px_-12px_rgba(11,21,53,0.40)] animate-float-delayed rotate-[7deg] z-10">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=700&q=80"
@@ -89,7 +89,7 @@ export default async function HomePage() {
             </div>
 
             {/* Photo 3 — Bali (middle, soft right tilt, overlapping center) */}
-            <div className="absolute w-[200px] lg:w-[235px] h-[255px] lg:h-[300px] top-[40%] left-8 rounded-3xl overflow-hidden shadow-[0_22px_50px_-12px_rgba(11,21,53,0.38)] animate-float rotate-[4deg] z-20">
+            <div className="absolute w-[170px] lg:w-[200px] h-[215px] lg:h-[255px] top-[42%] left-6 rounded-3xl overflow-hidden shadow-[0_20px_45px_-12px_rgba(11,21,53,0.38)] animate-float rotate-[4deg] z-20">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="https://images.unsplash.com/photo-1544644181-1484b3fdfc62?w=700&q=80"
@@ -99,7 +99,7 @@ export default async function HomePage() {
             </div>
 
             {/* Photo 4 — Santorini (front, bottom-right, holds the stamp) */}
-            <div className="absolute w-[220px] lg:w-[260px] h-[275px] lg:h-[330px] bottom-2 right-0 rounded-3xl overflow-hidden shadow-[0_30px_60px_-12px_rgba(11,21,53,0.45)] animate-float-delayed -rotate-[7deg] z-30">
+            <div className="absolute w-[185px] lg:w-[220px] h-[235px] lg:h-[280px] bottom-0 right-0 rounded-3xl overflow-hidden shadow-[0_25px_55px_-12px_rgba(11,21,53,0.45)] animate-float-delayed -rotate-[7deg] z-30">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=700&q=80"
@@ -108,15 +108,15 @@ export default async function HomePage() {
               />
 
               {/* Premiado 2025 — gold stamp affixed to corner */}
-              <div className="absolute -top-5 -left-5 w-[88px] h-[88px] rounded-full bg-gradient-to-br from-gold-500 via-gold-600 to-gold-700 ring-[3px] ring-ivory-50 flex flex-col items-center justify-center text-plum-900 font-bold leading-none rotate-[14deg] shadow-[0_8px_20px_rgba(11,21,53,0.30)]">
-                <Award size={18} className="mb-0.5" />
-                <span className="text-[9px] uppercase tracking-[0.15em]">Premiado</span>
-                <span className="font-display text-base mt-0.5">2025</span>
+              <div className="absolute -top-4 -left-4 w-[76px] h-[76px] rounded-full bg-gradient-to-br from-gold-500 via-gold-600 to-gold-700 ring-[3px] ring-ivory-50 flex flex-col items-center justify-center text-plum-900 font-bold leading-none rotate-[14deg] shadow-[0_8px_20px_rgba(11,21,53,0.30)]">
+                <Award size={15} className="mb-0.5" />
+                <span className="text-[8px] uppercase tracking-[0.15em]">Premiado</span>
+                <span className="font-display text-sm mt-0.5">2025</span>
               </div>
             </div>
 
             {/* Handwritten editorial label */}
-            <div className="absolute bottom-3 left-2 lg:left-8 font-script italic text-2xl text-gold-700 -rotate-[4deg] pointer-events-none">
+            <div className="absolute -bottom-1 left-2 lg:left-8 font-script italic text-xl text-gold-700 -rotate-[4deg] pointer-events-none">
               coleccion &apos;26
             </div>
           </div>
@@ -124,14 +124,14 @@ export default async function HomePage() {
       </section>
 
       {/* SEARCH WIDGET */}
-      <div id="search" className="container-site -mt-20 relative z-20">
+      <div id="search" className="container-site -mt-6 lg:-mt-10 relative z-20 mb-4">
         <SearchWidget />
       </div>
 
       {/* DESTINATIONS */}
-      <section className="py-24">
+      <section className="py-16">
         <div className="container-site">
-          <div className="flex justify-between items-end gap-8 flex-wrap mb-12">
+          <div className="flex justify-between items-end gap-8 flex-wrap mb-8">
             <div className="max-w-xl">
               <span className="eyebrow">Destinos del momento</span>
               <h2 className="heading-lg mt-4">
@@ -185,9 +185,9 @@ export default async function HomePage() {
       </section>
 
       {/* OFFERS */}
-      <section className="py-24 bg-ivory-50">
+      <section className="py-16 bg-ivory-50">
         <div className="container-site">
-          <div className="flex justify-between items-end gap-8 flex-wrap mb-12">
+          <div className="flex justify-between items-end gap-8 flex-wrap mb-8">
             <div className="max-w-xl">
               <span className="eyebrow">Ofertas exclusivas</span>
               <h2 className="heading-lg mt-4">
@@ -245,7 +245,7 @@ export default async function HomePage() {
       </section>
 
       {/* REWARDS */}
-      <section className="py-24 bg-ivory-100 relative overflow-hidden">
+      <section className="py-16 bg-ivory-100 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(196,148,53,0.10),transparent_50%),radial-gradient(circle_at_80%_20%,rgba(216,119,97,0.08),transparent_50%)] pointer-events-none" />
         <div className="container-site grid lg:grid-cols-2 gap-16 items-center relative z-10">
           <div>
@@ -316,9 +316,9 @@ export default async function HomePage() {
       </section>
 
       {/* EXPERIENCES */}
-      <section className="py-24 bg-ivory-50">
+      <section className="py-16 bg-ivory-50">
         <div className="container-site">
-          <div className="text-center max-w-2xl mx-auto mb-12">
+          <div className="text-center max-w-2xl mx-auto mb-8">
             <span className="eyebrow">Experiencias Aurelia</span>
             <h2 className="heading-lg mt-4 mb-3">
               Momentos <span className="italic-script">inolvidables</span>
@@ -358,9 +358,9 @@ export default async function HomePage() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-24 bg-ivory-100">
+      <section className="py-16 bg-ivory-100">
         <div className="container-site">
-          <div className="text-center max-w-2xl mx-auto mb-12">
+          <div className="text-center max-w-2xl mx-auto mb-8">
             <span className="eyebrow">Voces de nuestras viajeras</span>
             <h2 className="heading-lg mt-4">
               Historias que <span className="italic-script">inspiran</span>
@@ -401,9 +401,9 @@ export default async function HomePage() {
       </section>
 
       {/* BLOG */}
-      <section className="py-24">
+      <section className="py-16">
         <div className="container-site">
-          <div className="flex justify-between items-end gap-8 flex-wrap mb-12">
+          <div className="flex justify-between items-end gap-8 flex-wrap mb-8">
             <div className="max-w-xl">
               <span className="eyebrow">Diario de Aurelia</span>
               <h2 className="heading-lg mt-4">
@@ -450,7 +450,7 @@ export default async function HomePage() {
       </section>
 
       {/* NEWSLETTER */}
-      <section className="py-20 bg-ivory-100">
+      <section className="py-14 bg-ivory-100">
         <div className="container-site max-w-2xl text-center">
           <span className="eyebrow">Carta de Aurelia</span>
           <h2 className="heading-lg mt-4 mb-4">
