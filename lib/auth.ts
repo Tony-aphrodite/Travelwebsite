@@ -3,23 +3,19 @@ import Google from 'next-auth/providers/google';
 import Credentials from 'next-auth/providers/credentials';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import bcrypt from 'bcryptjs';
+import { authConfig } from './auth.config';
 import { db } from '@/lib/db';
 import * as schema from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  trustHost: true,
+  ...authConfig,
   adapter: DrizzleAdapter(db, {
     usersTable: schema.users,
     accountsTable: schema.accounts,
     sessionsTable: schema.sessions,
     verificationTokensTable: schema.verificationTokens,
   }),
-  session: { strategy: 'jwt' },
-  pages: {
-    signIn: '/auth/login',
-    error: '/auth/error',
-  },
   providers: [
     Google({
       clientId: process.env.AUTH_GOOGLE_ID!,
@@ -54,21 +50,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
+    ...authConfig.callbacks,
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        const rows = await db.select({ role: schema.users.role })
-          .from(schema.users).where(eq(schema.users.id, user.id!));
+        const rows = await db
+          .select({ role: schema.users.role })
+          .from(schema.users)
+          .where(eq(schema.users.id, user.id!));
         token.role = rows[0]?.role ?? 'user';
       }
       return token;
-    },
-    async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.id as string;
-        (session.user as any).role = token.role;
-      }
-      return session;
     },
   },
 });
