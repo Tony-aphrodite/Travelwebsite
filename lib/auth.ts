@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth';
+import NextAuth, { CredentialsSignin } from 'next-auth';
 import Google from 'next-auth/providers/google';
 import Credentials from 'next-auth/providers/credentials';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
@@ -7,6 +7,18 @@ import { authConfig } from './auth.config';
 import { db } from '@/lib/db';
 import * as schema from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
+
+// Diagnostic error codes — each step throws its own subclass so the
+// resulting ?code= query parameter on the redirect tells us exactly
+// where authorize() bailed. (Can't read Vercel function logs.)
+class NoCredsError extends CredentialsSignin { code = 'no_creds'; }
+class NoUserError extends CredentialsSignin { code = 'no_user'; }
+class NoHashError extends CredentialsSignin { code = 'no_hash'; }
+class BadPasswordError extends CredentialsSignin { code = 'bad_password'; }
+class DbExceptionError extends CredentialsSignin {
+  code = 'db_exception';
+  constructor(msg: string) { super(); this.code = `db_exc_${msg.slice(0, 40)}`; }
+}
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
@@ -28,42 +40,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         password: { label: 'Contraseña', type: 'password' },
       },
       async authorize(credentials) {
-        // TEMP DIAGNOSTIC LOGS — remove after credentials issue is resolved.
-        console.log('[authorize] called with keys:', Object.keys(credentials || {}));
-        console.log('[authorize] email type:', typeof credentials?.email, 'length:', String(credentials?.email || '').length);
-        console.log('[authorize] password type:', typeof credentials?.password, 'length:', String(credentials?.password || '').length);
-
         if (!credentials?.email || !credentials?.password) {
-          console.log('[authorize] returning null: missing credentials');
-          return null;
+          throw new NoCredsError();
         }
 
         const email = String(credentials.email).toLowerCase().trim();
         const password = String(credentials.password);
-        console.log('[authorize] normalized email:', JSON.stringify(email));
 
         try {
           const rows = await db.select().from(schema.users).where(eq(schema.users.email, email));
-          console.log('[authorize] db rows:', rows.length);
           const user = rows[0];
-          if (!user) {
-            console.log('[authorize] returning null: no user row');
-            return null;
-          }
-          console.log('[authorize] user:', { id: user.id, role: user.role, hasHash: !!user.hashedPassword, hashLen: user.hashedPassword?.length });
-          if (!user.hashedPassword) {
-            console.log('[authorize] returning null: no hashed password');
-            return null;
-          }
+          if (!user) throw new NoUserError();
+          if (!user.hashedPassword) throw new NoHashError();
 
           const ok = await bcrypt.compare(password, user.hashedPassword);
-          console.log('[authorize] bcrypt.compare =>', ok);
-          if (!ok) {
-            console.log('[authorize] returning null: bcrypt failed');
-            return null;
-          }
+          if (!ok) throw new BadPasswordError();
 
-          console.log('[authorize] success, returning user');
           return {
             id: user.id,
             name: user.name,
@@ -71,8 +63,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             image: user.image,
           };
         } catch (err) {
-          console.log('[authorize] EXCEPTION:', err);
-          return null;
+          // Re-throw our own diagnostic errors as-is; wrap anything else
+          if (err instanceof CredentialsSignin) throw err;
+          throw new DbExceptionError(String((err as Error)?.message || err));
         }
       },
     }),
