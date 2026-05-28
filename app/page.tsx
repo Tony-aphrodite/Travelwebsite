@@ -39,22 +39,6 @@ export default async function HomePage() {
                 Explorar destinos
               </Link>
             </div>
-            <div className="flex gap-8 mt-8 pt-6 border-t border-ivory-200 flex-wrap">
-              {[
-                { value: '120+', label: 'Destinos curados' },
-                { value: '15k', label: 'Viajeras felices' },
-                { value: '4.9', label: 'Valoracion' },
-              ].map((stat) => (
-                <div key={stat.label}>
-                  <strong className="font-display text-4xl text-plum-700 block leading-none">
-                    {stat.value}
-                  </strong>
-                  <span className="text-xs text-charcoal-500 uppercase tracking-wider">
-                    {stat.label}
-                  </span>
-                </div>
-              ))}
-            </div>
           </div>
 
           <div className="relative h-[420px] lg:h-[480px]">
