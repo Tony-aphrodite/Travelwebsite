@@ -54,27 +54,44 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const password = String(credentials.password);
 
         try {
-          // Use raw SQL — Drizzle's column mapping was dropping hashed_password
-          // on Vercel for unknown reasons. Direct query returns rows as plain
-          // objects with the actual DB column names.
+          // RAW SQL v3 (probe: rawsqlv3) — pin a marker so we can verify
+          // this exact code is what's deployed.
           const rows = (await rawSql`
             SELECT id, name, email, image, hashed_password
             FROM users
             WHERE email = ${email}
-          `) as Array<{ id: string; name: string | null; email: string; image: string | null; hashed_password: string | null }>;
+          `) as Array<Record<string, unknown>>;
 
           const user = rows[0];
           if (!user) throw new NoUserError();
-          if (!user.hashed_password) throw new NoHashError();
 
-          const ok = await bcrypt.compare(password, user.hashed_password);
+          // Inspect every possible key spelling
+          const possibleKeys = ['hashed_password', 'hashedPassword', 'hashedpassword'];
+          let hash: string | null = null;
+          let foundKey = 'none';
+          for (const k of possibleKeys) {
+            if (typeof user[k] === 'string' && (user[k] as string).length > 0) {
+              hash = user[k] as string;
+              foundKey = k;
+              break;
+            }
+          }
+          if (!hash) {
+            // Throw with diagnostic so we can see what keys the row actually has
+            const allKeys = Object.keys(user).join(',');
+            const error = new NoHashError();
+            error.code = `no_hash_v3_keys_${allKeys.slice(0, 60).replace(/[^a-z_,]/gi, '')}`;
+            throw error;
+          }
+
+          const ok = await bcrypt.compare(password, hash);
           if (!ok) throw new BadPasswordError();
 
           return {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            image: user.image,
+            id: user.id as string,
+            name: (user.name as string) ?? null,
+            email: user.email as string,
+            image: (user.image as string) ?? null,
           };
         } catch (err) {
           if (err instanceof CredentialsSignin) throw err;
