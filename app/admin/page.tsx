@@ -26,7 +26,7 @@ import {
   X,
   type LucideIcon,
 } from 'lucide-react';
-import { formatCurrency } from '@/lib/utils';
+import { formatCurrency, slugify } from '@/lib/utils';
 
 type Panel = 'dashboard' | 'reservas' | 'hoteles' | 'paquetes' | 'usuarios' | 'reportes';
 
@@ -120,8 +120,8 @@ export default function AdminPage() {
   const [recent, setRecent] = useState<Booking[]>([]);
   const [loadingData, setLoadingData] = useState(true);
 
-  const [editingHotel, setEditingHotel] = useState<HotelRow | null>(null);
-  const [editingPackage, setEditingPackage] = useState<PackageRow | null>(null);
+  const [editingHotel, setEditingHotel] = useState<{ data: HotelRow; isNew: boolean } | null>(null);
+  const [editingPackage, setEditingPackage] = useState<{ data: PackageRow; isNew: boolean } | null>(null);
 
   const isAdmin = (session?.user as any)?.role === 'admin';
 
@@ -194,33 +194,76 @@ export default function AdminPage() {
     }
   };
 
+  const emptyHotel = (): HotelRow => ({
+    id: '',
+    name: '',
+    location: '',
+    country: '',
+    image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&q=80',
+    price: 200,
+    rating: 4.5,
+    stars: 5,
+    ratingLabel: 'Excepcional',
+    description: '',
+  });
+
+  const emptyPackage = (): PackageRow => ({
+    id: '',
+    title: '',
+    destination: '',
+    image: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1200&q=80',
+    duration: '7 noches',
+    price: 1500,
+    oldPrice: 2000,
+    badge: 'Destacado',
+    description: '',
+  });
+
   const saveHotel = async (h: HotelRow) => {
-    const res = await fetch(`/api/admin/hotels/${h.id}`, {
-      method: 'PUT',
+    const isNew = editingHotel?.isNew ?? false;
+    const id = (h.id && h.id.trim()) || slugify(h.name);
+    const payload = { ...h, id };
+
+    const res = await fetch(isNew ? '/api/admin/hotels' : `/api/admin/hotels/${id}`, {
+      method: isNew ? 'POST' : 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(h),
+      body: JSON.stringify(payload),
     });
     if (res.ok) {
-      const updated = await res.json();
-      setHotels((prev) => prev.map((x) => (x.id === h.id ? { ...x, ...updated } : x)));
+      const saved = await res.json();
+      setHotels((prev) =>
+        isNew
+          ? [saved, ...prev]
+          : prev.map((x) => (x.id === id ? { ...x, ...saved } : x)),
+      );
       setEditingHotel(null);
     } else {
-      alert('No se pudo guardar el hotel');
+      const err = await res.json().catch(() => ({}));
+      alert(err.error || (isNew ? 'No se pudo crear el hotel' : 'No se pudo guardar el hotel'));
     }
   };
 
   const savePackage = async (p: PackageRow) => {
-    const res = await fetch(`/api/admin/packages/${p.id}`, {
-      method: 'PUT',
+    const isNew = editingPackage?.isNew ?? false;
+    const id = (p.id && p.id.trim()) || slugify(p.title);
+    const payload = { ...p, id };
+
+    const res = await fetch(isNew ? '/api/admin/packages' : `/api/admin/packages/${id}`, {
+      method: isNew ? 'POST' : 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(p),
+      body: JSON.stringify(payload),
     });
     if (res.ok) {
-      const updated = await res.json();
-      setPackages((prev) => prev.map((x) => (x.id === p.id ? { ...x, ...updated } : x)));
+      const saved = await res.json();
+      setPackages((prev) =>
+        isNew
+          ? [saved, ...prev]
+          : prev.map((x) => (x.id === id ? { ...x, ...saved } : x)),
+      );
       setEditingPackage(null);
     } else {
-      alert('No se pudo guardar el paquete');
+      const err = await res.json().catch(() => ({}));
+      alert(err.error || (isNew ? 'No se pudo crear el paquete' : 'No se pudo guardar el paquete'));
     }
   };
 
@@ -333,8 +376,22 @@ export default function AdminPage() {
               <>
                 {panel === 'dashboard' && <Dashboard stats={stats} recent={recent} />}
                 {panel === 'reservas' && <Reservas bookings={bookings} onStatusChange={changeBookingStatus} />}
-                {panel === 'hoteles' && <Hoteles hotels={hotels} onDelete={deleteHotel} onEdit={setEditingHotel} />}
-                {panel === 'paquetes' && <Paquetes packages={packages} onDelete={deletePackage} onEdit={setEditingPackage} />}
+                {panel === 'hoteles' && (
+                  <Hoteles
+                    hotels={hotels}
+                    onDelete={deleteHotel}
+                    onEdit={(h) => setEditingHotel({ data: h, isNew: false })}
+                    onCreate={() => setEditingHotel({ data: emptyHotel(), isNew: true })}
+                  />
+                )}
+                {panel === 'paquetes' && (
+                  <Paquetes
+                    packages={packages}
+                    onDelete={deletePackage}
+                    onEdit={(p) => setEditingPackage({ data: p, isNew: false })}
+                    onCreate={() => setEditingPackage({ data: emptyPackage(), isNew: true })}
+                  />
+                )}
                 {panel === 'usuarios' && <Usuarios users={users} currentUserId={session.user?.id} onRoleChange={changeUserRole} />}
                 {panel === 'reportes' && <Reportes bookings={bookings} />}
               </>
@@ -344,10 +401,20 @@ export default function AdminPage() {
       </div>
 
       {editingHotel && (
-        <HotelEditModal hotel={editingHotel} onClose={() => setEditingHotel(null)} onSave={saveHotel} />
+        <HotelEditModal
+          hotel={editingHotel.data}
+          isNew={editingHotel.isNew}
+          onClose={() => setEditingHotel(null)}
+          onSave={saveHotel}
+        />
       )}
       {editingPackage && (
-        <PackageEditModal pkg={editingPackage} onClose={() => setEditingPackage(null)} onSave={savePackage} />
+        <PackageEditModal
+          pkg={editingPackage.data}
+          isNew={editingPackage.isNew}
+          onClose={() => setEditingPackage(null)}
+          onSave={savePackage}
+        />
       )}
     </div>
   );
@@ -513,15 +580,20 @@ function Hoteles({
   hotels,
   onDelete,
   onEdit,
+  onCreate,
 }: {
   hotels: HotelRow[];
   onDelete: (id: string, name: string) => void;
   onEdit: (h: HotelRow) => void;
+  onCreate: () => void;
 }) {
   return (
     <div className="space-y-5">
       <div className="flex justify-between items-center">
         <p className="text-sm text-charcoal-500">{hotels.length} hoteles curados</p>
+        <button onClick={onCreate} className="btn btn-primary btn-sm">
+          <Plus size={14} /> Agregar hotel
+        </button>
       </div>
       <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
         {hotels.map((h) => (
@@ -560,15 +632,20 @@ function Paquetes({
   packages,
   onDelete,
   onEdit,
+  onCreate,
 }: {
   packages: PackageRow[];
   onDelete: (id: string, title: string) => void;
   onEdit: (p: PackageRow) => void;
+  onCreate: () => void;
 }) {
   return (
     <div className="space-y-5">
       <div className="flex justify-between items-center">
         <p className="text-sm text-charcoal-500">{packages.length} paquetes activos</p>
+        <button onClick={onCreate} className="btn btn-primary btn-sm">
+          <Plus size={14} /> Nuevo paquete
+        </button>
       </div>
       <div className="space-y-4">
         {packages.map((p) => (
@@ -764,10 +841,12 @@ function ModalShell({ title, onClose, children }: { title: string; onClose: () =
 
 function HotelEditModal({
   hotel,
+  isNew = false,
   onClose,
   onSave,
 }: {
   hotel: HotelRow;
+  isNew?: boolean;
   onClose: () => void;
   onSave: (h: HotelRow) => Promise<void>;
 }) {
@@ -789,7 +868,7 @@ function HotelEditModal({
   };
 
   return (
-    <ModalShell title={`Editar hotel`} onClose={onClose}>
+    <ModalShell title={isNew ? 'Nuevo hotel' : 'Editar hotel'} onClose={onClose}>
       <form onSubmit={handleSubmit} className="grid sm:grid-cols-2 gap-4">
         <div className="sm:col-span-2">
           <label className="field-label">Nombre</label>
@@ -846,10 +925,12 @@ function HotelEditModal({
 
 function PackageEditModal({
   pkg,
+  isNew = false,
   onClose,
   onSave,
 }: {
   pkg: PackageRow;
+  isNew?: boolean;
   onClose: () => void;
   onSave: (p: PackageRow) => Promise<void>;
 }) {
@@ -871,7 +952,7 @@ function PackageEditModal({
   };
 
   return (
-    <ModalShell title="Editar paquete" onClose={onClose}>
+    <ModalShell title={isNew ? 'Nuevo paquete' : 'Editar paquete'} onClose={onClose}>
       <form onSubmit={handleSubmit} className="grid sm:grid-cols-2 gap-4">
         <div className="sm:col-span-2">
           <label className="field-label">Titulo</label>

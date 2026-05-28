@@ -57,29 +57,43 @@ export default async function HomePage() {
             </div>
           </div>
 
-          <div className="relative h-[500px] lg:h-[600px]">
-            <div className="absolute w-[280px] lg:w-[340px] h-[360px] lg:h-[440px] top-5 right-16 overflow-hidden shadow-soft-xl animate-float rounded-t-[200px]">
+          <div className="relative h-[520px] lg:h-[620px]">
+            {/* Decorative blur disc behind the main image */}
+            <div className="absolute top-[15%] right-[20%] w-[260px] h-[260px] rounded-full bg-gold-300/40 blur-3xl pointer-events-none" />
+
+            {/* Main image — leaf-shape, tilted right */}
+            <div
+              className="absolute w-[300px] lg:w-[360px] h-[420px] lg:h-[500px] top-2 right-8 overflow-hidden shadow-soft-xl animate-float rotate-[3deg] hover:rotate-0 transition-transform duration-700"
+              style={{ borderRadius: '6rem 1.5rem 6rem 1.5rem' }}
+            >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=800&q=80"
+                src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=900&q=80"
                 alt="Destino de lujo"
                 className="absolute inset-0 w-full h-full object-cover"
               />
             </div>
-            <div className="absolute w-[180px] lg:w-[220px] h-[240px] lg:h-[280px] bottom-10 left-0 overflow-hidden shadow-soft-xl animate-float-delayed rounded-b-[200px]">
+
+            {/* Secondary image — opposite leaf-shape, tilted left, overlapping */}
+            <div
+              className="absolute w-[210px] lg:w-[260px] h-[280px] lg:h-[340px] bottom-6 left-0 overflow-hidden shadow-soft-xl animate-float-delayed -rotate-[5deg] hover:rotate-0 transition-transform duration-700 ring-4 ring-ivory-50"
+              style={{ borderRadius: '1.5rem 6rem 1.5rem 6rem' }}
+            >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="https://images.unsplash.com/photo-1544644181-1484b3fdfc62?w=600&q=80"
+                src="https://images.unsplash.com/photo-1544644181-1484b3fdfc62?w=700&q=80"
                 alt="Experiencia de viaje"
                 className="absolute inset-0 w-full h-full object-cover"
               />
             </div>
-            <div className="absolute bottom-16 right-5 bg-ivory-50 p-4 rounded-2xl shadow-soft-lg flex items-center gap-3 animate-float">
-              <div className="w-11 h-11 rounded-full bg-gradient-to-br from-gold-600 to-rose-500 flex items-center justify-center text-white">
+
+            {/* Award badge — sits at the intersection */}
+            <div className="absolute bottom-12 right-2 bg-ivory-50 p-4 rounded-2xl shadow-soft-lg flex items-center gap-3 animate-float ring-1 ring-ivory-200">
+              <div className="w-11 h-11 rounded-full bg-gradient-to-br from-gold-600 to-gold-500 flex items-center justify-center text-plum-900">
                 <Award size={20} />
               </div>
               <div>
-                <strong className="block text-sm text-charcoal-900 font-semibold">
+                <strong className="block text-sm text-plum-900 font-semibold">
                   Premiado 2025
                 </strong>
                 <span className="text-xs text-charcoal-500">Mejor agencia boutique</span>
