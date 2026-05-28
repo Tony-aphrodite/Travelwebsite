@@ -77,18 +77,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             }
           }
           if (!hash) {
-            // Identify WHICH row Vercel sees (id + updated_at) so we can tell
-            // if Vercel is on a different DB branch / replica than local.
-            const id = String(user['id'] ?? 'noid');
-            const updatedRow = (await rawSql`
-              SELECT id, updated_at, length(hashed_password) AS hash_len
-              FROM users WHERE id = ${id}
-            `) as Array<{ id: string; updated_at: string | null; hash_len: number | null }>;
-            const r = updatedRow[0];
-            const u = r?.updated_at ? String(r.updated_at).slice(0, 19).replace(/[^0-9]/g, '') : 'noup';
-            const hl = r?.hash_len ?? 'null';
+            // Show DB connection info so we can tell which Neon DB / branch
+            // Vercel is reading from vs local.
+            const info = (await rawSql`
+              SELECT current_database() AS db,
+                     inet_server_addr()::text AS host,
+                     (SELECT count(*) FROM users) AS user_count
+            `) as Array<{ db: string; host: string | null; user_count: string }>;
+            const i = info[0];
             const error = new NoHashError();
-            error.code = `v5_id${id.slice(0, 12)}_u${u.slice(0, 14)}_hl${hl}`;
+            error.code = `v6_db${(i?.db || 'nodb').slice(0, 20)}_users${i?.user_count || 0}`;
             throw error;
           }
 
