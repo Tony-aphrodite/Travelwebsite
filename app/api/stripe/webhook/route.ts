@@ -8,6 +8,7 @@ import { getCartItems, clearCart, createBooking, creditPoints } from '@/lib/db/q
 import { calculateTaxes } from '@/lib/utils';
 import { calculatePointsEarned } from '@/lib/loyalty';
 import { sendBookingConfirmation } from '@/lib/email';
+import { getTaxRate, getPointsPerDollar } from '@/lib/settings';
 
 export async function POST(req: Request) {
   const body = await req.text();
@@ -28,11 +29,12 @@ export async function POST(req: Request) {
 
     // Get cart items and create bookings
     const cartItems = await getCartItems(userId);
+    const [rate, ppd] = await Promise.all([getTaxRate(), getPointsPerDollar()]);
     for (const item of cartItems) {
       const subtotal = item.unitPrice * item.quantity;
-      const taxes = calculateTaxes(subtotal);
+      const taxes = calculateTaxes(subtotal, rate);
       const total = subtotal + taxes;
-      const pointsEarned = calculatePointsEarned(total);
+      const pointsEarned = calculatePointsEarned(total, ppd);
 
       const [booking] = await createBooking({
         userId,

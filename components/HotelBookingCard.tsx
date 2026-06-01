@@ -1,12 +1,9 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Loader2, ShoppingCart } from 'lucide-react';
-
-const TAX_RATE = 0.12;
-const AURELIA_DISCOUNT_RATE = 0.05;
 
 function todayIso() {
   return new Date().toISOString().slice(0, 10);
@@ -38,6 +35,18 @@ export default function HotelBookingCard({
   const [guests, setGuests] = useState(2);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState('');
+  const [rates, setRates] = useState({ taxRate: 0.12, memberDiscount: 0.05 });
+
+  useEffect(() => {
+    fetch('/api/settings/public')
+      .then((r) => r.json())
+      .then((s) => {
+        if (s && typeof s.taxRate === 'number') {
+          setRates({ taxRate: s.taxRate / 100, memberDiscount: s.memberDiscountPercent / 100 });
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const nights = useMemo(() => {
     const a = new Date(checkIn).getTime();
@@ -47,8 +56,8 @@ export default function HotelBookingCard({
   }, [checkIn, checkOut]);
 
   const subtotal = unitPrice * nights;
-  const taxes = Math.round(subtotal * TAX_RATE);
-  const aureliaDiscount = Math.round(subtotal * AURELIA_DISCOUNT_RATE);
+  const taxes = Math.round(subtotal * rates.taxRate);
+  const aureliaDiscount = Math.round(subtotal * rates.memberDiscount);
   const total = subtotal + taxes - aureliaDiscount;
 
   async function handleReserve() {

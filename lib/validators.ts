@@ -145,6 +145,99 @@ export const consultationStatusUpdateSchema = z.object({
   notes: z.string().max(2000).optional(),
 });
 
+export const adminFlightSchema = z.object({
+  id: z.string().min(1),
+  airline: z.string().min(2).max(80),
+  airlineCode: z.string().min(1).max(8),
+  fromCode: z.string().min(2).max(8),
+  toCode: z.string().min(2).max(8),
+  fromCity: z.string().min(2).max(80),
+  toCity: z.string().min(2).max(80),
+  departure: z.string().min(2).max(40),
+  arrival: z.string().min(2).max(40),
+  duration: z.string().min(1).max(40),
+  stops: z.number().int().min(0).max(5).default(0),
+  stopInfo: z.string().max(120).default(''),
+  price: z.number().int().positive(),
+  cabin: z.string().min(2).max(40),
+  isActive: z.boolean().optional().default(true),
+});
+
+export const adminVillaSchema = z.object({
+  id: z.string().min(1),
+  name: z.string().min(2).max(120),
+  location: z.string().min(2).max(120),
+  country: z.string().min(2).max(80),
+  image: z.string().url(),
+  gallery: z.array(z.string().url()).optional().default([]),
+  guests: z.number().int().positive(),
+  bedrooms: z.number().int().positive(),
+  bathrooms: z.number().int().positive(),
+  price: z.number().int().positive(),
+  rating: z.number().min(0).max(5),
+  reviewCount: z.number().int().min(0).optional().default(0),
+  description: z.string().min(10),
+  amenities: z.array(z.string()).optional().default([]),
+  lat: z.number().nullable().optional(),
+  lng: z.number().nullable().optional(),
+  isActive: z.boolean().optional().default(true),
+});
+
+export const adminCarSchema = z.object({
+  id: z.string().min(1),
+  model: z.string().min(2).max(120),
+  category: z.string().min(2).max(60),
+  image: z.string().url(),
+  company: z.string().min(2).max(80),
+  seats: z.number().int().positive(),
+  transmission: z.string().min(2).max(40),
+  fuel: z.string().min(2).max(40),
+  price: z.number().int().positive(),
+  features: z.array(z.string()).optional().default([]),
+  isActive: z.boolean().optional().default(true),
+});
+
+export const adminDestinationSchema = z.object({
+  id: z.string().min(1),
+  name: z.string().min(2).max(120),
+  country: z.string().min(2).max(80),
+  image: z.string().url(),
+  priceFrom: z.number().int().positive(),
+  tagline: z.string().min(2).max(200),
+  lat: z.number().nullable().optional(),
+  lng: z.number().nullable().optional(),
+});
+
+export const adminTestimonialSchema = z.object({
+  name: z.string().min(2).max(80),
+  trip: z.string().min(2).max(120),
+  avatar: z.string().url(),
+  text: z.string().min(10).max(800),
+  isActive: z.boolean().optional().default(true),
+});
+
+export const adminPromoSchema = z.object({
+  code: z.string().min(2).max(40),
+  discountPercent: z.number().int().min(1).max(100),
+  maxUses: z.number().int().positive().nullable().optional(),
+  expiresAt: z.coerce.date().nullable().optional(),
+  isActive: z.boolean().optional().default(true),
+});
+
+export const adminSettingsSchema = z.object({
+  taxRate: z.number().int().min(0).max(100),
+  memberDiscountPercent: z.number().int().min(0).max(50),
+  currency: z.string().min(2).max(8),
+  loyaltyPointsPerDollar: z.number().int().min(0).max(100),
+  silverThreshold: z.number().int().min(0),
+  roseGoldThreshold: z.number().int().min(0),
+  platinumThreshold: z.number().int().min(0),
+  contactEmail: z.string().email(),
+  contactPhone: z.string().min(3).max(40),
+  whatsappNumber: z.string().min(3).max(40),
+  bookingEmailSubject: z.string().min(3).max(120),
+});
+
 export const contactSchema = z.object({
   name: z.string().min(2).max(80),
   lastName: z.string().max(80).optional().default(''),

@@ -18,9 +18,8 @@ export const TIER_LABELS: Record<LoyaltyTier, string> = {
   platinum: 'Platinum',
 };
 
-export function calculatePointsEarned(totalUsd: number): number {
-  // 1 point per $10 spent
-  return Math.floor(totalUsd / 10);
+export function calculatePointsEarned(totalUsd: number, pointsPerDollar = 1): number {
+  return Math.floor(totalUsd * pointsPerDollar);
 }
 
 export function getTierForPoints(points: number): LoyaltyTier {

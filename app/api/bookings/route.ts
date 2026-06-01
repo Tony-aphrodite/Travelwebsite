@@ -4,6 +4,7 @@ import { getUserBookings, createBooking } from '@/lib/db/queries';
 import { bookingSchema } from '@/lib/validators';
 import { calculateTaxes } from '@/lib/utils';
 import { calculatePointsEarned } from '@/lib/loyalty';
+import { getTaxRate, getPointsPerDollar } from '@/lib/settings';
 
 export async function GET() {
   const session = await auth();
@@ -28,9 +29,10 @@ export async function POST(req: Request) {
 
   const { type, itemId, itemName, checkIn, checkOut, guests, quantity, unitPrice } = parsed.data;
   const subtotal = unitPrice * quantity;
-  const taxes = calculateTaxes(subtotal);
+  const [rate, ppd] = await Promise.all([getTaxRate(), getPointsPerDollar()]);
+  const taxes = calculateTaxes(subtotal, rate);
   const total = subtotal + taxes;
-  const pointsEarned = calculatePointsEarned(total);
+  const pointsEarned = calculatePointsEarned(total, ppd);
 
   const booking = await createBooking({
     userId: session.user.id,

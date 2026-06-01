@@ -1,30 +1,12 @@
-import NextAuth, { CredentialsSignin } from 'next-auth';
+import NextAuth from 'next-auth';
 import Google from 'next-auth/providers/google';
 import Credentials from 'next-auth/providers/credentials';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import bcrypt from 'bcryptjs';
-import { neon } from '@neondatabase/serverless';
 import { authConfig } from './auth.config';
 import { db } from '@/lib/db';
 import * as schema from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
-
-// Raw SQL client — bypasses Drizzle's column mapping entirely for the
-// credentials lookup. Drizzle's snake_case→camelCase translation was
-// dropping the hashed_password field somewhere in the Vercel bundle.
-const rawSql = neon(process.env.DATABASE_URL!);
-
-// Diagnostic error codes — each step throws its own subclass so the
-// resulting ?code= query parameter on the redirect tells us exactly
-// where authorize() bailed. (Can't read Vercel function logs.)
-class NoCredsError extends CredentialsSignin { code = 'no_creds'; }
-class NoUserError extends CredentialsSignin { code = 'no_user'; }
-class NoHashError extends CredentialsSignin { code = 'no_hash'; }
-class BadPasswordError extends CredentialsSignin { code = 'bad_password'; }
-class DbExceptionError extends CredentialsSignin {
-  code = 'db_exception';
-  constructor(msg: string) { super(); this.code = `db_exc_${msg.slice(0, 40)}`; }
-}
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
@@ -46,51 +28,34 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         password: { label: 'Contraseña', type: 'password' },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          throw new NoCredsError();
-        }
+        if (!credentials?.email || !credentials?.password) return null;
 
         const email = String(credentials.email).toLowerCase().trim();
         const password = String(credentials.password);
 
-        try {
-          // RAW SQL v3 (probe: rawsqlv3) — pin a marker so we can verify
-          // this exact code is what's deployed.
-          const rows = (await rawSql`
-            SELECT id, name, email, image, hashed_password
-            FROM users
-            WHERE email = ${email}
-          `) as Array<Record<string, unknown>>;
+        const rows = await db
+          .select({
+            id: schema.users.id,
+            name: schema.users.name,
+            email: schema.users.email,
+            image: schema.users.image,
+            hashedPassword: schema.users.hashedPassword,
+          })
+          .from(schema.users)
+          .where(eq(schema.users.email, email));
 
-          const user = rows[0];
-          if (!user) throw new NoUserError();
+        const user = rows[0];
+        if (!user || !user.hashedPassword) return null;
 
-          // Inspect every possible key spelling
-          const possibleKeys = ['hashed_password', 'hashedPassword', 'hashedpassword'];
-          let hash: string | null = null;
-          let foundKey = 'none';
-          for (const k of possibleKeys) {
-            if (typeof user[k] === 'string' && (user[k] as string).length > 0) {
-              hash = user[k] as string;
-              foundKey = k;
-              break;
-            }
-          }
-          if (!hash) throw new NoHashError();
+        const ok = await bcrypt.compare(password, user.hashedPassword);
+        if (!ok) return null;
 
-          const ok = await bcrypt.compare(password, hash);
-          if (!ok) throw new BadPasswordError();
-
-          return {
-            id: user.id as string,
-            name: (user.name as string) ?? null,
-            email: user.email as string,
-            image: (user.image as string) ?? null,
-          };
-        } catch (err) {
-          if (err instanceof CredentialsSignin) throw err;
-          throw new DbExceptionError(String((err as Error)?.message || err));
-        }
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          image: user.image,
+        };
       },
     }),
   ],

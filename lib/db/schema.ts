@@ -360,6 +360,23 @@ export const consultationRequests = pgTable('consultation_requests', {
   index('consult_date_idx').on(t.preferredDate),
 ]);
 
+// ─── SITE SETTINGS (singleton row, id=1) ────────────
+export const siteSettings = pgTable('site_settings', {
+  id: integer('id').primaryKey().default(1),
+  taxRate: integer('tax_rate').default(12).notNull(),
+  memberDiscountPercent: integer('member_discount_percent').default(5).notNull(),
+  currency: text('currency').default('USD').notNull(),
+  loyaltyPointsPerDollar: integer('loyalty_points_per_dollar').default(1).notNull(),
+  silverThreshold: integer('silver_threshold').default(0).notNull(),
+  roseGoldThreshold: integer('rose_gold_threshold').default(2000).notNull(),
+  platinumThreshold: integer('platinum_threshold').default(8000).notNull(),
+  contactEmail: text('contact_email').default('hola@aureliaviajes.com').notNull(),
+  contactPhone: text('contact_phone').default('+52 55 0000 0000').notNull(),
+  whatsappNumber: text('whatsapp_number').default('+525500000000').notNull(),
+  bookingEmailSubject: text('booking_email_subject').default('Tu reserva con Aurelia Viajes').notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
 // ─── PASSWORD RESET TOKENS ──────────────────────────
 export const passwordResetTokens = pgTable('password_reset_tokens', {
   id: serial('id').primaryKey(),

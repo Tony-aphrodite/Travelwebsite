@@ -42,6 +42,7 @@ export default function CarritoPage() {
   const [promoCode, setPromoCode] = useState('');
   const [promoApplied, setPromoApplied] = useState(false);
   const [promoError, setPromoError] = useState('');
+  const [settings, setSettings] = useState({ taxRate: 12, memberDiscountPercent: 5 });
 
   useEffect(() => {
     if (status === 'authenticated') {
@@ -54,6 +55,14 @@ export default function CarritoPage() {
     } else if (status === 'unauthenticated') {
       setLoading(false);
     }
+    fetch('/api/settings/public')
+      .then((r) => r.json())
+      .then((s) => {
+        if (s && typeof s.taxRate === 'number') {
+          setSettings({ taxRate: s.taxRate, memberDiscountPercent: s.memberDiscountPercent });
+        }
+      })
+      .catch(() => {});
   }, [status]);
 
   const qtyTimers = useRef<Map<number, ReturnType<typeof setTimeout>>>(new Map());
@@ -139,9 +148,9 @@ export default function CarritoPage() {
   };
 
   const subtotal = items.reduce((sum, it) => sum + it.unitPrice * it.quantity, 0);
-  const taxes = Math.round(subtotal * 0.12);
+  const taxes = Math.round(subtotal * (settings.taxRate / 100));
   const discount = promoApplied ? Math.round(subtotal * 0.2) : 0;
-  const aureliaDiscount = Math.round(subtotal * 0.05);
+  const aureliaDiscount = Math.round(subtotal * (settings.memberDiscountPercent / 100));
   const total = subtotal + taxes - discount - aureliaDiscount;
 
   if (status === 'loading' || loading) {

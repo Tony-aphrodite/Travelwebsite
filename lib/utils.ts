@@ -16,7 +16,7 @@ export function slugify(text: string): string {
     .replace(/(^-|-$)/g, '');
 }
 
-export function calculateTaxes(subtotal: number, rate = 0.16): number {
+export function calculateTaxes(subtotal: number, rate = 0.12): number {
   return Math.round(subtotal * rate);
 }
 
