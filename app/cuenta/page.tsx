@@ -20,6 +20,7 @@ import {
   TrendingUp,
   LogOut,
   Loader2,
+  ShieldCheck,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -140,9 +141,25 @@ export default function CuentaPage() {
               <h3 className="font-display text-xl">{userName}</h3>
               <p className="text-xs text-charcoal-500 mb-3">{userEmail}</p>
               <span className="status-pill bg-gradient-to-r from-gold-500 to-gold-600 text-charcoal-900">
-                <Sparkles size={12} /> Miembro
+                <Sparkles size={12} /> {userRole === 'admin' ? 'Administradora' : 'Miembro'}
               </span>
             </div>
+
+            {userRole === 'admin' && (
+              <Link
+                href="/admin"
+                className="card-soft p-4 flex items-center gap-3 bg-gradient-to-r from-gold-100 to-gold-200 hover:from-gold-200 hover:to-gold-300 transition-colors group"
+              >
+                <div className="w-10 h-10 rounded-full bg-plum-700 text-white flex items-center justify-center">
+                  <ShieldCheck size={18} />
+                </div>
+                <div className="flex-1">
+                  <div className="font-display text-base text-plum-700">Panel admin</div>
+                  <div className="text-[10px] uppercase tracking-widest text-charcoal-500">Gestionar el sitio</div>
+                </div>
+                <ChevronRight size={16} className="text-plum-700 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            )}
 
             <nav className="card-soft p-3">
               {TABS.map((t) => {

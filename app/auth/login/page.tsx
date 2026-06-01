@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { signIn } from 'next-auth/react';
+import { signIn, getSession } from 'next-auth/react';
 import Link from 'next/link';
 
 export default function LoginPage() {
@@ -25,7 +25,9 @@ export default function LoginPage() {
       setError('Email o contraseña incorrectos');
       setLoading(false);
     } else {
-      window.location.href = '/cuenta';
+      const session = await getSession();
+      const role = (session?.user as any)?.role;
+      window.location.href = role === 'admin' ? '/admin' : '/cuenta';
     }
   }
 
@@ -38,7 +40,7 @@ export default function LoginPage() {
         </div>
 
         <button
-          onClick={() => signIn('google', { callbackUrl: '/cuenta' })}
+          onClick={() => signIn('google', { callbackUrl: '/auth/post-login' })}
           className="w-full flex items-center justify-center gap-3 px-6 py-3.5 border border-ivory-300 rounded-full bg-ivory-50 text-sm font-semibold text-charcoal-700 hover:bg-ivory-100 transition-colors mb-6"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">

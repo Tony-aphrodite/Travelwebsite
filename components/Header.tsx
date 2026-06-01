@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Component, useEffect, useState, type ReactNode } from 'react';
 import { useSession, signOut } from 'next-auth/react';
-import { Menu, User, ShoppingCart, LogOut, ChevronDown } from 'lucide-react';
+import { Menu, User, ShoppingCart, LogOut, ChevronDown, ShieldCheck } from 'lucide-react';
 
 const NAV_LINKS = [
   { href: '/vuelos', label: 'Vuelos' },
@@ -62,6 +62,7 @@ function UserArea() {
 
   const user = session?.user;
   const isLoggedIn = status === 'authenticated' && !!user;
+  const isAdmin = (user as any)?.role === 'admin';
 
   if (!isLoggedIn) return <AuthButtons />;
 
@@ -100,7 +101,17 @@ function UserArea() {
             <div className="px-4 py-3 border-b border-ivory-200">
               <p className="text-sm font-semibold text-charcoal-900 truncate">{user?.name}</p>
               <p className="text-xs text-charcoal-500 truncate">{user?.email}</p>
+              {isAdmin && (
+                <span className="inline-flex items-center gap-1 mt-2 text-[10px] uppercase tracking-widest font-bold text-gold-700">
+                  <ShieldCheck size={11} /> Administrador
+                </span>
+              )}
             </div>
+            {isAdmin && (
+              <Link href="/admin" className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-plum-700 bg-gold-100 hover:bg-gold-200 transition-colors border-b border-ivory-200">
+                <ShieldCheck size={15} /> Panel admin
+              </Link>
+            )}
             <Link href="/cuenta" className="flex items-center gap-3 px-4 py-2.5 text-sm text-charcoal-700 hover:bg-rose-100 hover:text-plum-700 transition-colors">
               <User size={15} /> Mi cuenta
             </Link>
@@ -126,10 +137,16 @@ function MobileAuthSection({ onClose }: { onClose: () => void }) {
   const { data: session, status } = useSession();
   const user = session?.user;
   const isLoggedIn = status === 'authenticated' && !!user;
+  const isAdmin = (user as any)?.role === 'admin';
 
   if (isLoggedIn) {
     return (
       <>
+        {isAdmin && (
+          <Link href="/admin" className="px-8 py-3 text-sm font-bold text-plum-700 bg-gold-100 hover:bg-gold-200 flex items-center gap-2" onClick={onClose}>
+            <ShieldCheck size={15} /> Panel admin
+          </Link>
+        )}
         <Link href="/cuenta" className="px-8 py-3 text-sm font-medium text-charcoal-700 hover:bg-ivory-100 hover:text-plum-700" onClick={onClose}>
           Mi cuenta
         </Link>
