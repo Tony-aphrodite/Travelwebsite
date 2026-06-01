@@ -2,11 +2,12 @@
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { ModalShell } from './ModalShell';
+import { ImageUploadField } from './ImageUploadField';
 
 export type FieldDef = {
   key: string;
   label: string;
-  kind: 'text' | 'number' | 'url' | 'textarea' | 'select' | 'boolean' | 'list' | 'date';
+  kind: 'text' | 'number' | 'url' | 'textarea' | 'select' | 'boolean' | 'list' | 'date' | 'image';
   required?: boolean;
   span?: 1 | 2;
   options?: { value: string; label: string }[];
@@ -15,6 +16,7 @@ export type FieldDef = {
   max?: number;
   step?: number;
   rows?: number;
+  folder?: string;
 };
 
 export function EntityFormModal({
@@ -55,7 +57,14 @@ export function EntityFormModal({
         {fields.map((f) => (
           <div key={f.key} className={f.span === 2 ? 'sm:col-span-2' : ''}>
             <label className="field-label">{f.label}</label>
-            {f.kind === 'textarea' ? (
+            {f.kind === 'image' ? (
+              <ImageUploadField
+                value={form[f.key] ?? ''}
+                onChange={(v) => set(f.key, v)}
+                required={f.required}
+                folder={f.folder}
+              />
+            ) : f.kind === 'textarea' ? (
               <textarea
                 value={form[f.key] ?? ''}
                 onChange={(e) => set(f.key, e.target.value)}
