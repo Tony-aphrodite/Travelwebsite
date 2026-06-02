@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import Link from 'next/link';
 import { Star, Award } from 'lucide-react';
 import SearchWidget from '@/components/SearchWidget';

@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import Link from 'next/link';
 import { Heart, Compass, Shield, Sparkles, Award, Users, Globe } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';

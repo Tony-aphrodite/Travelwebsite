@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import Link from 'next/link';
 import { MapPin, Heart, Users, Bed, Bath } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';

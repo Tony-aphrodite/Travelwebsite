@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import Link from 'next/link';
 import { Flame, Clock, Tag, Sparkles, Percent, type LucideIcon } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
