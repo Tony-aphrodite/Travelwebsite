@@ -44,8 +44,13 @@ export default async function HotelDetailPage({ params }: { params: Promise<{ id
 
   const item = hotel || villa!;
   const gallery = (item.gallery as string[]) || [];
-  const mainImage = gallery[0] || item.image;
-  const extraImages = gallery.slice(1, 5);
+  // Prefer the main `image` field over gallery[0] so admin edits to the
+  // hero photo actually take effect. Fall back to gallery[0] only if image
+  // is empty.
+  const mainImage = item.image || gallery[0];
+  // Keep the side strip showing gallery shots; if image and gallery[0]
+  // are the same, drop gallery[0] to avoid duplication.
+  const extraImages = (gallery[0] === item.image ? gallery.slice(1) : gallery).slice(0, 4);
   const amenities = (item.amenities as string[]) || [];
   const price = item.price;
   const description = item.description;
