@@ -3,6 +3,7 @@ import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
 import * as schema from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
+import { adminHotelSchema } from '@/lib/validators';
 
 async function requireAdmin() {
   const session = await auth();
@@ -24,8 +25,13 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   if (!session) return NextResponse.json({ error: 'No autorizado' }, { status: 403 });
 
   const body = await req.json();
+  const parsed = adminHotelSchema.partial().safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: 'Datos invalidos', details: parsed.error.flatten() }, { status: 400 });
+  }
+
   const updated = await db.update(schema.hotels)
-    .set({ ...body, updatedAt: new Date() })
+    .set({ ...parsed.data, updatedAt: new Date() })
     .where(eq(schema.hotels.id, params.id))
     .returning();
   return NextResponse.json(updated[0]);

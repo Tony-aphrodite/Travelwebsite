@@ -3,6 +3,7 @@ import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
 import * as schema from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
+import { adminTestimonialSchema } from '@/lib/validators';
 
 async function requireAdmin() {
   const session = await auth();
@@ -14,13 +15,15 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   const session = await requireAdmin();
   if (!session) return NextResponse.json({ error: 'No autorizado' }, { status: 403 });
 
-  const id = Number(params.id);
-  if (!Number.isFinite(id)) return NextResponse.json({ error: 'ID invalido' }, { status: 400 });
-
   const body = await req.json();
+  const parsed = adminTestimonialSchema.partial().safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: 'Datos invalidos', details: parsed.error.flatten() }, { status: 400 });
+  }
+
   const updated = await db.update(schema.testimonials)
-    .set(body)
-    .where(eq(schema.testimonials.id, id))
+    .set(parsed.data)
+    .where(eq(schema.testimonials.id, Number(params.id)))
     .returning();
   return NextResponse.json(updated[0]);
 }
