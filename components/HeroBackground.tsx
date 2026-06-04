@@ -22,17 +22,14 @@ export default function HeroBackground() {
 
   return (
     <div className="absolute inset-0 -z-0 pointer-events-none">
-      {/* Full-bleed photo */}
+      {/* Full-bleed photo, full strength (no cream overlay) */}
       <div
         className="absolute inset-0 bg-cover bg-center transition-opacity duration-700"
         style={{ backgroundImage: `url(${src})` }}
       />
-      {/* Soft cream-to-transparent gradient on the left so the headline
-          and CTAs keep their dark-on-light contrast. The right side stays
-          clear so the destination photos / cards sit over the photo. */}
-      <div className="absolute inset-0 bg-gradient-to-r from-ivory-50/95 via-ivory-50/70 to-transparent" />
-      {/* Subtle bottom fade so the next section (search widget) seats cleanly */}
-      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-ivory-50" />
+      {/* Soft fade at the very bottom so the next section (search widget)
+          seats cleanly into the cream page. */}
+      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-ivory-50" />
     </div>
   );
 }
