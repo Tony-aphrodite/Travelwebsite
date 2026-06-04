@@ -33,10 +33,38 @@ export default function SearchWidget({ initialTab = 'vuelos' }: { initialTab?: T
   };
 
   return (
-    <div className="max-w-[1120px] mx-auto bg-ivory-50 rounded-3xl shadow-soft-xl">
-      {/* Tabs */}
-      <div className="px-5 md:px-6 pt-4">
-        <div className="flex gap-1 border-b border-ivory-200 overflow-x-auto scrollbar-hide">
+    <div className="max-w-[1120px] mx-auto relative pt-[56px]">
+      {/* HORIZONTAL EXTENSION (right side, behind tab strip) — sits to the
+          right of the tab strip and bridges it to the widget's right edge
+          via a flat horizontal section. Cream color so it merges with the
+          tab strip above and the body below into one continuous L-shape. */}
+      <div
+        className="absolute top-0 right-0 z-0 bg-ivory-50"
+        style={{
+          width: '300px',         // 60px wider than the tab strip's right
+                                  // margin so it overlaps the BR descent
+          height: '56px',         // same height as the tab strip
+          borderTopRightRadius: '24px',
+          boxShadow: '0 -8px 28px -10px rgba(11,21,53,0.18), 8px 0 28px -14px rgba(11,21,53,0.10)',
+        }}
+      />
+
+      {/* TAB STRIP — top-left rounded box. The bottom-right radius is
+          deliberately small (18px) so the descent right after Cruceros
+          reads as a SHARP ~80° turn — not a gradual sweep — and the
+          curve transitions immediately into the flat horizontal section
+          on its right. */}
+      <div
+        className="absolute top-0 left-0 z-10 bg-ivory-50 px-5 md:px-6 pt-3 pb-1 flex"
+        style={{
+          right: '240px',
+          borderTopLeftRadius: '24px',
+          borderTopRightRadius: '24px',
+          borderBottomRightRadius: '18px',   // SHARP ~80° descent
+          boxShadow: '0 -8px 28px -10px rgba(11,21,53,0.18), -8px 0 28px -14px rgba(11,21,53,0.10)',
+        }}
+      >
+        <div className="flex gap-1 overflow-x-auto scrollbar-hide w-full">
           {TABS.map(({ id, labelKey, Icon }) => (
             <button
               key={id}
@@ -54,8 +82,11 @@ export default function SearchWidget({ initialTab = 'vuelos' }: { initialTab?: T
         </div>
       </div>
 
-      {/* Forms */}
-      <div className="p-5 md:p-6">
+      {/* MAIN BODY — full-width box. Its top edge sits flush with the
+          bottom of the tab strip + horizontal extension above, so the
+          whole thing reads as one L-shaped widget. */}
+      <div className="bg-ivory-50 rounded-3xl shadow-soft-xl p-5 md:p-6 relative z-[1]">
+        {/* Forms */}
         {active === 'vuelos' && <FlightForm navigate={navigate} />}
         {active === 'hoteles' && <HotelForm navigate={navigate} />}
         {active === 'villas' && <VillaForm navigate={navigate} />}
