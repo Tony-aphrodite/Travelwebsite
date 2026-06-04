@@ -71,17 +71,14 @@ export default function HeroDestinationCarousel({ isNight }: { isNight: boolean 
 
   return (
     <div className="relative h-[420px] lg:h-[500px] flex items-center justify-center">
-      {/* Left arrow */}
+      {/* Left arrow — same high-contrast ivory pill in both modes so it
+          stays readable regardless of how dark the photo is behind it. */}
       <button
         onClick={prev}
         aria-label="Anterior destino"
-        className={`absolute left-0 lg:-left-2 z-30 w-11 h-11 rounded-full shadow-soft-lg flex items-center justify-center transition-all hover:scale-110 ${
-          isNight
-            ? 'bg-plum-900/70 text-ivory-50 backdrop-blur-md border border-ivory-50/20 hover:bg-plum-900/90'
-            : 'bg-ivory-50/95 text-plum-700 backdrop-blur-md hover:bg-white'
-        }`}
+        className="absolute left-0 lg:-left-2 z-30 w-12 h-12 rounded-full bg-ivory-50/95 text-plum-700 backdrop-blur-md shadow-[0_8px_24px_rgba(0,0,0,0.35)] ring-1 ring-ivory-50/40 flex items-center justify-center transition-all hover:scale-110 hover:bg-white"
       >
-        <ChevronLeft size={20} />
+        <ChevronLeft size={22} />
       </button>
 
       <div className="flex items-end gap-3 lg:gap-4 px-12 lg:px-14">
@@ -94,13 +91,9 @@ export default function HeroDestinationCarousel({ isNight }: { isNight: boolean 
       <button
         onClick={next}
         aria-label="Siguiente destino"
-        className={`absolute right-0 lg:-right-2 z-30 w-11 h-11 rounded-full shadow-soft-lg flex items-center justify-center transition-all hover:scale-110 ${
-          isNight
-            ? 'bg-plum-900/70 text-ivory-50 backdrop-blur-md border border-ivory-50/20 hover:bg-plum-900/90'
-            : 'bg-ivory-50/95 text-plum-700 backdrop-blur-md hover:bg-white'
-        }`}
+        className="absolute right-0 lg:-right-2 z-30 w-12 h-12 rounded-full bg-ivory-50/95 text-plum-700 backdrop-blur-md shadow-[0_8px_24px_rgba(0,0,0,0.35)] ring-1 ring-ivory-50/40 flex items-center justify-center transition-all hover:scale-110 hover:bg-white"
       >
-        <ChevronRight size={20} />
+        <ChevronRight size={22} />
       </button>
 
       {/* Page dots */}

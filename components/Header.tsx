@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Component, useEffect, useState, type ReactNode } from 'react';
 import { useSession, signOut } from 'next-auth/react';
-import { Menu, User, ShoppingCart, LogOut, ChevronDown, ShieldCheck } from 'lucide-react';
+import { Menu, User, ShoppingCart, LogOut, ChevronDown, ShieldCheck, Heart, Globe } from 'lucide-react';
 import { useIsNight } from '@/hooks/useIsNight';
 
 const NAV_LINKS = [
@@ -36,10 +36,10 @@ class AuthBoundary extends Component<
 }
 
 /* ── Login / Register buttons (shown when NOT logged in) ── */
-function AuthButtons() {
+function AuthButtons({ lightOnDark }: { lightOnDark: boolean }) {
   return (
     <>
-      <Link href="/auth/login" className="btn btn-outline btn-sm">
+      <Link href="/auth/login" className={`btn btn-outline btn-sm ${lightOnDark ? 'btn-on-dark' : ''}`}>
         <User size={16} />
         Iniciar sesion
       </Link>
@@ -50,8 +50,44 @@ function AuthButtons() {
   );
 }
 
+/* ── Language switcher (visual only for now — locale stays es_MX) ── */
+function LanguageSwitcher({ lightOnDark }: { lightOnDark: boolean }) {
+  return (
+    <button
+      type="button"
+      title="Idioma"
+      className={`hidden md:inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-colors ${
+        lightOnDark
+          ? 'text-ivory-50 hover:bg-ivory-50/15 drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]'
+          : 'text-charcoal-700 hover:bg-ivory-100 hover:text-plum-700'
+      }`}
+    >
+      <Globe size={14} />
+      ES
+      <ChevronDown size={11} />
+    </button>
+  );
+}
+
+/* ── Favorites quick-access (logged-in users) ── */
+function FavoritesLink({ lightOnDark }: { lightOnDark: boolean }) {
+  return (
+    <Link
+      href="/cuenta?tab=favoritos"
+      title="Favoritos"
+      className={`relative p-2.5 rounded-full transition-colors ${
+        lightOnDark
+          ? 'text-ivory-50 hover:bg-ivory-50/15 drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]'
+          : 'text-charcoal-700 hover:bg-ivory-100 hover:text-plum-700'
+      }`}
+    >
+      <Heart size={18} />
+    </Link>
+  );
+}
+
 /* ── Logged-in user area: cart + dropdown ── */
-function UserArea() {
+function UserArea({ lightOnDark }: { lightOnDark: boolean }) {
   const { data: session, status } = useSession();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
@@ -66,13 +102,27 @@ function UserArea() {
   const isLoggedIn = status === 'authenticated' && !!user;
   const isAdmin = (user as any)?.role === 'admin';
 
-  if (!isLoggedIn) return <AuthButtons />;
+  if (!isLoggedIn) {
+    return (
+      <>
+        <LanguageSwitcher lightOnDark={lightOnDark} />
+        <AuthButtons lightOnDark={lightOnDark} />
+      </>
+    );
+  }
 
   return (
     <>
+      <LanguageSwitcher lightOnDark={lightOnDark} />
+      <FavoritesLink lightOnDark={lightOnDark} />
+
       <Link
         href="/carrito"
-        className="relative p-2.5 rounded-full text-charcoal-700 hover:bg-ivory-100 hover:text-plum-700 transition-colors"
+        className={`relative p-2.5 rounded-full transition-colors ${
+          lightOnDark
+            ? 'text-ivory-50 hover:bg-ivory-50/15 drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]'
+            : 'text-charcoal-700 hover:bg-ivory-100 hover:text-plum-700'
+        }`}
         title="Carrito"
       >
         <ShoppingCart size={18} />
@@ -84,7 +134,11 @@ function UserArea() {
             e.stopPropagation();
             setUserMenuOpen(!userMenuOpen);
           }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-charcoal-700 hover:bg-ivory-100 hover:text-plum-700 transition-colors"
+          className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+            lightOnDark
+              ? 'bg-ivory-50/15 text-ivory-50 hover:bg-ivory-50/25 backdrop-blur-md border border-ivory-50/20 drop-shadow-[0_1px_4px_rgba(0,0,0,0.4)]'
+              : 'text-charcoal-700 hover:bg-ivory-100 hover:text-plum-700'
+          }`}
         >
           {user?.image ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -248,8 +302,8 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <AuthBoundary fallback={<AuthButtons />}>
-            <UserArea />
+          <AuthBoundary fallback={<AuthButtons lightOnDark={lightOnDark} />}>
+            <UserArea lightOnDark={lightOnDark} />
           </AuthBoundary>
 
           <button
