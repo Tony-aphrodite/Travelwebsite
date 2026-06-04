@@ -1,6 +1,6 @@
 import type { CrudConfig } from '../_components/CrudPanel';
 import type {
-  HotelRow, PackageRow, FlightRow, VillaRow, CarRow, ActivityRow,
+  HotelRow, PackageRow, FlightRow, VillaRow, CarRow, ActivityRow, CruiseRow,
   DestinationRow, BlogRow, TestimonialRow, PromoRow,
 } from './types';
 import { slugify, formatCurrency } from '@/lib/utils';
@@ -13,6 +13,7 @@ const STOCK_CAR = 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?
 const STOCK_ACTIVITY = 'https://images.unsplash.com/photo-1530789253388-582c481c54b0?w=1200&q=80';
 const STOCK_DEST = 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1200&q=80';
 const STOCK_BLOG = 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=1200&q=80';
+const STOCK_CRUISE = 'https://images.unsplash.com/photo-1548574505-5e239809ee19?w=1200&q=80';
 const STOCK_AVATAR = 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80';
 
 export const HOTEL_CONFIG: CrudConfig<HotelRow> = {
@@ -240,6 +241,52 @@ export const ACTIVITY_CONFIG: CrudConfig<ActivityRow> = {
     { key: 'rating', label: 'Rating (0-5)', kind: 'number', required: true, min: 0, max: 5, step: 0.1 },
     { key: 'description', label: 'Descripción', kind: 'textarea', span: 2, required: true, rows: 4 },
     { key: 'isActive', label: 'Estado', kind: 'boolean', span: 2, placeholder: 'Activa y visible al público' },
+  ],
+};
+
+export const CRUISE_CONFIG: CrudConfig<CruiseRow> = {
+  endpoint: '/api/admin/cruises',
+  idField: 'id',
+  itemSingular: 'crucero',
+  itemPlural: 'cruceros',
+  imageField: 'image',
+  newDefaults: () => ({
+    id: '', name: '', cruiseLine: '', ship: '', image: STOCK_CRUISE,
+    departurePort: '', destinations: [], duration: '7 noches', nights: 7,
+    price: 1200, rating: 4.7, description: '', isActive: true,
+  }),
+  prepareSave: (d) => ({ ...d, id: (d.id && String(d.id).trim()) || slugify(String(d.name)) }),
+  columns: [
+    { key: 'name', label: 'Crucero' },
+    { key: 'cruiseLine', label: 'Naviera' },
+    { key: 'ship', label: 'Buque' },
+    { key: 'departurePort', label: 'Sale de' },
+    { key: 'nights', label: 'Noches', align: 'right' },
+    { key: 'price', label: 'Precio', align: 'right', render: (r) => formatCurrency(r.price) },
+  ],
+  fields: [
+    { key: 'name', label: 'Nombre del crucero', kind: 'text', required: true, span: 2 },
+    { key: 'cruiseLine', label: 'Naviera', kind: 'select', required: true, options: [
+      { value: 'Norwegian Cruise Line', label: 'Norwegian Cruise Line' },
+      { value: 'Royal Caribbean', label: 'Royal Caribbean' },
+      { value: 'MSC Cruceros', label: 'MSC Cruceros' },
+      { value: 'Costa Cruceros', label: 'Costa Cruceros' },
+      { value: 'Princess Cruises', label: 'Princess Cruises' },
+      { value: 'Celebrity Cruises', label: 'Celebrity Cruises' },
+      { value: 'Disney Cruise Line', label: 'Disney Cruise Line' },
+      { value: 'Silversea', label: 'Silversea' },
+    ] },
+    { key: 'ship', label: 'Nombre del buque', kind: 'text', required: true },
+    { key: 'departurePort', label: 'Puerto de salida', kind: 'text', required: true, placeholder: 'Barcelona' },
+    { key: 'destinations', label: 'Puertos visitados (separados por coma)', kind: 'list', placeholder: 'Marsella, Génova, Mallorca' },
+    { key: 'duration', label: 'Duración', kind: 'text', required: true, placeholder: '7 noches' },
+    { key: 'nights', label: 'Noches', kind: 'number', required: true, min: 1, max: 60 },
+    { key: 'image', label: 'Foto principal', kind: 'image', required: true, span: 2, folder: 'cruises' },
+    { key: 'price', label: 'Precio desde (USD)', kind: 'number', required: true, min: 1 },
+    { key: 'oldPrice', label: 'Precio anterior (opcional)', kind: 'number', min: 0 },
+    { key: 'rating', label: 'Rating (0-5)', kind: 'number', required: true, min: 0, max: 5, step: 0.1 },
+    { key: 'description', label: 'Descripción', kind: 'textarea', span: 2, required: true, rows: 4 },
+    { key: 'isActive', label: 'Estado', kind: 'boolean', span: 2, placeholder: 'Activo y visible al público' },
   ],
 };
 

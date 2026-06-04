@@ -224,6 +224,26 @@ export const adminPromoSchema = z.object({
   isActive: z.boolean().optional().default(true),
 });
 
+export const adminCruiseSchema = z.object({
+  id: z.string().min(1),
+  name: z.string().min(2).max(160),
+  cruiseLine: z.string().min(2).max(80),
+  ship: z.string().min(2).max(120),
+  image: z.string().url(),
+  gallery: z.array(z.string().url()).optional().default([]),
+  departurePort: z.string().min(2).max(120),
+  destinations: z.array(z.string()).optional().default([]),
+  duration: z.string().min(1).max(60),
+  nights: z.number().int().positive(),
+  price: z.number().int().positive(),
+  oldPrice: z.number().int().positive().nullable().optional(),
+  rating: z.number().min(0).max(5),
+  reviewCount: z.number().int().min(0).optional().default(0),
+  description: z.string().min(10),
+  amenities: z.array(z.string()).optional().default([]),
+  isActive: z.boolean().optional().default(true),
+});
+
 export const adminSettingsSchema = z.object({
   taxRate: z.number().int().min(0).max(100),
   memberDiscountPercent: z.number().int().min(0).max(50),

@@ -10,7 +10,7 @@ export default function HeroSection() {
 
   return (
     <section
-      className={`relative pt-28 pb-10 overflow-hidden transition-colors duration-700 ${
+      className={`relative pt-28 pb-24 lg:pb-28 overflow-hidden transition-colors duration-700 ${
         isNight ? 'bg-plum-900' : 'bg-ivory-50'
       }`}
     >

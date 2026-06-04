@@ -2,9 +2,9 @@
 
 import { useState, useRef, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import { Plane, Building2, Home, Package, Car, Compass, Search } from 'lucide-react';
+import { Plane, Building2, Home, Package, Car, Compass, Search, Ship } from 'lucide-react';
 
-type TabId = 'vuelos' | 'hoteles' | 'villas' | 'paquetes' | 'autos' | 'actividades';
+type TabId = 'vuelos' | 'hoteles' | 'villas' | 'paquetes' | 'autos' | 'actividades' | 'cruceros';
 
 const TABS: { id: TabId; label: string; Icon: typeof Plane }[] = [
   { id: 'vuelos', label: 'Vuelos', Icon: Plane },
@@ -13,6 +13,7 @@ const TABS: { id: TabId; label: string; Icon: typeof Plane }[] = [
   { id: 'paquetes', label: 'Paquetes', Icon: Package },
   { id: 'autos', label: 'Autos', Icon: Car },
   { id: 'actividades', label: 'Experiencias', Icon: Compass },
+  { id: 'cruceros', label: 'Cruceros', Icon: Ship },
 ];
 
 export default function SearchWidget({ initialTab = 'vuelos' }: { initialTab?: TabId }) {
@@ -29,7 +30,7 @@ export default function SearchWidget({ initialTab = 'vuelos' }: { initialTab?: T
   };
 
   return (
-    <div className="max-w-[1120px] mx-auto bg-ivory-50 rounded-3xl shadow-soft-xl p-5 md:p-6">
+    <div className="max-w-[1120px] mx-auto bg-ivory-50 rounded-3xl rounded-tr-[80px] shadow-soft-xl p-5 md:p-6">
       {/* Tabs */}
       <div className="flex gap-1 border-b border-ivory-200 mb-4 overflow-x-auto">
         {TABS.map(({ id, label, Icon }) => (
@@ -55,6 +56,7 @@ export default function SearchWidget({ initialTab = 'vuelos' }: { initialTab?: T
       {active === 'paquetes' && <PackageForm navigate={navigate} />}
       {active === 'autos' && <CarForm navigate={navigate} />}
       {active === 'actividades' && <ActivityForm navigate={navigate} />}
+      {active === 'cruceros' && <CruiseForm navigate={navigate} />}
     </div>
   );
 }
@@ -266,6 +268,60 @@ function CarForm({ navigate }: { navigate: NavigateFn }) {
       </Field>
       <Field label="Fecha fin" className="flex-1 min-w-[180px]">
         <input className="field-input" type="datetime-local" defaultValue="2026-05-25T18:00" />
+      </Field>
+      <Submit />
+    </form>
+  );
+}
+
+function CruiseForm({ navigate }: { navigate: NavigateFn }) {
+  const portRef = useRef<HTMLInputElement>(null);
+  const lineRef = useRef<HTMLSelectElement>(null);
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    navigate('/cruceros', {
+      departurePort: portRef.current?.value || '',
+      cruiseLine: lineRef.current?.value || '',
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="flex flex-wrap gap-4 items-end">
+      <Field label="Puerto de salida" className="flex-1 min-w-[200px]">
+        <input ref={portRef} className="field-input" placeholder="Barcelona" />
+      </Field>
+      <Field label="Naviera" className="flex-1 min-w-[200px]">
+        <select ref={lineRef} className="field-input" defaultValue="">
+          <option value="">Cualquiera</option>
+          <option>Norwegian Cruise Line</option>
+          <option>Royal Caribbean</option>
+          <option>MSC Cruceros</option>
+          <option>Costa Cruceros</option>
+          <option>Princess Cruises</option>
+          <option>Celebrity Cruises</option>
+          <option>Disney Cruise Line</option>
+          <option>Silversea</option>
+        </select>
+      </Field>
+      <Field label="Embarque" className="flex-1 min-w-[140px]">
+        <input className="field-input" type="date" defaultValue="2026-06-15" />
+      </Field>
+      <Field label="Duración" className="w-[180px]">
+        <select className="field-input">
+          <option>Cualquiera</option>
+          <option>3-5 noches</option>
+          <option>6-10 noches</option>
+          <option>11-15 noches</option>
+          <option>16+ noches</option>
+        </select>
+      </Field>
+      <Field label="Pasajeros" className="w-[160px]">
+        <select className="field-input">
+          <option>2 Adultos</option>
+          <option>Familia</option>
+          <option>Grupo</option>
+        </select>
       </Field>
       <Submit />
     </form>

@@ -8,7 +8,7 @@ export const bookingStatusEnum = pgEnum('booking_status', [
   'pending', 'confirmed', 'cancelled', 'completed',
 ]);
 export const bookingTypeEnum = pgEnum('booking_type', [
-  'hotel', 'villa', 'package', 'flight', 'car', 'activity',
+  'hotel', 'villa', 'package', 'flight', 'car', 'activity', 'cruise',
 ]);
 export const loyaltyTierEnum = pgEnum('loyalty_tier', [
   'silver', 'rose_gold', 'platinum',
@@ -198,6 +198,32 @@ export const activities = pgTable('activities', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 }, (t) => [index('activity_category_idx').on(t.category)]);
+
+// ─── CRUISES ────────────────────────────────────────
+export const cruises = pgTable('cruises', {
+  id: text('id').primaryKey(),
+  name: text('name').notNull(),
+  cruiseLine: text('cruise_line').notNull(),
+  ship: text('ship').notNull(),
+  image: text('image').notNull(),
+  gallery: jsonb('gallery').$type<string[]>().default([]),
+  departurePort: text('departure_port').notNull(),
+  destinations: jsonb('destinations').$type<string[]>().default([]),
+  duration: text('duration').notNull(),
+  nights: integer('nights').notNull(),
+  price: integer('price').notNull(),
+  oldPrice: integer('old_price'),
+  rating: real('rating').notNull(),
+  reviewCount: integer('review_count').default(0).notNull(),
+  description: text('description').notNull(),
+  amenities: jsonb('amenities').$type<string[]>().default([]),
+  isActive: boolean('is_active').default(true).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+}, (t) => [
+  index('cruise_line_idx').on(t.cruiseLine),
+  index('cruise_price_idx').on(t.price),
+]);
 
 // ─── BLOG POSTS ─────────────────────────────────────
 export const blogPosts = pgTable('blog_posts', {

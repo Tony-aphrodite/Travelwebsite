@@ -259,6 +259,69 @@ export async function getCars(filters: CarFilters = {}) {
     .offset((page - 1) * pageSize);
 }
 
+// ─── CRUISES ────────────────────────────────────────
+export type CruiseFilters = {
+  cruiseLine?: string;
+  departurePort?: string;
+  priceMin?: number;
+  priceMax?: number;
+  nightsMin?: number;
+  nightsMax?: number;
+  sort?: string;
+  q?: string;
+  page?: number;
+  pageSize?: number;
+};
+
+export async function getCruises(filters: CruiseFilters = {}) {
+  const conditions = [eq(schema.cruises.isActive, true)];
+
+  if (filters.cruiseLine) {
+    conditions.push(eq(schema.cruises.cruiseLine, filters.cruiseLine));
+  }
+  if (filters.departurePort) {
+    conditions.push(ilike(schema.cruises.departurePort, `%${filters.departurePort}%`));
+  }
+  if (filters.priceMin !== undefined) {
+    conditions.push(gte(schema.cruises.price, filters.priceMin));
+  }
+  if (filters.priceMax !== undefined) {
+    conditions.push(lte(schema.cruises.price, filters.priceMax));
+  }
+  if (filters.nightsMin !== undefined) {
+    conditions.push(gte(schema.cruises.nights, filters.nightsMin));
+  }
+  if (filters.nightsMax !== undefined) {
+    conditions.push(lte(schema.cruises.nights, filters.nightsMax));
+  }
+  if (filters.q) {
+    conditions.push(
+      sql`(${schema.cruises.name} ILIKE ${'%' + filters.q + '%'} OR ${schema.cruises.ship} ILIKE ${'%' + filters.q + '%'} OR ${schema.cruises.departurePort} ILIKE ${'%' + filters.q + '%'})`
+    );
+  }
+
+  let orderBy;
+  switch (filters.sort) {
+    case 'price_asc': orderBy = asc(schema.cruises.price); break;
+    case 'price_desc': orderBy = desc(schema.cruises.price); break;
+    case 'rating_desc': orderBy = desc(schema.cruises.rating); break;
+    default: orderBy = desc(schema.cruises.rating);
+  }
+
+  const pageSize = Math.max(1, Math.min(50, filters.pageSize ?? 12));
+  const page = Math.max(1, filters.page ?? 1);
+  return db.select().from(schema.cruises)
+    .where(and(...conditions))
+    .orderBy(orderBy)
+    .limit(pageSize)
+    .offset((page - 1) * pageSize);
+}
+
+export async function getCruiseById(id: string) {
+  const rows = await db.select().from(schema.cruises).where(eq(schema.cruises.id, id));
+  return rows[0] ?? null;
+}
+
 // ─── ACTIVITIES ─────────────────────────────────────
 export type ActivityFilters = {
   category?: string;

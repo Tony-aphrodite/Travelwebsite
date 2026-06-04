@@ -1,6 +1,6 @@
 export type Panel =
   | 'dashboard' | 'reservas'
-  | 'hoteles' | 'paquetes' | 'vuelos' | 'villas' | 'autos' | 'actividades'
+  | 'hoteles' | 'paquetes' | 'vuelos' | 'villas' | 'autos' | 'actividades' | 'cruceros'
   | 'destinos' | 'blog' | 'testimonials'
   | 'consultas' | 'newsletter' | 'promos'
   | 'usuarios' | 'reportes' | 'settings';
@@ -35,6 +35,15 @@ export type CarRow = {
   id: string; model: string; category: string; image: string; company: string;
   seats: number; transmission: string; fuel: string; price: number;
   isActive: boolean;
+};
+
+export type CruiseRow = {
+  id: string; name: string; cruiseLine: string; ship: string; image: string;
+  departurePort: string; destinations?: string[];
+  duration: string; nights: number;
+  price: number; oldPrice?: number | null;
+  rating: number; reviewCount?: number;
+  description: string; isActive: boolean;
 };
 
 export type ActivityRow = {

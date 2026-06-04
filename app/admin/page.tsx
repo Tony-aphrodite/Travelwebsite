@@ -7,13 +7,13 @@ import {
   LayoutDashboard, Hotel, Plane, Package, Users, TrendingUp,
   Calendar, Search, Bell, ChevronRight, Loader2, ShieldAlert,
   Home as HomeIcon, Car, Sparkles, MapPin, FileText, MessageSquare,
-  Mail, Tag, Settings as SettingsIcon, Quote,
+  Mail, Tag, Settings as SettingsIcon, Quote, Ship,
   type LucideIcon,
 } from 'lucide-react';
 import type { Panel, Booking, UserRow, Stats } from './_lib/types';
 import {
   HOTEL_CONFIG, PACKAGE_CONFIG, FLIGHT_CONFIG, VILLA_CONFIG,
-  CAR_CONFIG, ACTIVITY_CONFIG, DESTINATION_CONFIG, BLOG_CONFIG,
+  CAR_CONFIG, ACTIVITY_CONFIG, CRUISE_CONFIG, DESTINATION_CONFIG, BLOG_CONFIG,
   TESTIMONIAL_CONFIG, PROMO_CONFIG,
 } from './_lib/configs';
 import { CrudPanel } from './_components/CrudPanel';
@@ -35,6 +35,7 @@ const NAV: { key: Panel; label: string; icon: LucideIcon; group?: string }[] = [
   { key: 'villas', label: 'Villas', icon: HomeIcon, group: 'Catálogo' },
   { key: 'autos', label: 'Autos', icon: Car, group: 'Catálogo' },
   { key: 'actividades', label: 'Actividades', icon: Sparkles, group: 'Catálogo' },
+  { key: 'cruceros', label: 'Cruceros', icon: Ship, group: 'Catálogo' },
   { key: 'destinos', label: 'Destinos', icon: MapPin, group: 'Catálogo' },
 
   { key: 'blog', label: 'Blog', icon: FileText, group: 'Contenido' },
@@ -236,6 +237,7 @@ export default function AdminPage() {
                 {panel === 'villas' && <CrudPanel config={VILLA_CONFIG} />}
                 {panel === 'autos' && <CrudPanel config={CAR_CONFIG} />}
                 {panel === 'actividades' && <CrudPanel config={ACTIVITY_CONFIG} />}
+                {panel === 'cruceros' && <CrudPanel config={CRUISE_CONFIG} />}
                 {panel === 'destinos' && <CrudPanel config={DESTINATION_CONFIG} />}
                 {panel === 'blog' && <CrudPanel config={BLOG_CONFIG} />}
                 {panel === 'testimonials' && <CrudPanel config={TESTIMONIAL_CONFIG} />}
