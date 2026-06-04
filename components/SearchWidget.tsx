@@ -33,19 +33,37 @@ export default function SearchWidget({ initialTab = 'vuelos' }: { initialTab?: T
   };
 
   return (
-    <div className="max-w-[1120px] mx-auto relative pt-[58px]">
-      {/* TAB STRIP — a separate rounded box pinned to the top-left.
-          Right edge stops ~200px before the widget edge so the
-          empty space on the right naturally forms the notch the
-          customer described. Its rounded bottom-right corner is the
-          "semicircle going down" that joins the main body. */}
+    <div className="max-w-[1120px] mx-auto relative pt-[56px]">
+      {/* HORIZONTAL FILLER — bridges the gap between the tab strip's
+          bottom-right curve and the right edge of the widget. Sits
+          BEHIND the tab strip (z-0) so the strip's rounded BR curve
+          appears to flow into this flat horizontal section, which then
+          connects directly to the body below. Without this rectangle,
+          the area at the top-right would show the hero photo and the
+          tab strip + body would read as two disconnected boxes. */}
+      <div
+        className="absolute top-0 right-0 z-0 bg-ivory-50"
+        style={{
+          width: '290px',         // wider than the tab strip's right margin
+                                  //  so it overlaps the BR curve area
+          height: '56px',         // exact height where the body's top sits
+          borderTopRightRadius: '24px',
+          boxShadow: '0 -8px 28px -10px rgba(11,21,53,0.18), 8px 0 28px -14px rgba(11,21,53,0.10)',
+        }}
+      />
+
+      {/* TAB STRIP — top-left rounded box. Its rounded bottom-right
+          corner is the visible "semicircle going down" the customer
+          described; the filler rectangle behind it provides the
+          horizontal continuation to the right edge. */}
       <div
         className="absolute top-0 left-0 z-10 bg-ivory-50 px-5 md:px-6 pt-3 pb-1 flex"
         style={{
-          right: '210px',
+          right: '230px',         // tab strip ends before the filler so
+                                  //  the BR curve fully overlaps the filler
           borderTopLeftRadius: '24px',
           borderTopRightRadius: '24px',
-          borderBottomRightRadius: '30px',
+          borderBottomRightRadius: '46px',
           boxShadow: '0 -8px 28px -10px rgba(11,21,53,0.18), -8px 0 28px -14px rgba(11,21,53,0.10)',
         }}
       >
@@ -67,10 +85,10 @@ export default function SearchWidget({ initialTab = 'vuelos' }: { initialTab?: T
         </div>
       </div>
 
-      {/* MAIN BODY — full-width box with its own rounded corners.
-          The top-right corner curves up to meet the flat right
-          extension after the tab strip's notch. */}
-      <div className="bg-ivory-50 rounded-3xl shadow-soft-xl p-5 md:p-6">
+      {/* MAIN BODY — full-width box, its top edge sits flush with the
+          bottom of the filler rectangle above, so the whole thing reads
+          as one continuous L-shape. */}
+      <div className="bg-ivory-50 rounded-3xl shadow-soft-xl p-5 md:p-6 relative z-[1]">
         {/* Forms */}
         {active === 'vuelos' && <FlightForm navigate={navigate} />}
         {active === 'hoteles' && <HotelForm navigate={navigate} />}
