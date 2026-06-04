@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Star } from 'lucide-react';
 import SearchWidget from '@/components/SearchWidget';
 import HeroSection from '@/components/HeroSection';
+import DestinationsSection from '@/components/DestinationsSection';
 import { getDestinations, getPackages, getActivities, getTestimonials, getBlogPosts } from '@/lib/db/queries';
 import NewsletterForm from '@/components/NewsletterForm';
 
@@ -26,61 +27,8 @@ export default async function HomePage() {
         <SearchWidget />
       </div>
 
-      {/* DESTINATIONS */}
-      <section className="py-16">
-        <div className="container-site">
-          <div className="flex justify-between items-end gap-8 flex-wrap mb-8">
-            <div className="max-w-xl">
-              <span className="eyebrow">Destinos del momento</span>
-              <h2 className="heading-lg mt-4">
-                Lugares que <span className="italic-script">enamoran</span>
-              </h2>
-            </div>
-            <p className="max-w-md text-charcoal-500">
-              Una seleccion cuidada de destinos para tu proxima escapada. Desde playas turquesa
-              hasta ciudades historicas.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-12 gap-6">
-            {destinations.slice(0, 5).map((dest, i) => (
-              <Link
-                key={dest.id}
-                href={`/hoteles?country=${encodeURIComponent(dest.country)}`}
-                className={`relative rounded-3xl overflow-hidden shadow-soft-md cursor-pointer group transition-all duration-500 hover:-translate-y-2 hover:shadow-soft-xl bg-ivory-200 ${
-                  i === 0
-                    ? 'col-span-12 md:col-span-6 row-span-2 aspect-[4/5] md:aspect-auto'
-                    : 'col-span-6 md:col-span-3 aspect-[3/4]'
-                }`}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={dest.image}
-                  alt={dest.name}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/85 via-charcoal-900/20 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                  <span className="text-xs uppercase tracking-widest text-gold-500 font-semibold">
-                    {dest.country}
-                  </span>
-                  <h3 className="font-display text-2xl mt-1 mb-2 text-white">
-                    {dest.name}
-                    {i === 0 && `, ${dest.tagline.toLowerCase()}`}
-                  </h3>
-                  <div className="text-sm opacity-90">
-                    Desde{' '}
-                    <strong className="font-display text-xl ml-1">
-                      ${dest.priceFrom.toLocaleString()}
-                    </strong>{' '}
-                    USD
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* DESTINATIONS + AURELIA CLUB + TRUST BAR */}
+      <DestinationsSection destinations={destinations} />
 
       {/* OFFERS */}
       <section className="py-16 bg-ivory-50">

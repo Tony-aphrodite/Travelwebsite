@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Manrope, Fraunces, Cormorant_Garamond } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import WhatsAppFloat from '@/components/WhatsAppFloat';
+import AureliaAI from '@/components/AureliaAI';
 import SessionProvider from '@/components/SessionProvider';
 import { LocaleProvider } from '@/lib/i18n/LocaleProvider';
 import './globals.css';
@@ -76,7 +76,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Header />
             <main>{children}</main>
             <Footer />
-            <WhatsAppFloat />
+            <AureliaAI />
           </LocaleProvider>
         </SessionProvider>
       </body>

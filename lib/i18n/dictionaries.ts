@@ -40,6 +40,27 @@ export type Dictionary = {
     puertoSalida: string; naviera: string; embarque: string; duracion: string;
     cualquiera: string; unAdulto: string; dosAdultos: string; familia: string;
   };
+  destinations: {
+    title: string; subtitle: string; viewAll: string; from: string;
+  };
+  club: {
+    title: string; tagline: string; cta: string;
+  };
+  trust: {
+    support: string; supportDesc: string;
+    price: string; priceDesc: string;
+    payment: string; paymentDesc: string;
+    flexible: string; flexibleDesc: string;
+    confidence: string; confidenceDesc: string;
+  };
+  ai: {
+    openLabel: string; close: string; send: string;
+    greetingTitle: string; greetingPrompt: string;
+    subline: string; welcomeIntro: string;
+    starters: string[];
+    inputPlaceholder: string;
+    thinking: string; errorGeneric: string; errorNetwork: string;
+  };
 };
 
 export const dictionaries: Record<Locale, Dictionary> = {
@@ -121,6 +142,47 @@ export const dictionaries: Record<Locale, Dictionary> = {
       dosAdultos: '2 Adultos',
       familia: 'Familia',
     },
+    destinations: {
+      title: 'Destinos que te encantarán',
+      subtitle: 'Una selección cuidada de destinos para tu próxima escapada.',
+      viewAll: 'Ver todos',
+      from: 'Desde',
+    },
+    club: {
+      title: 'Aurelia Club',
+      tagline: 'Únete gratis y comienza a acumular puntos para viajes increíbles.',
+      cta: 'Únete ahora',
+    },
+    trust: {
+      support: 'Atención 24/7',
+      supportDesc: 'Asistencia personalizada',
+      price: 'Mejor precio garantizado',
+      priceDesc: 'Encontramos la mejor tarifa',
+      payment: 'Pago seguro',
+      paymentDesc: 'Tus datos siempre protegidos',
+      flexible: 'Reserva flexible',
+      flexibleDesc: 'Cambia sin complicaciones',
+      confidence: 'Viaja con confianza',
+      confidenceDesc: 'Más de 10 años creando recuerdos',
+    },
+    ai: {
+      openLabel: 'Abrir asistente de IA',
+      close: 'Cerrar',
+      send: 'Enviar',
+      greetingTitle: 'Hola, soy Aurelia AI',
+      greetingPrompt: '¿En qué puedo ayudarte a planear hoy?',
+      subline: 'Asistente de viaje 24/7',
+      welcomeIntro: 'Pregúntame sobre destinos, hoteles, cruceros o cuándo viajar.',
+      starters: [
+        '¿Cuáles son los mejores destinos para luna de miel?',
+        '¿Qué época es buena para visitar Japón?',
+        'Recomiéndame un crucero por el Mediterráneo',
+      ],
+      inputPlaceholder: 'Escribe tu pregunta...',
+      thinking: 'Pensando...',
+      errorGeneric: 'Hubo un problema. Intenta de nuevo.',
+      errorNetwork: 'Error de conexión. Verifica tu internet.',
+    },
   },
   en: {
     nav: {
@@ -199,6 +261,47 @@ export const dictionaries: Record<Locale, Dictionary> = {
       unAdulto: '1 Adult',
       dosAdultos: '2 Adults',
       familia: 'Family',
+    },
+    destinations: {
+      title: 'Destinations you will love',
+      subtitle: 'A handpicked selection of destinations for your next getaway.',
+      viewAll: 'See all',
+      from: 'From',
+    },
+    club: {
+      title: 'Aurelia Club',
+      tagline: 'Join free and start earning points toward unforgettable trips.',
+      cta: 'Join now',
+    },
+    trust: {
+      support: '24/7 Support',
+      supportDesc: 'Personalized assistance',
+      price: 'Best price guaranteed',
+      priceDesc: 'We find you the best rate',
+      payment: 'Secure payment',
+      paymentDesc: 'Your data is always protected',
+      flexible: 'Flexible booking',
+      flexibleDesc: 'Change without hassle',
+      confidence: 'Travel with confidence',
+      confidenceDesc: 'Over 10 years creating memories',
+    },
+    ai: {
+      openLabel: 'Open AI assistant',
+      close: 'Close',
+      send: 'Send',
+      greetingTitle: 'Hi, I am Aurelia AI',
+      greetingPrompt: 'How can I help you plan today?',
+      subline: '24/7 travel assistant',
+      welcomeIntro: 'Ask me about destinations, hotels, cruises, or when to travel.',
+      starters: [
+        'What are the best honeymoon destinations?',
+        'When is a good time to visit Japan?',
+        'Recommend a Mediterranean cruise for me',
+      ],
+      inputPlaceholder: 'Type your question...',
+      thinking: 'Thinking...',
+      errorGeneric: 'Something went wrong. Try again.',
+      errorNetwork: 'Connection error. Check your internet.',
     },
   },
 };
