@@ -34,23 +34,58 @@ export default function SearchWidget({ initialTab = 'vuelos' }: { initialTab?: T
 
   return (
     <div className="max-w-[1120px] mx-auto relative pt-[56px]">
-      {/* HORIZONTAL FILLER — bridges the gap between the tab strip's
-          bottom-right curve and the right edge of the widget. Sits
-          BEHIND the tab strip (z-0) so the strip's rounded BR curve
-          appears to flow into this flat horizontal section, which then
-          connects directly to the body below. Without this rectangle,
-          the area at the top-right would show the hero photo and the
-          tab strip + body would read as two disconnected boxes. */}
+      {/* CLOUD CUTOUT — decorative wave shape that bridges the gap between
+          the tab strip's bottom-right curve and the widget's right edge.
+          A horizontal cream band with three circular bumps protruding up
+          into the hero area, giving the scalloped/cloud edge the customer
+          wants. Sits behind everything else (z-0) but in front of the hero
+          (the search widget itself is z-20). */}
       <div
-        className="absolute top-0 right-0 z-0 bg-ivory-50"
-        style={{
-          width: '290px',         // wider than the tab strip's right margin
-                                  //  so it overlaps the BR curve area
-          height: '56px',         // exact height where the body's top sits
-          borderTopRightRadius: '24px',
-          boxShadow: '0 -8px 28px -10px rgba(11,21,53,0.18), 8px 0 28px -14px rgba(11,21,53,0.10)',
-        }}
-      />
+        className="absolute top-0 right-0 z-0 pointer-events-none"
+        style={{ width: '290px', height: '56px' }}
+      >
+        {/* Main horizontal band — flat bottom, rounded TL where it meets
+            the tab strip's BR curve, rounded TR matching the body's TR */}
+        <div
+          className="absolute inset-0 bg-ivory-50"
+          style={{
+            borderTopLeftRadius: '46px',
+            borderTopRightRadius: '24px',
+            boxShadow: '0 -8px 28px -10px rgba(11,21,53,0.18), 8px 0 28px -14px rgba(11,21,53,0.10)',
+          }}
+        />
+
+        {/* Cloud bump — small left */}
+        <div
+          className="absolute bg-ivory-50 rounded-full"
+          style={{
+            width: '46px',
+            height: '46px',
+            top: '-14px',
+            left: '36px',
+          }}
+        />
+        {/* Cloud bump — large center (the dominant scallop) */}
+        <div
+          className="absolute bg-ivory-50 rounded-full"
+          style={{
+            width: '72px',
+            height: '72px',
+            top: '-30px',
+            left: '105px',
+          }}
+        />
+        {/* Cloud bump — medium right */}
+        <div
+          className="absolute bg-ivory-50 rounded-full"
+          style={{
+            width: '54px',
+            height: '54px',
+            top: '-18px',
+            left: '195px',
+          }}
+        />
+      </div>
 
       {/* TAB STRIP — top-left rounded box. Its rounded bottom-right
           corner is the visible "semicircle going down" the customer
