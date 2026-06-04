@@ -310,9 +310,11 @@ export default function Header() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Light text only when we're at the top AND it's night.
-  // Once you scroll the bar gets its cream backdrop and dark text is fine again.
-  const lightOnDark = !scrolled && isNight;
+  // White text whenever the bar is sitting on top of the hero photo —
+  // both day and night photos are busy enough that the previous dark
+  // text was hard to read against them. Once you scroll past the hero,
+  // the navbar gets its cream backdrop and reverts to dark text.
+  const lightOnDark = !scrolled;
 
   return (
     <header

@@ -62,28 +62,17 @@ export default function HeroSection() {
               {t.hero.ctaPrimary}
             </Link>
 
-            {/* Secondary CTA — circular play button + text label,
-                matching the customer's reference design. */}
+            {/* Secondary CTA — hollow circular play button + white text. */}
             <Link
               href="/destinos"
               className="group inline-flex items-center gap-3"
             >
               <span
-                className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-soft-lg ${
-                  isNight
-                    ? 'bg-ivory-50/15 text-ivory-50 border border-ivory-50/30 backdrop-blur-md group-hover:bg-ivory-50/25'
-                    : 'bg-plum-900 text-ivory-50 shadow-[0_8px_18px_rgba(11,21,53,0.30)] group-hover:bg-plum-700'
-                }`}
+                className="w-12 h-12 rounded-full bg-transparent border-2 border-ivory-50 text-ivory-50 flex items-center justify-center transition-all duration-300 drop-shadow-[0_4px_10px_rgba(0,0,0,0.35)] group-hover:scale-110 group-hover:bg-ivory-50/15"
               >
                 <Play size={16} fill="currentColor" className="ml-0.5" />
               </span>
-              <span
-                className={`font-semibold text-base transition-colors duration-300 ${
-                  isNight
-                    ? 'text-ivory-50 drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]'
-                    : 'text-plum-900 group-hover:text-plum-700'
-                }`}
-              >
+              <span className="font-semibold text-base text-ivory-50 drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)] transition-opacity duration-300 group-hover:opacity-90">
                 {t.hero.ctaSecondary}
               </span>
             </Link>
