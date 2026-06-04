@@ -316,7 +316,7 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-[padding,background-color,box-shadow] duration-500 ease-out ${
         scrolled
           ? 'py-3 bg-ivory-50/90 backdrop-blur-xl border-b border-ivory-200 shadow-soft'
           : 'py-5 bg-transparent'

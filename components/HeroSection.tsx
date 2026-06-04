@@ -13,13 +13,13 @@ export default function HeroSection() {
 
   return (
     <section
-      className={`relative pt-28 pb-24 lg:pb-28 overflow-hidden transition-colors duration-700 ${
+      className={`relative pt-28 pb-10 lg:pb-14 overflow-hidden transition-colors duration-700 ${
         isNight ? 'bg-plum-900' : 'bg-ivory-50'
       }`}
     >
       <HeroBackground isNight={isNight} />
 
-      <div className="max-w-[1440px] mx-auto px-6 lg:px-10 grid lg:grid-cols-[1.1fr_0.9fr] gap-10 items-center relative z-10">
+      <div className="max-w-[1440px] mx-auto pl-6 pr-2 lg:pl-10 lg:pr-4 grid lg:grid-cols-[1.05fr_1fr] gap-6 lg:gap-4 items-end relative z-10">
         <div className="max-w-[600px]">
           <span
             className={`eyebrow transition-colors duration-700 ${
