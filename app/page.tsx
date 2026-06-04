@@ -1,9 +1,9 @@
 export const dynamic = 'force-dynamic';
 
 import Link from 'next/link';
-import { Star, Award } from 'lucide-react';
+import { Star } from 'lucide-react';
 import SearchWidget from '@/components/SearchWidget';
-import HeroBackground from '@/components/HeroBackground';
+import HeroSection from '@/components/HeroSection';
 import { getDestinations, getPackages, getActivities, getTestimonials, getBlogPosts } from '@/lib/db/queries';
 import NewsletterForm from '@/components/NewsletterForm';
 
@@ -19,95 +19,7 @@ export default async function HomePage() {
   return (
     <>
       {/* HERO */}
-      <section className="relative pt-28 pb-10 overflow-hidden bg-ivory-50">
-        <HeroBackground />
-
-        <div className="max-w-[1440px] mx-auto px-6 lg:px-10 grid lg:grid-cols-[1.1fr_0.9fr] gap-10 items-center relative z-10">
-          <div className="max-w-[600px]">
-            <span className="eyebrow">Coleccion 2026</span>
-            <h1 className="heading-xl mt-6 mb-6 text-balance">
-              El arte de viajar, <span className="italic-script">redescubierto</span> para ti.
-            </h1>
-            <p className="text-[18px] text-charcoal-700 mb-8 max-w-[500px] leading-relaxed">
-              Aurelia crea experiencias de viaje que combinan el lujo discreto con el alma de cada
-              destino. Vuelos, hoteles boutique, villas privadas y momentos que recordaras para
-              siempre.
-            </p>
-            <div className="flex gap-4 flex-wrap">
-              <Link href="#search" className="btn btn-primary btn-lg">
-                Planifica tu viaje
-              </Link>
-              <Link href="/destinos" className="btn btn-outline btn-lg">
-                Explorar destinos
-              </Link>
-            </div>
-          </div>
-
-          <div className="relative h-[420px] lg:h-[480px]">
-            {/* Soft gold halo backdrop */}
-            <div className="absolute top-[20%] left-[28%] w-[340px] h-[340px] rounded-full bg-gold-400/30 blur-3xl pointer-events-none" />
-
-            {/* Scattered decorative gold dots */}
-            <div className="absolute top-2 left-[40%] w-2 h-2 rounded-full bg-gold-500 pointer-events-none z-40" />
-            <div className="absolute top-[30%] left-1 w-1.5 h-1.5 rounded-full bg-gold-600 pointer-events-none z-40" />
-            <div className="absolute top-[55%] right-1 w-1 h-1 rounded-full bg-gold-700 pointer-events-none z-40" />
-            <div className="absolute bottom-[18%] left-[44%] w-1.5 h-1.5 rounded-full bg-gold-500 pointer-events-none z-40" />
-            <div className="absolute bottom-6 right-[48%] w-1 h-1 rounded-full bg-gold-600 pointer-events-none z-40" />
-
-            {/* Photo 1 — Patagonia (top-left, BOLD left tilt, smallest) */}
-            <div className="absolute w-[140px] lg:w-[170px] h-[180px] lg:h-[215px] top-3 left-0 rounded-3xl overflow-hidden shadow-[0_15px_38px_-12px_rgba(11,21,53,0.32)] animate-float -rotate-[18deg]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&q=80"
-                alt="Patagonia, glaciares y montanas"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-            </div>
-
-            {/* Photo 2 — Maldivas (top-right, moderate right tilt, LARGEST) */}
-            <div className="absolute w-[200px] lg:w-[240px] h-[250px] lg:h-[300px] -top-2 right-2 rounded-3xl overflow-hidden shadow-[0_22px_48px_-12px_rgba(11,21,53,0.40)] animate-float-delayed rotate-[11deg] z-10">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=700&q=80"
-                alt="Maldivas, playa turquesa vista aerea"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-            </div>
-
-            {/* Photo 3 — Bali (CENTER overlapping both, dramatic right tilt) */}
-            <div className="absolute w-[155px] lg:w-[185px] h-[200px] lg:h-[235px] top-[34%] left-[24%] lg:left-[28%] rounded-3xl overflow-hidden shadow-[0_22px_48px_-12px_rgba(11,21,53,0.42)] animate-float rotate-[16deg] z-20">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="https://images.unsplash.com/photo-1544644181-1484b3fdfc62?w=700&q=80"
-                alt="Bali, templo flotante al amanecer"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-            </div>
-
-            {/* Photo 4 — Santorini (bottom-right, anchors composition, holds stamp) */}
-            <div className="absolute w-[180px] lg:w-[215px] h-[230px] lg:h-[275px] bottom-0 right-4 rounded-3xl overflow-hidden shadow-[0_25px_55px_-12px_rgba(11,21,53,0.45)] animate-float-delayed -rotate-[12deg] z-30">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=700&q=80"
-                alt="Santorini, cupulas blancas sobre el mar Egeo"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-
-              {/* Premiado 2025 — gold stamp affixed to corner */}
-              <div className="absolute -top-4 -left-4 w-[76px] h-[76px] rounded-full bg-gradient-to-br from-gold-500 via-gold-600 to-gold-700 ring-[3px] ring-ivory-50 flex flex-col items-center justify-center text-plum-900 font-bold leading-none rotate-[18deg] shadow-[0_8px_20px_rgba(11,21,53,0.30)]">
-                <Award size={15} className="mb-0.5" />
-                <span className="text-[8px] uppercase tracking-[0.15em]">Premiado</span>
-                <span className="font-display text-sm mt-0.5">2025</span>
-              </div>
-            </div>
-
-            {/* Handwritten editorial label */}
-            <div className="absolute -bottom-2 left-0 lg:left-4 font-script italic text-xl text-gold-700 -rotate-[6deg] pointer-events-none z-40">
-              coleccion &apos;26
-            </div>
-          </div>
-        </div>
-      </section>
+      <HeroSection />
 
       {/* SEARCH WIDGET */}
       <div id="search" className="container-site mt-6 lg:mt-10 relative z-20 mb-4">

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Component, useEffect, useState, type ReactNode } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { Menu, User, ShoppingCart, LogOut, ChevronDown, ShieldCheck } from 'lucide-react';
+import { useIsNight } from '@/hooks/useIsNight';
 
 const NAV_LINKS = [
   { href: '/vuelos', label: 'Vuelos' },
@@ -189,6 +190,7 @@ function MobileAuthFallback({ onClose }: { onClose: () => void }) {
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const isNight = useIsNight();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -196,6 +198,10 @@ export default function Header() {
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  // Light text only when we're at the top AND it's night.
+  // Once you scroll the bar gets its cream backdrop and dark text is fine again.
+  const lightOnDark = !scrolled && isNight;
 
   return (
     <header
@@ -210,7 +216,11 @@ export default function Header() {
           <span className="w-9 h-9 rounded-full bg-gradient-to-br from-gold-500 to-gold-700 flex items-center justify-center text-plum-900 text-sm font-bold shadow-soft">
             A
           </span>
-          <span className="font-display text-[1.6rem] font-bold text-plum-700 tracking-tight">
+          <span
+            className={`font-display text-[1.6rem] font-bold tracking-tight transition-colors duration-500 ${
+              lightOnDark ? 'text-ivory-50 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]' : 'text-plum-700'
+            }`}
+          >
             Aurelia
           </span>
         </Link>
@@ -220,10 +230,18 @@ export default function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className="relative text-sm font-medium text-charcoal-700 hover:text-plum-700 transition-colors py-2 group"
+              className={`relative text-sm font-medium transition-colors py-2 group ${
+                lightOnDark
+                  ? 'text-ivory-50 hover:text-gold-300 drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]'
+                  : 'text-charcoal-700 hover:text-plum-700'
+              }`}
             >
               {link.label}
-              <span className="absolute left-1/2 -translate-x-1/2 bottom-0 w-0 h-px bg-plum-700 group-hover:w-full transition-all duration-500" />
+              <span
+                className={`absolute left-1/2 -translate-x-1/2 bottom-0 w-0 h-px group-hover:w-full transition-all duration-500 ${
+                  lightOnDark ? 'bg-gold-300' : 'bg-plum-700'
+                }`}
+              />
             </Link>
           ))}
         </nav>
