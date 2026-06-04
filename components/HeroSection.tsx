@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { Play } from 'lucide-react';
 import HeroBackground from './HeroBackground';
 import HeroDestinationCarousel from './HeroDestinationCarousel';
 import { useIsNight } from '@/hooks/useIsNight';
@@ -56,15 +57,35 @@ export default function HeroSection() {
             {t.hero.subtitle}
           </p>
 
-          <div className="flex gap-4 flex-wrap">
+          <div className="flex gap-5 flex-wrap items-center">
             <Link href="#search" className="btn btn-primary btn-lg">
               {t.hero.ctaPrimary}
             </Link>
+
+            {/* Secondary CTA — circular play button + text label,
+                matching the customer's reference design. */}
             <Link
               href="/destinos"
-              className={`btn btn-lg btn-outline ${isNight ? 'btn-on-dark' : ''}`}
+              className="group inline-flex items-center gap-3"
             >
-              {t.hero.ctaSecondary}
+              <span
+                className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-soft-lg ${
+                  isNight
+                    ? 'bg-ivory-50/15 text-ivory-50 border border-ivory-50/30 backdrop-blur-md group-hover:bg-ivory-50/25'
+                    : 'bg-plum-900 text-ivory-50 shadow-[0_8px_18px_rgba(11,21,53,0.30)] group-hover:bg-plum-700'
+                }`}
+              >
+                <Play size={16} fill="currentColor" className="ml-0.5" />
+              </span>
+              <span
+                className={`font-semibold text-base transition-colors duration-300 ${
+                  isNight
+                    ? 'text-ivory-50 drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]'
+                    : 'text-plum-900 group-hover:text-plum-700'
+                }`}
+              >
+                {t.hero.ctaSecondary}
+              </span>
             </Link>
           </div>
         </div>
