@@ -33,45 +33,63 @@ export default function SearchWidget({ initialTab = 'vuelos' }: { initialTab?: T
   };
 
   return (
-    <div className="max-w-[1120px] mx-auto bg-ivory-50 rounded-3xl rounded-tr-[80px] shadow-soft-xl p-5 md:p-6">
-      {/* Tabs */}
-      <div className="flex gap-1 border-b border-ivory-200 mb-4 overflow-x-auto scrollbar-hide">
-        {TABS.map(({ id, labelKey, Icon }) => (
-          <button
-            key={id}
-            onClick={() => setActive(id)}
-            className={`px-5 py-3 border-b-2 -mb-px text-sm font-medium flex items-center gap-2 transition-colors whitespace-nowrap ${
-              active === id
-                ? 'text-plum-700 border-plum-700'
-                : 'text-charcoal-500 border-transparent hover:text-plum-700'
-            }`}
-          >
-            <Icon size={18} />
-            {t.search[labelKey]}
-          </button>
-        ))}
+    <div className="max-w-[1120px] mx-auto relative pt-[58px]">
+      {/* TAB STRIP — a separate rounded box pinned to the top-left.
+          Right edge stops ~200px before the widget edge so the
+          empty space on the right naturally forms the notch the
+          customer described. Its rounded bottom-right corner is the
+          "semicircle going down" that joins the main body. */}
+      <div
+        className="absolute top-0 left-0 z-10 bg-ivory-50 px-5 md:px-6 pt-3 pb-1 flex"
+        style={{
+          right: '210px',
+          borderTopLeftRadius: '24px',
+          borderTopRightRadius: '24px',
+          borderBottomRightRadius: '30px',
+          boxShadow: '0 -8px 28px -10px rgba(11,21,53,0.18), -8px 0 28px -14px rgba(11,21,53,0.10)',
+        }}
+      >
+        <div className="flex gap-1 overflow-x-auto scrollbar-hide w-full">
+          {TABS.map(({ id, labelKey, Icon }) => (
+            <button
+              key={id}
+              onClick={() => setActive(id)}
+              className={`px-4 md:px-5 py-3 border-b-2 -mb-px text-sm font-medium flex items-center gap-2 transition-colors whitespace-nowrap ${
+                active === id
+                  ? 'text-plum-700 border-plum-700'
+                  : 'text-charcoal-500 border-transparent hover:text-plum-700'
+              }`}
+            >
+              <Icon size={18} />
+              {t.search[labelKey]}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* Forms */}
-      {active === 'vuelos' && <FlightForm navigate={navigate} />}
-      {active === 'hoteles' && <HotelForm navigate={navigate} />}
-      {active === 'villas' && <VillaForm navigate={navigate} />}
-      {active === 'paquetes' && <PackageForm navigate={navigate} />}
-      {active === 'autos' && <CarForm navigate={navigate} />}
-      {active === 'actividades' && <ActivityForm navigate={navigate} />}
-      {active === 'cruceros' && <CruiseForm navigate={navigate} />}
+      {/* MAIN BODY — full-width box with its own rounded corners.
+          The top-right corner curves up to meet the flat right
+          extension after the tab strip's notch. */}
+      <div className="bg-ivory-50 rounded-3xl shadow-soft-xl p-5 md:p-6">
+        {/* Forms */}
+        {active === 'vuelos' && <FlightForm navigate={navigate} />}
+        {active === 'hoteles' && <HotelForm navigate={navigate} />}
+        {active === 'villas' && <VillaForm navigate={navigate} />}
+        {active === 'paquetes' && <PackageForm navigate={navigate} />}
+        {active === 'autos' && <CarForm navigate={navigate} />}
+        {active === 'actividades' && <ActivityForm navigate={navigate} />}
+        {active === 'cruceros' && <CruiseForm navigate={navigate} />}
 
-      {/* Advanced search link — sits in the bottom-right corner to match
-          the reference design. Visual only for now; can wire to a real
-          advanced-filter modal later. */}
-      <div className="mt-3 flex justify-end">
-        <button
-          type="button"
-          className="inline-flex items-center gap-1.5 text-xs text-charcoal-500 hover:text-plum-700 transition-colors"
-        >
-          <Sliders size={12} />
-          {t.search.busquedaAvanzada}
-        </button>
+        {/* Advanced search link */}
+        <div className="mt-3 flex justify-end">
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 text-xs text-charcoal-500 hover:text-plum-700 transition-colors"
+          >
+            <Sliders size={12} />
+            {t.search.busquedaAvanzada}
+          </button>
+        </div>
       </div>
     </div>
   );
