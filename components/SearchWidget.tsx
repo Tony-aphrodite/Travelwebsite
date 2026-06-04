@@ -41,11 +41,9 @@ export default function SearchWidget({ initialTab = 'vuelos' }: { initialTab?: T
       <div
         className="absolute top-0 right-0 z-0 bg-ivory-50"
         style={{
-          width: '300px',         // 60px wider than the tab strip's right
-                                  // margin so it overlaps the BR descent
-          height: '56px',         // same height as the tab strip
+          width: '300px',
+          height: '56px',
           borderTopRightRadius: '24px',
-          boxShadow: '0 -8px 28px -10px rgba(11,21,53,0.18), 8px 0 28px -14px rgba(11,21,53,0.10)',
         }}
       />
 
@@ -60,8 +58,7 @@ export default function SearchWidget({ initialTab = 'vuelos' }: { initialTab?: T
           right: '240px',
           borderTopLeftRadius: '24px',
           borderTopRightRadius: '24px',
-          borderBottomRightRadius: '18px',   // SHARP ~80° descent
-          boxShadow: '0 -8px 28px -10px rgba(11,21,53,0.18), -8px 0 28px -14px rgba(11,21,53,0.10)',
+          borderBottomRightRadius: '18px',
         }}
       >
         <div className="flex gap-1 overflow-x-auto scrollbar-hide w-full">
