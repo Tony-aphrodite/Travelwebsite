@@ -31,10 +31,12 @@ type Msg = { role: 'user' | 'assistant'; content: string };
 export async function POST(req: Request) {
   const key = process.env.ANTHROPIC_API_KEY;
   if (!key) {
+    // Best-effort language sniff so an English visitor doesn't get a
+    // Spanish-only error. Defaults to bilingual so either side reads it.
     return NextResponse.json(
       {
         error:
-          'El asistente de IA aún no está configurado. Mientras tanto, escríbenos por nuestros canales de contacto y te respondemos personalmente.',
+          'AI assistant is being configured. In the meantime, please reach out through our contact channels and we will reply personally. · El asistente de IA está siendo configurado. Mientras tanto, escríbenos por nuestros canales de contacto y te respondemos personalmente.',
       },
       { status: 503 },
     );
