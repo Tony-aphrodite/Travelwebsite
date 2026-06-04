@@ -2,7 +2,7 @@
 
 import { useState, useRef, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import { Plane, Building2, Home, Package, Car, Compass, Search, Ship } from 'lucide-react';
+import { Plane, Building2, Home, Package, Car, Compass, Search, Ship, Sliders } from 'lucide-react';
 import { useT } from '@/lib/i18n/LocaleProvider';
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 
@@ -35,7 +35,7 @@ export default function SearchWidget({ initialTab = 'vuelos' }: { initialTab?: T
   return (
     <div className="max-w-[1120px] mx-auto bg-ivory-50 rounded-3xl rounded-tr-[80px] shadow-soft-xl p-5 md:p-6">
       {/* Tabs */}
-      <div className="flex gap-1 border-b border-ivory-200 mb-4 overflow-x-auto">
+      <div className="flex gap-1 border-b border-ivory-200 mb-4 overflow-x-auto scrollbar-hide">
         {TABS.map(({ id, labelKey, Icon }) => (
           <button
             key={id}
@@ -60,6 +60,19 @@ export default function SearchWidget({ initialTab = 'vuelos' }: { initialTab?: T
       {active === 'autos' && <CarForm navigate={navigate} />}
       {active === 'actividades' && <ActivityForm navigate={navigate} />}
       {active === 'cruceros' && <CruiseForm navigate={navigate} />}
+
+      {/* Advanced search link — sits in the bottom-right corner to match
+          the reference design. Visual only for now; can wire to a real
+          advanced-filter modal later. */}
+      <div className="mt-3 flex justify-end">
+        <button
+          type="button"
+          className="inline-flex items-center gap-1.5 text-xs text-charcoal-500 hover:text-plum-700 transition-colors"
+        >
+          <Sliders size={12} />
+          {t.search.busquedaAvanzada}
+        </button>
+      </div>
     </div>
   );
 }

@@ -118,6 +118,17 @@ body {
   }
 }
 
+/* Hide scrollbar but keep scroll behavior — used on the SearchWidget
+   tab strip so the native scrollbar buttons don't render into the
+   curved top-right corner. */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* Price range slider */
 .price-slider {
   -webkit-appearance: none;
