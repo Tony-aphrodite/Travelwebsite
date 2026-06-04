@@ -4,9 +4,11 @@ import Link from 'next/link';
 import HeroBackground from './HeroBackground';
 import HeroDestinationCarousel from './HeroDestinationCarousel';
 import { useIsNight } from '@/hooks/useIsNight';
+import { useT } from '@/lib/i18n/LocaleProvider';
 
 export default function HeroSection() {
   const isNight = useIsNight();
+  const t = useT();
 
   return (
     <section
@@ -23,7 +25,7 @@ export default function HeroSection() {
               isNight ? '!text-gold-400 [&::before]:!bg-gold-400' : ''
             }`}
           >
-            Coleccion 2026
+            {t.hero.eyebrow}
           </span>
 
           <h1
@@ -33,15 +35,15 @@ export default function HeroSection() {
                 : 'drop-shadow-[0_2px_10px_rgba(255,255,255,0.65)]'
             }`}
           >
-            El arte de viajar,{' '}
+            {t.hero.headlinePart1}{' '}
             <span
               className={`italic-script transition-colors duration-700 ${
                 isNight ? '!text-gold-300' : ''
               }`}
             >
-              redescubierto
+              {t.hero.headlineScript}
             </span>{' '}
-            para ti.
+            {t.hero.headlinePart2}
           </h1>
 
           <p
@@ -51,20 +53,18 @@ export default function HeroSection() {
                 : 'text-charcoal-700 drop-shadow-[0_1px_6px_rgba(255,255,255,0.7)]'
             }`}
           >
-            Aurelia crea experiencias de viaje que combinan el lujo discreto con el alma de cada
-            destino. Vuelos, hoteles boutique, villas privadas y momentos que recordaras para
-            siempre.
+            {t.hero.subtitle}
           </p>
 
           <div className="flex gap-4 flex-wrap">
             <Link href="#search" className="btn btn-primary btn-lg">
-              Planifica tu viaje
+              {t.hero.ctaPrimary}
             </Link>
             <Link
               href="/destinos"
               className={`btn btn-lg btn-outline ${isNight ? 'btn-on-dark' : ''}`}
             >
-              Explorar destinos
+              {t.hero.ctaSecondary}
             </Link>
           </div>
         </div>

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight, Award } from 'lucide-react';
+import { useT } from '@/lib/i18n/LocaleProvider';
 
 type Destination = {
   city: string;
@@ -60,6 +61,7 @@ const DESTINATIONS: Destination[] = [
 
 export default function HeroDestinationCarousel({ isNight }: { isNight: boolean }) {
   const [index, setIndex] = useState(0);
+  const t = useT();
   const N = DESTINATIONS.length;
 
   const prev = () => setIndex((i) => (i - 1 + N) % N);
@@ -75,7 +77,7 @@ export default function HeroDestinationCarousel({ isNight }: { isNight: boolean 
           stays readable regardless of how dark the photo is behind it. */}
       <button
         onClick={prev}
-        aria-label="Anterior destino"
+        aria-label={t.hero.carouselPrev}
         className="absolute left-0 lg:-left-2 z-30 w-12 h-12 rounded-full bg-ivory-50/95 text-plum-700 backdrop-blur-md shadow-[0_8px_24px_rgba(0,0,0,0.35)] ring-1 ring-ivory-50/40 flex items-center justify-center transition-all hover:scale-110 hover:bg-white"
       >
         <ChevronLeft size={22} />
@@ -90,7 +92,7 @@ export default function HeroDestinationCarousel({ isNight }: { isNight: boolean 
       {/* Right arrow */}
       <button
         onClick={next}
-        aria-label="Siguiente destino"
+        aria-label={t.hero.carouselNext}
         className="absolute right-0 lg:-right-2 z-30 w-12 h-12 rounded-full bg-ivory-50/95 text-plum-700 backdrop-blur-md shadow-[0_8px_24px_rgba(0,0,0,0.35)] ring-1 ring-ivory-50/40 flex items-center justify-center transition-all hover:scale-110 hover:bg-white"
       >
         <ChevronRight size={22} />
@@ -117,6 +119,7 @@ export default function HeroDestinationCarousel({ isNight }: { isNight: boolean 
 
 function Card({ data, variant }: { data: Destination; variant: 'side' | 'center' }) {
   const isCenter = variant === 'center';
+  const t = useT();
   return (
     <div
       className={`relative rounded-3xl overflow-hidden transition-all duration-500 ${
@@ -150,7 +153,7 @@ function Card({ data, variant }: { data: Destination; variant: 'side' | 'center'
           )}
         </div>
         <div className={`opacity-90 ${isCenter ? 'text-[11px] lg:text-xs' : 'text-[10px] lg:text-[11px]'}`}>
-          Desde ${data.priceFrom.toLocaleString()} USD
+          {t.hero.desde} ${data.priceFrom.toLocaleString()} USD
         </div>
       </div>
     </div>

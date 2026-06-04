@@ -3,22 +3,25 @@
 import { useState, useRef, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { Plane, Building2, Home, Package, Car, Compass, Search, Ship } from 'lucide-react';
+import { useT } from '@/lib/i18n/LocaleProvider';
+import type { Dictionary } from '@/lib/i18n/dictionaries';
 
 type TabId = 'vuelos' | 'hoteles' | 'villas' | 'paquetes' | 'autos' | 'actividades' | 'cruceros';
 
-const TABS: { id: TabId; label: string; Icon: typeof Plane }[] = [
-  { id: 'vuelos', label: 'Vuelos', Icon: Plane },
-  { id: 'hoteles', label: 'Hoteles', Icon: Building2 },
-  { id: 'villas', label: 'Villas', Icon: Home },
-  { id: 'paquetes', label: 'Paquetes', Icon: Package },
-  { id: 'autos', label: 'Autos', Icon: Car },
-  { id: 'actividades', label: 'Experiencias', Icon: Compass },
-  { id: 'cruceros', label: 'Cruceros', Icon: Ship },
+const TABS: { id: TabId; labelKey: keyof Dictionary['search']; Icon: typeof Plane }[] = [
+  { id: 'vuelos', labelKey: 'vuelos', Icon: Plane },
+  { id: 'hoteles', labelKey: 'hoteles', Icon: Building2 },
+  { id: 'villas', labelKey: 'villas', Icon: Home },
+  { id: 'paquetes', labelKey: 'paquetes', Icon: Package },
+  { id: 'autos', labelKey: 'autos', Icon: Car },
+  { id: 'actividades', labelKey: 'experiencias', Icon: Compass },
+  { id: 'cruceros', labelKey: 'cruceros', Icon: Ship },
 ];
 
 export default function SearchWidget({ initialTab = 'vuelos' }: { initialTab?: TabId }) {
   const [active, setActive] = useState<TabId>(initialTab);
   const router = useRouter();
+  const t = useT();
 
   const navigate = (path: string, params: Record<string, string>) => {
     const sp = new URLSearchParams();
@@ -33,7 +36,7 @@ export default function SearchWidget({ initialTab = 'vuelos' }: { initialTab?: T
     <div className="max-w-[1120px] mx-auto bg-ivory-50 rounded-3xl rounded-tr-[80px] shadow-soft-xl p-5 md:p-6">
       {/* Tabs */}
       <div className="flex gap-1 border-b border-ivory-200 mb-4 overflow-x-auto">
-        {TABS.map(({ id, label, Icon }) => (
+        {TABS.map(({ id, labelKey, Icon }) => (
           <button
             key={id}
             onClick={() => setActive(id)}
@@ -44,7 +47,7 @@ export default function SearchWidget({ initialTab = 'vuelos' }: { initialTab?: T
             }`}
           >
             <Icon size={18} />
-            {label}
+            {t.search[labelKey]}
           </button>
         ))}
       </div>
@@ -79,10 +82,11 @@ function Field({
 }
 
 function Submit() {
+  const t = useT();
   return (
     <button type="submit" className="btn btn-primary btn-lg self-end">
       <Search size={18} />
-      Buscar
+      {t.search.buscar}
     </button>
   );
 }
@@ -90,6 +94,7 @@ function Submit() {
 type NavigateFn = (path: string, params: Record<string, string>) => void;
 
 function FlightForm({ navigate }: { navigate: NavigateFn }) {
+  const t = useT();
   const fromRef = useRef<HTMLInputElement>(null);
   const toRef = useRef<HTMLInputElement>(null);
 
@@ -106,31 +111,31 @@ function FlightForm({ navigate }: { navigate: NavigateFn }) {
       <div className="flex gap-6 mb-4 text-sm">
         <label className="flex items-center gap-1.5 cursor-pointer">
           <input type="radio" name="trip" defaultChecked className="accent-plum-700" />
-          <span>Ida y vuelta</span>
+          <span>{t.search.idaYVuelta}</span>
         </label>
         <label className="flex items-center gap-1.5 cursor-pointer">
           <input type="radio" name="trip" className="accent-plum-700" />
-          <span>Solo ida</span>
+          <span>{t.search.soloIda}</span>
         </label>
         <label className="flex items-center gap-1.5 cursor-pointer">
           <input type="radio" name="trip" className="accent-plum-700" />
-          <span>Multidestino</span>
+          <span>{t.search.multidestino}</span>
         </label>
       </div>
       <div className="flex flex-wrap gap-4 items-end">
-        <Field label="Desde" className="flex-1 min-w-[160px]">
+        <Field label={t.search.desde} className="flex-1 min-w-[160px]">
           <input ref={fromRef} className="field-input" defaultValue="Ciudad de Mexico" />
         </Field>
-        <Field label="Hacia" className="flex-1 min-w-[160px]">
+        <Field label={t.search.hacia} className="flex-1 min-w-[160px]">
           <input ref={toRef} className="field-input" defaultValue="Paris, Francia" />
         </Field>
-        <Field label="Salida" className="flex-1 min-w-[140px]">
+        <Field label={t.search.salida} className="flex-1 min-w-[140px]">
           <input className="field-input" type="date" defaultValue="2026-05-15" />
         </Field>
-        <Field label="Regreso" className="flex-1 min-w-[140px]">
+        <Field label={t.search.regreso} className="flex-1 min-w-[140px]">
           <input className="field-input" type="date" defaultValue="2026-05-25" />
         </Field>
-        <Field label="Pasajeros" className="w-[180px]">
+        <Field label={t.search.pasajeros} className="w-[180px]">
           <select className="field-input">
             <option>1 Adulto</option>
             <option>2 Adultos</option>
@@ -144,6 +149,7 @@ function FlightForm({ navigate }: { navigate: NavigateFn }) {
 }
 
 function HotelForm({ navigate }: { navigate: NavigateFn }) {
+  const t = useT();
   const destRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (e: FormEvent) => {
@@ -155,16 +161,16 @@ function HotelForm({ navigate }: { navigate: NavigateFn }) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-wrap gap-4 items-end">
-      <Field label="Destino" className="flex-1 min-w-[200px]">
+      <Field label={t.search.destino} className="flex-1 min-w-[200px]">
         <input ref={destRef} className="field-input" placeholder="Santorini, Grecia" />
       </Field>
-      <Field label="Entrada" className="flex-1 min-w-[140px]">
+      <Field label={t.search.entrada} className="flex-1 min-w-[140px]">
         <input className="field-input" type="date" defaultValue="2026-05-15" />
       </Field>
-      <Field label="Salida" className="flex-1 min-w-[140px]">
+      <Field label={t.search.salida} className="flex-1 min-w-[140px]">
         <input className="field-input" type="date" defaultValue="2026-05-20" />
       </Field>
-      <Field label="Habitaciones" className="w-[200px]">
+      <Field label={t.search.habitaciones} className="w-[200px]">
         <select className="field-input">
           <option>1 Hab. · 2 Adultos</option>
           <option>2 Hab. · 4 Adultos</option>
@@ -177,6 +183,7 @@ function HotelForm({ navigate }: { navigate: NavigateFn }) {
 }
 
 function VillaForm({ navigate }: { navigate: NavigateFn }) {
+  const t = useT();
   const regionRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (e: FormEvent) => {
@@ -188,16 +195,16 @@ function VillaForm({ navigate }: { navigate: NavigateFn }) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-wrap gap-4 items-end">
-      <Field label="Region" className="flex-1 min-w-[200px]">
+      <Field label={t.search.region} className="flex-1 min-w-[200px]">
         <input ref={regionRef} className="field-input" placeholder="Toscana, Italia" />
       </Field>
-      <Field label="Llegada" className="flex-1 min-w-[140px]">
+      <Field label={t.search.llegada} className="flex-1 min-w-[140px]">
         <input className="field-input" type="date" defaultValue="2026-06-10" />
       </Field>
-      <Field label="Salida" className="flex-1 min-w-[140px]">
+      <Field label={t.search.salida} className="flex-1 min-w-[140px]">
         <input className="field-input" type="date" defaultValue="2026-06-17" />
       </Field>
-      <Field label="Huespedes" className="w-[180px]">
+      <Field label={t.search.huespedes} className="w-[180px]">
         <select className="field-input">
           <option>2 Huespedes</option>
           <option>4 Huespedes</option>
@@ -211,6 +218,7 @@ function VillaForm({ navigate }: { navigate: NavigateFn }) {
 }
 
 function PackageForm({ navigate }: { navigate: NavigateFn }) {
+  const t = useT();
   const destRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (e: FormEvent) => {
@@ -222,19 +230,19 @@ function PackageForm({ navigate }: { navigate: NavigateFn }) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-wrap gap-4 items-end">
-      <Field label="Desde" className="flex-1 min-w-[160px]">
+      <Field label={t.search.desde} className="flex-1 min-w-[160px]">
         <input className="field-input" defaultValue="Ciudad de Mexico" />
       </Field>
-      <Field label="Hacia" className="flex-1 min-w-[160px]">
+      <Field label={t.search.hacia} className="flex-1 min-w-[160px]">
         <input ref={destRef} className="field-input" placeholder="Maldivas" />
       </Field>
-      <Field label="Salida" className="flex-1 min-w-[140px]">
+      <Field label={t.search.salida} className="flex-1 min-w-[140px]">
         <input className="field-input" type="date" defaultValue="2026-07-01" />
       </Field>
-      <Field label="Regreso" className="flex-1 min-w-[140px]">
+      <Field label={t.search.regreso} className="flex-1 min-w-[140px]">
         <input className="field-input" type="date" defaultValue="2026-07-10" />
       </Field>
-      <Field label="Viajeros" className="w-[160px]">
+      <Field label={t.search.viajeros} className="w-[160px]">
         <select className="field-input">
           <option>2 Adultos</option>
           <option>Familia</option>
@@ -246,6 +254,7 @@ function PackageForm({ navigate }: { navigate: NavigateFn }) {
 }
 
 function CarForm({ navigate }: { navigate: NavigateFn }) {
+  const t = useT();
   const locationRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (e: FormEvent) => {
@@ -257,16 +266,16 @@ function CarForm({ navigate }: { navigate: NavigateFn }) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-wrap gap-4 items-end">
-      <Field label="Recoger en" className="flex-1 min-w-[200px]">
+      <Field label={t.search.recogerEn} className="flex-1 min-w-[200px]">
         <input ref={locationRef} className="field-input" placeholder="Aeropuerto de Niza" />
       </Field>
-      <Field label="Devolver en" className="flex-1 min-w-[200px]">
+      <Field label={t.search.devolverEn} className="flex-1 min-w-[200px]">
         <input className="field-input" defaultValue="Mismo lugar" />
       </Field>
-      <Field label="Fecha inicio" className="flex-1 min-w-[180px]">
+      <Field label={t.search.fechaInicio} className="flex-1 min-w-[180px]">
         <input className="field-input" type="datetime-local" defaultValue="2026-05-20T10:00" />
       </Field>
-      <Field label="Fecha fin" className="flex-1 min-w-[180px]">
+      <Field label={t.search.fechaFin} className="flex-1 min-w-[180px]">
         <input className="field-input" type="datetime-local" defaultValue="2026-05-25T18:00" />
       </Field>
       <Submit />
@@ -275,6 +284,7 @@ function CarForm({ navigate }: { navigate: NavigateFn }) {
 }
 
 function CruiseForm({ navigate }: { navigate: NavigateFn }) {
+  const t = useT();
   const portRef = useRef<HTMLInputElement>(null);
   const lineRef = useRef<HTMLSelectElement>(null);
 
@@ -288,10 +298,10 @@ function CruiseForm({ navigate }: { navigate: NavigateFn }) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-wrap gap-4 items-end">
-      <Field label="Puerto de salida" className="flex-1 min-w-[200px]">
+      <Field label={t.search.puertoSalida} className="flex-1 min-w-[200px]">
         <input ref={portRef} className="field-input" placeholder="Barcelona" />
       </Field>
-      <Field label="Naviera" className="flex-1 min-w-[200px]">
+      <Field label={t.search.naviera} className="flex-1 min-w-[200px]">
         <select ref={lineRef} className="field-input" defaultValue="">
           <option value="">Cualquiera</option>
           <option>Norwegian Cruise Line</option>
@@ -304,10 +314,10 @@ function CruiseForm({ navigate }: { navigate: NavigateFn }) {
           <option>Silversea</option>
         </select>
       </Field>
-      <Field label="Embarque" className="flex-1 min-w-[140px]">
+      <Field label={t.search.embarque} className="flex-1 min-w-[140px]">
         <input className="field-input" type="date" defaultValue="2026-06-15" />
       </Field>
-      <Field label="Duración" className="w-[180px]">
+      <Field label={t.search.duracion} className="w-[180px]">
         <select className="field-input">
           <option>Cualquiera</option>
           <option>3-5 noches</option>
@@ -316,7 +326,7 @@ function CruiseForm({ navigate }: { navigate: NavigateFn }) {
           <option>16+ noches</option>
         </select>
       </Field>
-      <Field label="Pasajeros" className="w-[160px]">
+      <Field label={t.search.pasajeros} className="w-[160px]">
         <select className="field-input">
           <option>2 Adultos</option>
           <option>Familia</option>
@@ -329,6 +339,7 @@ function CruiseForm({ navigate }: { navigate: NavigateFn }) {
 }
 
 function ActivityForm({ navigate }: { navigate: NavigateFn }) {
+  const t = useT();
   const queryRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (e: FormEvent) => {
@@ -340,13 +351,13 @@ function ActivityForm({ navigate }: { navigate: NavigateFn }) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-wrap gap-4 items-end">
-      <Field label="Destino o experiencia" className="flex-1 min-w-[260px]">
+      <Field label={t.search.destinoOExperiencia} className="flex-1 min-w-[260px]">
         <input ref={queryRef} className="field-input" placeholder="Tour de vinedos en Toscana" />
       </Field>
-      <Field label="Fecha" className="flex-1 min-w-[140px]">
+      <Field label={t.search.fecha} className="flex-1 min-w-[140px]">
         <input className="field-input" type="date" defaultValue="2026-06-12" />
       </Field>
-      <Field label="Personas" className="w-[160px]">
+      <Field label={t.search.personas} className="w-[160px]">
         <select className="field-input">
           <option>1 Persona</option>
           <option>2 Personas</option>

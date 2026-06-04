@@ -70,10 +70,21 @@ type Favorite = {
   createdAt: string;
 };
 
+const VALID_TABS: Tab[] = ['resumen', 'viajes', 'favoritos', 'recompensas', 'datos', 'notificaciones'];
+
 export default function CuentaPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [tab, setTab] = useState<Tab>('resumen');
+
+  // Read ?tab=... from the URL on mount so links like
+  // /cuenta?tab=favoritos jump straight to the right pane. Done in a
+  // useEffect (window only exists client-side) to avoid the
+  // useSearchParams() Suspense-bailout build error.
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search).get('tab') as Tab | null;
+    if (q && VALID_TABS.includes(q)) setTab(q);
+  }, []);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [favorites, setFavorites] = useState<Favorite[]>([]);
   const [loadingData, setLoadingData] = useState(true);

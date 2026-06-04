@@ -4,6 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
 import SessionProvider from '@/components/SessionProvider';
+import { LocaleProvider } from '@/lib/i18n/LocaleProvider';
 import './globals.css';
 
 // Body sans — warm, modern, more refined than Inter
@@ -71,10 +72,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es" className={`${manrope.variable} ${fraunces.variable} ${cormorant.variable}`}>
       <body className="font-sans">
         <SessionProvider>
-          <Header />
-          <main>{children}</main>
-          <Footer />
-          <WhatsAppFloat />
+          <LocaleProvider>
+            <Header />
+            <main>{children}</main>
+            <Footer />
+            <WhatsAppFloat />
+          </LocaleProvider>
         </SessionProvider>
       </body>
     </html>
