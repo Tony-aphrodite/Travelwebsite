@@ -82,10 +82,21 @@ export default function SearchWidget({ initialTab = 'vuelos' }: { initialTab?: T
         </div>
       </div>
 
-      {/* MAIN BODY — full-width box. Its top edge sits flush with the
-          bottom of the tab strip + horizontal extension above, so the
-          whole thing reads as one L-shaped widget. */}
-      <div className="bg-ivory-50 rounded-3xl shadow-soft-xl p-5 md:p-6 relative z-[1]">
+      {/* MAIN BODY — full-width box. TL and TR are SHARP (0 radius) so
+          they line up cleanly with the tab strip's BL and the horizontal
+          extension's BL — otherwise the body's rounded TL/TR would create
+          a small V-notch where the boxes meet. BL and BR stay rounded
+          (24px) — they're the widget's actual bottom-left and bottom-right
+          outer corners. */}
+      <div
+        className="bg-ivory-50 shadow-soft-xl p-5 md:p-6 relative z-[1]"
+        style={{
+          borderTopLeftRadius: '0',
+          borderTopRightRadius: '0',
+          borderBottomLeftRadius: '24px',
+          borderBottomRightRadius: '24px',
+        }}
+      >
         {/* Forms */}
         {active === 'vuelos' && <FlightForm navigate={navigate} />}
         {active === 'hoteles' && <HotelForm navigate={navigate} />}
