@@ -33,35 +33,23 @@ export default function SearchWidget({ initialTab = 'vuelos' }: { initialTab?: T
   };
 
   return (
-    <div className="max-w-[1120px] mx-auto relative pt-[56px]">
-      {/* HORIZONTAL EXTENSION (right side, behind tab strip) — sits to the
-          right of the tab strip and bridges it to the widget's right edge
-          via a flat horizontal section. Cream color so it merges with the
-          tab strip above and the body below into one continuous L-shape. */}
-      <div
-        className="absolute top-0 right-0 z-0 bg-ivory-50"
-        style={{
-          width: '300px',
-          height: '56px',
-          borderTopRightRadius: '24px',
-        }}
-      />
-
-      {/* TAB STRIP — top-left rounded box. The bottom-right radius is
-          deliberately small (18px) so the descent right after Cruceros
-          reads as a SHARP ~80° turn — not a gradual sweep — and the
-          curve transitions immediately into the flat horizontal section
-          on its right. */}
-      <div
-        className="absolute top-0 left-0 z-10 bg-ivory-50 px-5 md:px-6 pt-3 pb-1 flex"
-        style={{
-          right: '240px',
-          borderTopLeftRadius: '24px',
-          borderTopRightRadius: '24px',
-          borderBottomRightRadius: '18px',
-        }}
-      >
-        <div className="flex gap-1 overflow-x-auto scrollbar-hide w-full">
+    <div
+      className="max-w-[1120px] mx-auto relative"
+      style={{
+        // Customer-supplied PNG used as the widget background instead of
+        // trying to compose the L-shape silhouette with CSS. The image
+        // already contains the rounded corners + descent curve + shadow.
+        // `100% 100%` stretches it to fit the widget exactly so tabs and
+        // form align with the artwork edges.
+        backgroundImage: "url('/search-widget-bg.png')",
+        backgroundSize: '100% 100%',
+        backgroundRepeat: 'no-repeat',
+        filter: 'drop-shadow(0 18px 30px rgba(11, 21, 53, 0.18))',
+      }}
+    >
+      {/* Tabs */}
+      <div className="px-5 md:px-6 pt-4">
+        <div className="flex gap-1 overflow-x-auto scrollbar-hide">
           {TABS.map(({ id, labelKey, Icon }) => (
             <button
               key={id}
@@ -79,22 +67,8 @@ export default function SearchWidget({ initialTab = 'vuelos' }: { initialTab?: T
         </div>
       </div>
 
-      {/* MAIN BODY — full-width box. TL and TR are SHARP (0 radius) so
-          they line up cleanly with the tab strip's BL and the horizontal
-          extension's BL — otherwise the body's rounded TL/TR would create
-          a small V-notch where the boxes meet. BL and BR stay rounded
-          (24px) — they're the widget's actual bottom-left and bottom-right
-          outer corners. */}
-      <div
-        className="bg-ivory-50 shadow-soft-xl p-5 md:p-6 relative z-[1]"
-        style={{
-          borderTopLeftRadius: '0',
-          borderTopRightRadius: '0',
-          borderBottomLeftRadius: '24px',
-          borderBottomRightRadius: '24px',
-        }}
-      >
-        {/* Forms */}
+      {/* Forms */}
+      <div className="p-5 md:p-6">
         {active === 'vuelos' && <FlightForm navigate={navigate} />}
         {active === 'hoteles' && <HotelForm navigate={navigate} />}
         {active === 'villas' && <VillaForm navigate={navigate} />}
