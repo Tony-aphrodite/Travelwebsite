@@ -319,7 +319,7 @@ export default function Header() {
       className={`fixed top-0 left-0 right-0 z-50 transition-[padding,background-color,box-shadow] duration-500 ease-out ${
         scrolled
           ? 'py-3 bg-ivory-50/90 backdrop-blur-xl border-b border-ivory-200 shadow-soft'
-          : 'py-5 bg-transparent border-b border-ivory-50/60 shadow-[0_1px_0_rgba(255,255,255,0.45)]'
+          : 'py-5 bg-transparent border-b border-ivory-50/25'
       }`}
     >
       <div className="max-w-[1440px] mx-auto px-6 lg:px-10 flex items-center justify-between gap-6">
