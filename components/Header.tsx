@@ -125,7 +125,7 @@ function LanguageSwitcher({ lightOnDark }: { lightOnDark: boolean }) {
 function FavoritesLink({ lightOnDark }: { lightOnDark: boolean }) {
   return (
     <Link
-      href="/cuenta?tab=favoritos"
+      href="/favoritos"
       title="Favoritos"
       className={`relative p-2.5 rounded-full transition-colors ${
         lightOnDark

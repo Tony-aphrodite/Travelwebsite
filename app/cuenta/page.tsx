@@ -156,21 +156,11 @@ export default function CuentaPage() {
               </span>
             </div>
 
-            {userRole === 'admin' && (
-              <Link
-                href="/admin"
-                className="card-soft p-4 flex items-center gap-3 bg-gradient-to-r from-gold-100 to-gold-200 hover:from-gold-200 hover:to-gold-300 transition-colors group"
-              >
-                <div className="w-10 h-10 rounded-full bg-plum-700 text-white flex items-center justify-center">
-                  <ShieldCheck size={18} />
-                </div>
-                <div className="flex-1">
-                  <div className="font-display text-base text-plum-700">Panel admin</div>
-                  <div className="text-[10px] uppercase tracking-widest text-charcoal-500">Gestionar el sitio</div>
-                </div>
-                <ChevronRight size={16} className="text-plum-700 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            )}
+            {/* Note: the gold "Panel admin" shortcut that used to live here was
+                removed on purpose. Admin access lives only in the header
+                dropdown (and is server-side gated by middleware). This page
+                is a pure user-facing profile so nothing here hints at admin
+                surface area to other users. */}
 
             <nav className="card-soft p-3">
               {TABS.map((t) => {
