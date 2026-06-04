@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic';
 import Link from 'next/link';
 import { Star, Award } from 'lucide-react';
 import SearchWidget from '@/components/SearchWidget';
+import HeroBackground from '@/components/HeroBackground';
 import { getDestinations, getPackages, getActivities, getTestimonials, getBlogPosts } from '@/lib/db/queries';
 import NewsletterForm from '@/components/NewsletterForm';
 
@@ -19,8 +20,7 @@ export default async function HomePage() {
     <>
       {/* HERO */}
       <section className="relative pt-28 pb-10 overflow-hidden bg-ivory-50">
-        <div className="absolute w-[400px] h-[400px] -top-24 -right-24 rounded-full bg-gold-300/35 blur-3xl pointer-events-none" />
-        <div className="absolute w-[300px] h-[300px] -bottom-12 left-[10%] rounded-full bg-rose-100/60 blur-3xl pointer-events-none" />
+        <HeroBackground />
 
         <div className="max-w-[1440px] mx-auto px-6 lg:px-10 grid lg:grid-cols-[1.1fr_0.9fr] gap-10 items-center relative z-10">
           <div className="max-w-[600px]">
