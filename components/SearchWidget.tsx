@@ -112,7 +112,10 @@ function Field({
 function Submit() {
   const t = useT();
   return (
-    <button type="submit" className="btn btn-primary btn-lg self-end">
+    <button
+      type="submit"
+      className="inline-flex items-center justify-center gap-2 rounded-full font-sans font-semibold text-base tracking-wide whitespace-nowrap px-9 py-4 bg-plum-900 text-ivory-50 shadow-[0_8px_20px_rgba(11,21,53,0.35)] hover:bg-plum-700 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(11,21,53,0.45)] transition-all duration-500 ease-out self-end"
+    >
       <Search size={18} />
       {t.search.buscar}
     </button>
