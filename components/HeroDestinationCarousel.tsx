@@ -72,13 +72,13 @@ export default function HeroDestinationCarousel({ isNight }: { isNight: boolean 
   const right = DESTINATIONS[(index + 1) % N];
 
   return (
-    <div className="relative h-[420px] lg:h-[500px] flex items-center justify-center">
+    <div className="relative h-[420px] lg:h-[500px] flex items-end justify-center pb-2 lg:pb-4">
       {/* Left arrow — same high-contrast ivory pill in both modes so it
           stays readable regardless of how dark the photo is behind it. */}
       <button
         onClick={prev}
         aria-label={t.hero.carouselPrev}
-        className="absolute left-0 lg:-left-2 z-30 w-12 h-12 rounded-full bg-ivory-50/95 text-plum-700 backdrop-blur-md shadow-[0_8px_24px_rgba(0,0,0,0.35)] ring-1 ring-ivory-50/40 flex items-center justify-center transition-all hover:scale-110 hover:bg-white"
+        className="absolute left-0 lg:-left-2 z-30 w-12 h-12 rounded-full bg-transparent border-2 border-ivory-50 text-ivory-50 backdrop-blur-sm drop-shadow-[0_4px_10px_rgba(0,0,0,0.35)] flex items-center justify-center transition-all hover:scale-110 hover:bg-ivory-50/15"
       >
         <ChevronLeft size={22} />
       </button>
@@ -93,7 +93,7 @@ export default function HeroDestinationCarousel({ isNight }: { isNight: boolean 
       <button
         onClick={next}
         aria-label={t.hero.carouselNext}
-        className="absolute right-0 lg:-right-2 z-30 w-12 h-12 rounded-full bg-ivory-50/95 text-plum-700 backdrop-blur-md shadow-[0_8px_24px_rgba(0,0,0,0.35)] ring-1 ring-ivory-50/40 flex items-center justify-center transition-all hover:scale-110 hover:bg-white"
+        className="absolute right-0 lg:-right-2 z-30 w-12 h-12 rounded-full bg-transparent border-2 border-ivory-50 text-ivory-50 backdrop-blur-sm drop-shadow-[0_4px_10px_rgba(0,0,0,0.35)] flex items-center justify-center transition-all hover:scale-110 hover:bg-ivory-50/15"
       >
         <ChevronRight size={22} />
       </button>
