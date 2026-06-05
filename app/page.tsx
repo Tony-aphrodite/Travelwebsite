@@ -23,7 +23,7 @@ export default async function HomePage() {
       <HeroSection />
 
       {/* SEARCH WIDGET — pulled up to overlap the hero photo */}
-      <div id="search" className="container-site -mt-12 lg:-mt-16 relative z-20 mb-8">
+      <div id="search" className="container-site -mt-12 lg:-mt-16 relative z-20 mb-3">
         <SearchWidget />
       </div>
 
