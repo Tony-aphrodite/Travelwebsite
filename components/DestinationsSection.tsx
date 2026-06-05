@@ -19,7 +19,7 @@ export default function DestinationsSection({ destinations }: { destinations: De
   const four = destinations.slice(0, 4);
 
   return (
-    <section className="py-12 lg:py-16">
+    <section className="py-8 lg:py-10">
       <div className="container-site">
         <div className="flex justify-between items-end gap-4 flex-wrap mb-6">
           <h2 className="font-display text-3xl lg:text-4xl text-plum-700">

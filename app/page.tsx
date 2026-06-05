@@ -31,7 +31,7 @@ export default async function HomePage() {
       <DestinationsSection destinations={destinations} />
 
       {/* OFFERS */}
-      <section className="py-16 bg-ivory-50">
+      <section className="py-10 bg-ivory-50">
         <div className="container-site">
           <div className="flex justify-between items-end gap-8 flex-wrap mb-8">
             <div className="max-w-xl">
@@ -91,7 +91,7 @@ export default async function HomePage() {
       </section>
 
       {/* REWARDS */}
-      <section className="py-16 bg-ivory-100 relative overflow-hidden">
+      <section className="py-10 bg-ivory-100 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(196,148,53,0.10),transparent_50%),radial-gradient(circle_at_80%_20%,rgba(216,119,97,0.08),transparent_50%)] pointer-events-none" />
         <div className="container-site grid lg:grid-cols-2 gap-16 items-center relative z-10">
           <div>
@@ -162,7 +162,7 @@ export default async function HomePage() {
       </section>
 
       {/* EXPERIENCES */}
-      <section className="py-16 bg-ivory-50">
+      <section className="py-10 bg-ivory-50">
         <div className="container-site">
           <div className="text-center max-w-2xl mx-auto mb-8">
             <span className="eyebrow">Experiencias Aurelia</span>
@@ -204,7 +204,7 @@ export default async function HomePage() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-16 bg-ivory-100">
+      <section className="py-10 bg-ivory-100">
         <div className="container-site">
           <div className="text-center max-w-2xl mx-auto mb-8">
             <span className="eyebrow">Voces de nuestras viajeras</span>
@@ -247,7 +247,7 @@ export default async function HomePage() {
       </section>
 
       {/* BLOG */}
-      <section className="py-16">
+      <section className="py-10">
         <div className="container-site">
           <div className="flex justify-between items-end gap-8 flex-wrap mb-8">
             <div className="max-w-xl">
@@ -296,7 +296,7 @@ export default async function HomePage() {
       </section>
 
       {/* NEWSLETTER */}
-      <section className="py-14 bg-ivory-100">
+      <section className="py-10 bg-ivory-100">
         <div className="container-site max-w-2xl text-center">
           <span className="eyebrow">Carta de Aurelia</span>
           <h2 className="heading-lg mt-4 mb-4">
