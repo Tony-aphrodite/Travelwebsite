@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Logo from './Logo';
 import { Instagram, Facebook, Twitter, Youtube } from 'lucide-react';
 
 const SECTIONS = [
@@ -40,12 +41,7 @@ export default function Footer() {
       <div className="max-w-[1440px] mx-auto px-6 lg:px-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-16">
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2 mb-4">
-              <span className="w-9 h-9 rounded-full bg-gradient-to-br from-gold-500 to-gold-700 flex items-center justify-center text-plum-900 text-sm font-bold">
-                A
-              </span>
-              <span className="font-display text-[1.6rem] font-bold text-plum-700">Aurelia</span>
-            </Link>
+            <Logo tone="dark" size={36} className="mb-4" />
             <p className="max-w-sm leading-relaxed mb-6 text-charcoal-500">
               Viajes curados con el arte de la hospitalidad y el lujo discreto. Descubre el mundo
               con elegancia.

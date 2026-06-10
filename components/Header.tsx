@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Logo from './Logo';
 import { Component, useEffect, useState, type ReactNode } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { Menu, User, ShoppingCart, LogOut, ChevronDown, ShieldCheck, Heart, Globe, Check } from 'lucide-react';
@@ -325,18 +326,7 @@ export default function Header() {
       }`}
     >
       <div className="max-w-[1440px] mx-auto px-6 lg:px-10 flex items-center justify-between gap-6">
-        <Link href="/" className="flex items-center gap-2">
-          <span className="w-9 h-9 rounded-full bg-gradient-to-br from-gold-500 to-gold-700 flex items-center justify-center text-plum-900 text-sm font-bold shadow-soft">
-            A
-          </span>
-          <span
-            className={`font-display text-[1.6rem] font-bold tracking-tight transition-colors duration-500 ${
-              lightOnDark ? 'text-ivory-50 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]' : 'text-plum-700'
-            }`}
-          >
-            Aurelia
-          </span>
-        </Link>
+        <Logo tone={lightOnDark ? 'light' : 'dark'} size={38} />
 
         <nav className="hidden lg:flex items-center gap-8">
           {NAV_LINKS.map((link) => (
